@@ -47,6 +47,7 @@ public class Order extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_id")
+
 	private List<OrderItem> orderItems = new ArrayList<>();
 
 

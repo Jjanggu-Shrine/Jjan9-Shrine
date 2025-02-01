@@ -50,8 +50,8 @@ public class Store extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false, name = "owner_id")
-	private Seller ownerId;
+	@JoinColumn(nullable = false, name = "seller_id")
+	private Seller sellerId;
 
 	public void softDelete() {
 		this.isDeleted = true;
