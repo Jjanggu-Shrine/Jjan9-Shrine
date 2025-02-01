@@ -2,12 +2,10 @@ package com.example.jjangushrine.domain.auth.service;
 
 import com.example.jjangushrine.domain.auth.dto.request.SellerSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
-import com.example.jjangushrine.domain.auth.dto.request.UserSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.response.SignInRes;
 import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.user.enums.UserRole;
-import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.common.ConflictException;
 import com.example.jjangushrine.exception.common.InvalidException;
 import org.junit.jupiter.api.DisplayName;
