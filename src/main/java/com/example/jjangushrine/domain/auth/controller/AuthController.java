@@ -55,3 +55,4 @@ public class AuthController {
                 .body(sellerAuthService.sellerSignIn(signInReq));
     }
 }
+
