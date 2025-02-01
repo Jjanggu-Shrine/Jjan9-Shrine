@@ -39,3 +39,4 @@ out/
 ### properties ###
 *.properties
 *.yml
+!application-test.yml

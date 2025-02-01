@@ -15,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "sellers")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Seller {
 
     @Id
@@ -54,10 +51,9 @@ public class Seller {
     @Column(nullable = false)
     private String zipCode;
 
-    @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole userRole = UserRole.SELLER;
+    private final UserRole userRole = UserRole.SELLER;
 
     @Column
     @ColumnDefault("false")
@@ -65,6 +61,27 @@ public class Seller {
 
     @Column
     private LocalDateTime deletedAt;
+
+    @Builder
+    public Seller(
+            Long id,
+            String email,
+            String password,
+            String representativeName,
+            String phoneNumber,
+            String address,
+            String addressDetail,
+            String zipCode
+    ){
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.representativeName = representativeName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.zipCode = zipCode;
+    }
 
     public void softDelete() {
         this.isDeleted = true;

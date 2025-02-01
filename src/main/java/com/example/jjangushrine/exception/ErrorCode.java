@@ -9,8 +9,6 @@ public enum ErrorCode {
     // 400 BAD_REQUEST
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "ERR001", "요청값이 올바르지 않습니다."),
     INVALID_TYPE_VALUE(HttpStatus.BAD_REQUEST, "ERR002", "요청 데이터 타입이 올바르지 않습니다."),
-    //DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "ERR003", "이미 사용 중인 이메일입니다."),
-    //DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "ERR004", "이미 사용 중인 사용자명입니다."),
     DUPLICATE_DELETED(HttpStatus.BAD_REQUEST, "ERR005", "이미 삭제 된 사용자입니다."),
     WRONG_CREDENTIALS(HttpStatus.BAD_REQUEST, "ERR006", "인증 정보가 올바르지 않습니다."),
     INVALID_ACCESS(HttpStatus.BAD_REQUEST, "ERR007", "잘못된 접근입니다."),
@@ -22,6 +20,7 @@ public enum ErrorCode {
     INVALID_ORDER_TIME(HttpStatus.BAD_REQUEST, "ERR013", "지금은 가게 운영 시간이 아닙니다."),
     ORDER_NOT_DELIVERED(HttpStatus.BAD_REQUEST,"ERR014","완료되지 않은 주문입니다."),
     INVALID_USER_ROLE(HttpStatus.BAD_REQUEST,"ERR015","유효하지 않은 UerRole 입니다."),
+    INVALID_PRINCIPAL_TYPE(HttpStatus.BAD_REQUEST, "ERR016", "지원하지 않는 사용자 타입입니다."),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
@@ -38,6 +37,7 @@ public enum ErrorCode {
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR304", "가게를 찾을 수 없습니다."),
     MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR305", "메뉴를 찾을 수 없습니다."),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR306", "주문을 찾을 수 없습니다."),
+    SELLER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR307", "판매자를 찾을 수 없습니다."),
 
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
