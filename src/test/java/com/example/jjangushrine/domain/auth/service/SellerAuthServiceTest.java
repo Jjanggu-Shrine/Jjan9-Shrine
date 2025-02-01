@@ -2,12 +2,10 @@ package com.example.jjangushrine.domain.auth.service;
 
 import com.example.jjangushrine.domain.auth.dto.request.SellerSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
-import com.example.jjangushrine.domain.auth.dto.request.UserSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.response.SignInRes;
 import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.user.enums.UserRole;
-import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.common.ConflictException;
 import com.example.jjangushrine.exception.common.InvalidException;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -22,6 +21,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles
 class SellerAuthServiceTest {
     @Autowired
     private SellerAuthService authService;
