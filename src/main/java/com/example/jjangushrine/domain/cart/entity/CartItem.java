@@ -3,6 +3,7 @@ package com.example.jjangushrine.domain.cart.entity;
 
 import com.example.jjangushrine.domain.product.entity.Product;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
+    @Builder
     public CartItem(Cart cart, Product product, int quantity) {
         this.cart = cart;
         this.product = product;
