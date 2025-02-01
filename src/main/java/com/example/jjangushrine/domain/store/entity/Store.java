@@ -2,16 +2,12 @@ package com.example.jjangushrine.domain.store.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.example.jjangushrine.common.BaseEntity;
+import com.example.jjangushrine.domain.seller.entity.Seller;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +48,10 @@ public class Store extends BaseEntity {
 
 	@Column
 	private LocalDateTime deletedAt;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, name = "owner_id")
+	private Seller ownerId;
 
 	public void softDelete() {
 		this.isDeleted = true;
