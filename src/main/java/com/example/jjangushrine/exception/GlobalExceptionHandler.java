@@ -3,7 +3,7 @@ package com.example.jjangushrine.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
+//import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,14 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    // AccessDeniedException 처리 추가
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-        log.error("AccessDeniedException", e);
-        return ResponseEntity
-            .status(HttpStatus.FORBIDDEN)
-            .body(ErrorResponse.of(ErrorCode.FORBIDDEN_ACCESS, "접근 권한이 없습니다."));
-    }
+//    // AccessDeniedException 처리 추가
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+//        log.error("AccessDeniedException", e);
+//        return ResponseEntity
+//            .status(HttpStatus.FORBIDDEN)
+//            .body(ErrorResponse.of(ErrorCode.FORBIDDEN_ACCESS, "접근 권한이 없습니다."));
+//    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
