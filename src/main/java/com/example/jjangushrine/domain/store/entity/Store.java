@@ -2,11 +2,11 @@ package com.example.jjangushrine.domain.store.entity;
 
 import java.time.LocalDateTime;
 
-import com.example.jjangushrine.domain.owner.entity.Owner;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.example.jjangushrine.common.BaseEntity;
+import com.example.jjangushrine.domain.seller.entity.Seller;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,7 +51,7 @@ public class Store extends BaseEntity {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "owner_id")
-	private Owner ownerId;
+	private Seller ownerId;
 
 	public void softDelete() {
 		this.isDeleted = true;
