@@ -28,14 +28,14 @@ public class CartService {
     public CartItemCreateRes addCartItem(CartItemCreateReq reqDto) {
 
         // 장바구니 가져오기
-        Cart cart = cartRepository.findById(reqDto.getUserId()).
-                orElseGet(() -> createCartForUser(reqDto.getUserId()));
+        Cart cart = cartRepository.findById(reqDto.userId()).
+                orElseGet(() -> createCartForUser(reqDto.userId()));
 
         // 상품 담기
-        Product product = productRepository.findById(reqDto.getProductId())
+        Product product = productRepository.findById(reqDto.productId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        int quantity = reqDto.getQuantity();
+        int quantity = reqDto.quantity();
         int totalPrice = product.getAmount() * quantity;
 
         CartItem cartItem = new CartItem(cart, product, quantity);
