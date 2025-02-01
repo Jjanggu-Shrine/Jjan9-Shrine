@@ -57,7 +57,7 @@ public class Seller {
     @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole userRole = UserRole.OWNER;
+    private UserRole userRole = UserRole.SELLER;
 
     @Column
     @ColumnDefault("false")
