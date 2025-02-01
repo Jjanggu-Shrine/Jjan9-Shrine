@@ -1,4 +1,4 @@
-package com.example.jjangushrine.domain.order.dto.response;
+package com.example.jjangushrine.domain.cart.dto.response;
 
 import lombok.Getter;
 

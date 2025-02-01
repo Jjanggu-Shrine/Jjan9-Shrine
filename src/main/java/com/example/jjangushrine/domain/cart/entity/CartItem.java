@@ -1,4 +1,4 @@
-package com.example.jjangushrine.domain.order.entity;
+package com.example.jjangushrine.domain.cart.entity;
 
 
 import com.example.jjangushrine.domain.product.entity.Product;

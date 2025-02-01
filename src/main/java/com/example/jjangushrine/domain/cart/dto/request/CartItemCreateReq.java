@@ -1,4 +1,4 @@
-package com.example.jjangushrine.domain.order.dto.request;
+package com.example.jjangushrine.domain.cart.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
