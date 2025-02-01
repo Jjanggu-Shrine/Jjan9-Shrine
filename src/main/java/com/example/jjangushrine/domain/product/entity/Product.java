@@ -48,6 +48,9 @@ public class Product extends BaseEntity {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@Column(name = "iamge", nullable = false)
+	private String image;
+
 	@Column(name = "stock", nullable = false)
 	private Short stock;
 
@@ -62,11 +65,12 @@ public class Product extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Product(Store store,  String name, Integer amount, String description, Short stock, String category) {
+	public Product(Store store,  String name, Integer amount, String description, String image, Short stock, String category) {
 		this.store  = store;
 		this.name = name;
 		this.amount = amount;
 		this.description = description;
+		this.image = image;
 		this.stock = stock;
 		this.category = Category.valueOf(category);
 		this.isDeleted = false;
