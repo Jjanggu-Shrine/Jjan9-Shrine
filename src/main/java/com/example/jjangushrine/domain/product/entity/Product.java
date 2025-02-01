@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
+import com.example.jjangushrine.domain.product.enums.Category;
 import com.example.jjangushrine.domain.store.entity.Store;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,6 +51,10 @@ public class Product extends BaseEntity {
 	@Column(name = "stock", nullable = false)
 	private Short stock;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category", nullable = false)
+	private Category category;
+
 	@Column(name = "is_deleted")
 	private Boolean isDeleted;
 
@@ -55,12 +62,13 @@ public class Product extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Product(Store store,  String name, Integer amount, String description, Short stock) {
+	public Product(Store store,  String name, Integer amount, String description, Short stock, String category) {
 		this.store  = store;
 		this.name = name;
 		this.amount = amount;
 		this.description = description;
 		this.stock = stock;
+		this.category = Category.valueOf(category);
 		this.isDeleted = false;
 	}
 }
