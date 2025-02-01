@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartItemCreateReq {
 
+    private final Long userId;
     private final Long productId;
-    private final Long quantity;
+    private final int quantity;
 }
