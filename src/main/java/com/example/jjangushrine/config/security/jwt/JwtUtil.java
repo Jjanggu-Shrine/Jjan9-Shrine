@@ -33,7 +33,7 @@
             return SecurityConst.BEARER_PREFIX + Jwts.builder()
                     .claim("id", principal.getId())
                     .claim("email", principal.getUsername())
-                    .claim("role", getAuthorities(authentication))
+                    .claim("role", principal.getRole().name())
                     .issuedAt(now)
                     .expiration(new Date(now.getTime() + SecurityConst.TOKEN_TIME))
                     .signWith(secretKey)
@@ -46,12 +46,6 @@
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-        }
-
-        private String getAuthorities(Authentication authentication) {
-            return authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(","));
         }
     }
 
