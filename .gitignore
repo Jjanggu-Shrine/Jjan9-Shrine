@@ -40,3 +40,4 @@ out/
 *.properties
 *.yml
 !application-test.yml
+*.sql
