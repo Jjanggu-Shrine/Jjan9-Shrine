@@ -25,14 +25,18 @@ jobs:
       - name: gradlew bootJar
         run: ./gradlew bootJar
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/private_key
+          chmod 600 ~/.ssh/private_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy JAR to server
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: build/libs/JjanguShrine-0.0.1-SNAPSHOT.jar
-          remote: ~/JjanguShrine-0.0.1-SNAPSHOT.jar
-          host: ${{ secrets.SSH_HOST }}
-          username: ec2-user
-          privateKey: ${{ secrets.SSH_KEY }}
+        run: |
+          scp -i ~/.ssh/private_key -o StrictHostKeyChecking=no \
+            build/libs/JjanguShrine-0.0.1-SNAPSHOT.jar \
+            ec2-user@${{ secrets.SSH_HOST }}:~/
 
       - name: SSH Commands
         uses: appleboy/ssh-action@v0.1.6
