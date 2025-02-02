@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.product.enums.Category;
+import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.domain.store.entity.Store;
 
 import jakarta.persistence.Column;
@@ -74,5 +75,15 @@ public class Product extends BaseEntity {
 		this.stock = stock;
 		this.category = Category.valueOf(category);
 		this.isDeleted = false;
+	}
+
+	public void validateIsDeleted() {
+		if(isDeleted) {
+			throw new ProductNotFoundException();
+		}
+	}
+
+	public void delete(){
+		this.isDeleted = true;
 	}
 }
