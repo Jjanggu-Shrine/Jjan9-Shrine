@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .anyRequest().authenticated())
 
-                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(jwtUtil, objectMapper), UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling(handler ->
                         handler.authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))

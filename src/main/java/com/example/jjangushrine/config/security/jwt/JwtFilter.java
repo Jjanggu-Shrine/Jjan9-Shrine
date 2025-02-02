@@ -1,9 +1,12 @@
 package com.example.jjangushrine.config.security.jwt;
 
+import com.example.jjangushrine.common.ErrorResponse;
 import com.example.jjangushrine.config.security.SecurityConst;
 import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -31,6 +34,7 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
@@ -51,10 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String bearerJwt = request.getHeader(SecurityConst.AUTHORIZATION_HEADER);
 
         if (bearerJwt == null) {
-            response.sendError(
-                    HttpServletResponse.SC_BAD_REQUEST,
-                    SecurityConst.TOKEN_NOT_FOUND
-            );
+            sendErrorResponse(response, ErrorCode.TOKEN_NOT_FOUND);
             return;
         }
 
@@ -88,19 +89,19 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (SecurityException e) {
             log.error(SecurityConst.TOKEN_VALIDATION_FAIL, e);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, SecurityConst.TOKEN_VALIDATION_FAIL);
+            sendErrorResponse(response, ErrorCode.TOKEN_VALIDATION_FAIL);
         } catch (MalformedJwtException e) {
             log.error(SecurityConst.MALFORMED_TOKEN, e);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, SecurityConst.MALFORMED_TOKEN);
+            sendErrorResponse(response, ErrorCode.MALFORMED_TOKEN);
         } catch (ExpiredJwtException e) {
             log.error(SecurityConst.EXPIRED_TOKEN, e);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, SecurityConst.EXPIRED_TOKEN);
+            sendErrorResponse(response, ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.error(SecurityConst.UNSUPPORTED_TOKEN, e);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, SecurityConst.UNSUPPORTED_TOKEN);
+            sendErrorResponse(response, ErrorCode.UNSUPPORTED_TOKEN);
         } catch (Exception e) {
             log.error(SecurityConst.UNKNOWN_TOKEN_ERROR, e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, SecurityConst.UNKNOWN_TOKEN_ERROR);
+            sendErrorResponse(response, ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -109,5 +110,12 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new MalformedJwtException(SecurityConst.MALFORMED_TOKEN);
         }
         return bearerToken.substring(7);
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+        response.setContentType(SecurityConst.CONTENT_TYPE);
+        response.setStatus(errorCode.getStatus().value());
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }
