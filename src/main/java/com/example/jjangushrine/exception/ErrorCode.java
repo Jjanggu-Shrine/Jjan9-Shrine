@@ -54,6 +54,7 @@ public enum ErrorCode {
     SELLER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR307", "판매자를 찾을 수 없습니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "상품을 찾을 수 없습니다."),
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
+
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
 
     // 409 CONFLICT
