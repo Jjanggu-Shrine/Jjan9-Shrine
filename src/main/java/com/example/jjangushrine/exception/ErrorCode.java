@@ -37,6 +37,7 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR201", "접근 권한이 없습니다."),
+    STORE_FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR202", "해당 상점에 접근할 권한이 없습니다."),
     //Coupon
     ADMIN_ACCESS_DENIED(HttpStatus.FORBIDDEN, "ERR202", "관리자 권한이 필요한 작업입니다."),
 
