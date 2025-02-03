@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
+import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.exception.ProductAccessDeniedException;
@@ -44,6 +45,17 @@ public class ProductService {
 
 		Product saveProduct = productRepository.save(product);
 		return ProductRes.fromEntity(saveProduct);
+	}
+
+	@Transactional
+	public ProductRes updateProduct(Long productId, Long sellerId, ProductUpdateReq updateReq) {
+
+		Product findProduct = getProductById(productId);
+		validateProductOwnedBySeller(productId, sellerId);
+
+		findProduct.update(updateReq);
+
+		return ProductRes.fromEntity(findProduct);
 	}
 
 	@Transactional
