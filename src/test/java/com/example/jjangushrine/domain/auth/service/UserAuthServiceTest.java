@@ -38,10 +38,7 @@ class UserAuthServiceTest {
                 "test@test.com",
                 "Password123!",
                 "닉네임",
-                "010-1234-5678",
-                "서울시",
-                "강남구",
-                "12345"
+                "010-1234-5678"
         );
 
         // when
@@ -64,19 +61,15 @@ class UserAuthServiceTest {
         UserSignUpReq req = new UserSignUpReq(
                 "usermail@mail.com",
                 "1234", "userNick",
-                "000-111-2222",
-                "address",
-                "addressDetail",
-                "1234567");
+                "000-111-2222"
+        );
         authService.userSignUp(req);  // 첫 번째 가입
 
         UserSignUpReq duplicateReq = new UserSignUpReq(
                 "usermail@mail.com",
                 "1234", "userNick",
-                "000-111-2222",
-                "address",
-                "addressDetail",
-                "1234567");
+                "000-111-2222"
+        );
 
         // when & then
         assertThatThrownBy(() -> authService.userSignUp(duplicateReq))
@@ -95,10 +88,7 @@ class UserAuthServiceTest {
                 email,
                 password,
                 "nickname",
-                "010-1234-5678",
-                "address",
-                "addressDetail",
-                "12345"
+                "010-1234-5678"
         );
         authService.userSignUp(signUpReq);
 
@@ -124,10 +114,7 @@ class UserAuthServiceTest {
                 email,
                 password,
                 "nickname",
-                "010-1234-5678",
-                "address",
-                "addressDetail",
-                "12345"
+                "010-1234-5678"
         );
         authService.userSignUp(signUpReq);
 
