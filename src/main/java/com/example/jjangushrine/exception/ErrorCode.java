@@ -21,10 +21,15 @@ public enum ErrorCode {
     ORDER_NOT_DELIVERED(HttpStatus.BAD_REQUEST,"ERR014","완료되지 않은 주문입니다."),
     INVALID_USER_ROLE(HttpStatus.BAD_REQUEST,"ERR015","유효하지 않은 UerRole 입니다."),
     INVALID_PRINCIPAL_TYPE(HttpStatus.BAD_REQUEST, "ERR016", "지원하지 않는 사용자 타입입니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"ERR017", "지원되지 않는 JWT 토큰입니다."),
+    TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "ERR018", "JWT 토큰이 없습니다."),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "ERR102", "잘못된 아이디 또는 비밀번호입니다."),
+    TOKEN_VALIDATION_FAIL(HttpStatus.UNAUTHORIZED,"ERR103", "JWT 보안 검증에 실패했습니다."),
+    MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED,"ERR104", "잘못된 JWT 형식입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"ERR105", "만료된 JWT 토큰입니다."),
 
     // 403 FORBIDDEN
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR201", "접근 권한이 없습니다."),
