@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
+import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.enums.Category;
 import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.domain.store.entity.Store;
@@ -85,5 +86,26 @@ public class Product extends BaseEntity {
 
 	public void delete(){
 		this.isDeleted = true;
+	}
+
+	public void update(ProductUpdateReq updateReq) {
+		if (updateReq.name() != null) {
+			this.name = updateReq.name();
+		}
+		if (updateReq.amount() != null) {
+			this.amount = updateReq.amount();
+		}
+		if (updateReq.description() != null) {
+			this.description = updateReq.description();
+		}
+		if (updateReq.image() != null) {
+			this.image = updateReq.image();
+		}
+		if (updateReq.stock() != null) {
+			this.stock = updateReq.stock();
+		}
+		if (updateReq.category() != null) {
+			this.category = Category.valueOf(updateReq.category());
+		}
 	}
 }
