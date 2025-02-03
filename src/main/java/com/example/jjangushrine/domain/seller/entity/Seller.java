@@ -43,15 +43,6 @@ public class Seller {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private String address;
-
-    @Column(nullable = false)
-    private String addressDetail;
-
-    @Column(nullable = false)
-    private String zipCode;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private final UserRole userRole = UserRole.SELLER;
 
@@ -68,19 +59,13 @@ public class Seller {
             String email,
             String password,
             String representativeName,
-            String phoneNumber,
-            String address,
-            String addressDetail,
-            String zipCode
+            String phoneNumber
     ){
         this.id = id;
         this.email = email;
         this.password = password;
         this.representativeName = representativeName;
         this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.addressDetail = addressDetail;
-        this.zipCode = zipCode;
     }
 
     public void softDelete() {

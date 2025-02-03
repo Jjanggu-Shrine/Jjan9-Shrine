@@ -38,6 +38,7 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR201", "접근 권한이 없습니다."),
+
     //Coupon
     ADMIN_ACCESS_DENIED(HttpStatus.FORBIDDEN, "ERR202", "관리자 권한이 필요한 작업입니다."),
 	STORE_FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR203", "해당 상점에 접근할 권한이 없습니다."),
@@ -52,12 +53,14 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR306", "주문을 찾을 수 없습니다."),
     SELLER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR307", "판매자를 찾을 수 없습니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "상품을 찾을 수 없습니다."),
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
 
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "ERR402", "이미 사용 중인 사용자명입니다."),
     DUPLICATE_LOCK(HttpStatus.CONFLICT, "ERR403", "다른 요청이 처리중입니다."),
+    DUPLICATE_DEFAULT(HttpStatus.CONFLICT, "ERR404", "이미 기본값으로 설정된 주소입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");

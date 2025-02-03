@@ -43,21 +43,12 @@ public class User extends BaseEntity {
 	private String phoneNumber;
 
 	@Column(nullable = false)
-	private String address;
-
-	@Column(nullable = false)
-	private String addressDetail;
-
-	@Column(nullable = false)
-	private String zipCode;
-
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private final UserRole userRole = UserRole.USER;
 
-	@Column
+	@Column(nullable = false)
 	@ColumnDefault("false")
-	private Boolean isDeleted;
+	private Boolean isDeleted = false;
 
 	@Column
 	private LocalDateTime deletedAt;
@@ -68,19 +59,13 @@ public class User extends BaseEntity {
 			String email,
 			String password,
 			String nickName,
-			String phoneNumber,
-			String address,
-			String addressDetail,
-			String zipCode
+			String phoneNumber
 	) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.nickName = nickName;
 		this.phoneNumber = phoneNumber;
-		this.address = address;
-		this.addressDetail = addressDetail;
-		this.zipCode = zipCode;
 	}
 
 	public void softDelete() {
