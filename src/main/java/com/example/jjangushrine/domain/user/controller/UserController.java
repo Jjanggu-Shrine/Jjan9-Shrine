@@ -39,4 +39,14 @@ public class UserController {
                         ApiResMessage.UPDATE_USER_SUCCESS,
                         userService.updateUser(userUpdateReq, userDetails.getEmail())));
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        userService.deleteUser(userDetails.getEmail());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        ApiResMessage.DELETE_USER_SUCCESS));
+    }
 }

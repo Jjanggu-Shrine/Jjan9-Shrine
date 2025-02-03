@@ -31,6 +31,12 @@ public class UserService {
         return UserRes.from(user);
     }
 
+    @Transactional
+    public void deleteUser(String email) {
+        User user = findUserByEmail(email);
+        user.softDelete();
+    }
+
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
