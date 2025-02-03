@@ -6,6 +6,7 @@ import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.exception.common.LockException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +55,6 @@ class CartServiceTest {
         User user = User.builder()
                 .id(1L)
                 .email("test@test.com")
-                .password("password")
                 .build();
         authUser = new CustomUserDetails(user);
 
@@ -125,7 +126,7 @@ class CartServiceTest {
 
         // Then
         assertThatThrownBy(() -> cartService.addCartItem(authUser, req))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(LockException.class)
                 .hasMessageContaining("다른 요청이 처리중입니다");
 
         verify(rLock, never()).unlock();
