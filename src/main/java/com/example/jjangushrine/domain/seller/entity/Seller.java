@@ -1,11 +1,8 @@
 package com.example.jjangushrine.domain.seller.entity;
 
 import java.time.LocalDateTime;
-
 import org.hibernate.annotations.ColumnDefault;
-
 import com.example.jjangushrine.domain.user.enums.UserRole;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,7 +27,7 @@ public class Seller {
     @Column(name = "seller_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -46,9 +43,9 @@ public class Seller {
     @Enumerated(EnumType.STRING)
     private final UserRole userRole = UserRole.SELLER;
 
-    @Column
+    @Column(nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @Column
     private LocalDateTime deletedAt;
@@ -60,7 +57,7 @@ public class Seller {
             String password,
             String representativeName,
             String phoneNumber
-    ){
+    ) {
         this.id = id;
         this.email = email;
         this.password = password;
