@@ -75,4 +75,8 @@ public class Product extends BaseEntity {
 		this.category = Category.valueOf(category);
 		this.isDeleted = false;
 	}
+
+	public void registerStore(Store store) {
+		this.store = store;
+	}
 }
