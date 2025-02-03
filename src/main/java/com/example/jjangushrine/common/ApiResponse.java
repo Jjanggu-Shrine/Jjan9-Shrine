@@ -23,9 +23,4 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> success(String message) {
         return new ApiResponse<>(true, message, null);
     }
-
-    // 에러 응답
-    public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<>(false, message, null);
-    }
 }
