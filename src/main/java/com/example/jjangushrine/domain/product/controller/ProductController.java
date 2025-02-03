@@ -21,12 +21,12 @@ public class ProductController {
 
 	private final ProductService productService;
 
-	@DeleteMapping("/products/{productId}")
-	public ResponseEntity<ApiResponse<Void>> deleteProduct(
+	@DeleteMapping("/sellers/products/{productId}")
+	public ResponseEntity<ApiResponse<String>> deleteProduct(
 		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable Long productId
 	) {
 		productService.deleteProduct(userDetails.getId(), productId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("상품 삭제에 성공했습니다."));
 	}
 }
