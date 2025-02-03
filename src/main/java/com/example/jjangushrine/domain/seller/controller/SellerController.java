@@ -37,6 +37,16 @@ public class SellerController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
                         ApiResMessage.UPDATE_SELLER_SUCCESS,
-                        sellerService.updateUser(updateReq, userDetails.getEmail())));
+                        sellerService.updateSeller(updateReq, userDetails.getEmail())));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        sellerService.deleteSeller(userDetails.getEmail());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        ApiResMessage.DELETE_SELLER_SUCCESS));
     }
 }

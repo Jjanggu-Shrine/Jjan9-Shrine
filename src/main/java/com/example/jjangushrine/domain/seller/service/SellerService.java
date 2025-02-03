@@ -20,15 +20,21 @@ public class SellerService {
     private final SellerRepository sellerRepository;
 
     public SellerRes getSellerInfo(String email) {
-        Seller seller = findUserByEmail(email);
+        Seller seller = findSellerByEmail(email);
         return SellerRes.from(seller);
     }
 
     @Transactional
-    public SellerRes updateUser(SellerUpdateReq updateReq, String email) {
-        Seller seller = findUserByEmail(email);
+    public SellerRes updateSeller(SellerUpdateReq updateReq, String email) {
+        Seller seller = findSellerByEmail(email);
         seller.update(updateReq);
         return SellerRes.from(seller);
+    }
+
+    @Transactional
+    public void deleteSeller(String email) {
+        Seller seller = findSellerByEmail(email);
+        seller.softDelete();
     }
 
     public boolean existsByEmail(String email) {
@@ -43,7 +49,7 @@ public class SellerService {
         return sellerRepository.findByEmail(email);
     }
 
-    public Seller findUserByEmail(String email) {
+    public Seller findSellerByEmail(String email) {
         return sellerRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }

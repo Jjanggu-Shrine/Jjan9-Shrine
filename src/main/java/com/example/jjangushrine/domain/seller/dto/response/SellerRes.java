@@ -8,6 +8,7 @@ public record SellerRes(
         String representativeName,
         String phoneNumber
 ) {
+
     public static SellerRes from(Seller seller) {
         return new SellerRes(
                 seller.getId(),
