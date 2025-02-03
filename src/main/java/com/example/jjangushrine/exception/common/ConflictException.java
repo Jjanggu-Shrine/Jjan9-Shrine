@@ -2,12 +2,12 @@ package com.example.jjangushrine.exception.common;
 
 import com.example.jjangushrine.exception.ErrorCode;
 
-public class NotFoundException extends BusinessException {
-    public NotFoundException(ErrorCode errorCode) {
+public class ConflictException extends BusinessException {
+    public ConflictException(ErrorCode errorCode) {
         super(errorCode);
     }
 
-    public NotFoundException(ErrorCode errorCode, String detail) {
+    public ConflictException(ErrorCode errorCode, String detail){
         super(errorCode, detail);
     }
 }

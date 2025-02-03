@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +22,7 @@ import com.example.jjangushrine.domain.user.enums.UserRole;
 @Entity
 @Table(name = "users")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseEntity {
 
 	@Id
@@ -54,10 +51,9 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private String zipCode;
 
-	@Builder.Default
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private UserRole userRole = UserRole.USER;
+	private final UserRole userRole = UserRole.USER;
 
 	@Column
 	@ColumnDefault("false")
@@ -65,6 +61,27 @@ public class User extends BaseEntity {
 
 	@Column
 	private LocalDateTime deletedAt;
+
+	@Builder
+	public User(
+			Long id,
+			String email,
+			String password,
+			String nickName,
+			String phoneNumber,
+			String address,
+			String addressDetail,
+			String zipCode
+	) {
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.nickName = nickName;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.addressDetail = addressDetail;
+		this.zipCode = zipCode;
+	}
 
 	public void softDelete() {
 		this.isDeleted = true;
