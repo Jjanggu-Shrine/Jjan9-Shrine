@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
-import com.example.jjangushrine.domain.product.dto.response.ProductSaveRes;
+import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -45,15 +45,14 @@ public class ProductServiceTest {
 		Seller mockSeller = createMockSeller();
 		Store mockStore = createMockStore(mockSeller);
 		Product mockProduct = createMockProduct(saveReq, mockStore);
-		ProductSaveRes expectedRes = ProductSaveRes.fromEntity(mockProduct);
+		ProductRes expectedRes = ProductRes.fromEntity(mockProduct);
 
 		given(storeRepository.findById(anyLong())).willReturn(Optional.of(mockStore));
 		given(sellerRepository.findById(anyLong())).willReturn(Optional.of(mockSeller));
-		given(productService.validateStoreAccessForSeller(mockStore, eq(mockSeller.getId()))).willReturn(true);
+		given(productRepository.save(any(Product.class))).willReturn(mockProduct);
 
-
-	    // when
-		ProductSaveRes actualRes = productService.saveProduct(saveReq, mockSeller.getId());
+		// when
+		ProductRes actualRes = productService.saveProduct(saveReq, mockSeller.getId());
 
 	    // then
 		assertEquals(expectedRes, actualRes);
