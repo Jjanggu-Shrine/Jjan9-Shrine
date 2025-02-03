@@ -55,6 +55,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "상품을 찾을 수 없습니다."),
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
 
+    COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
+
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "ERR402", "이미 사용 중인 사용자명입니다."),
