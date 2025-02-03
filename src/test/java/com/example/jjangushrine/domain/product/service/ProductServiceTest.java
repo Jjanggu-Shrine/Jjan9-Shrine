@@ -1,6 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 import static org.mockito.BDDMockito.*;
 
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
+import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
+import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -35,6 +38,27 @@ class ProductServiceTest {
 
 	@InjectMocks
 	ProductService productService;
+
+	@Test
+	@DisplayName("상품업데이트성공")
+	void updateProductSeccess () {
+	    // given
+		ProductSaveReq saveReq = createProductSaveReq();
+	    ProductUpdateReq updateReq = createProductUpdateReq();
+		Seller mockSeller = createMockSeller();
+		Store mockStore = createMockStore(mockSeller);
+		Product mockProduct = createMockProduct(saveReq, mockStore);
+		ProductRes expectedRes = ProductRes.fromEntity(mockProduct);
+
+		given(productRepository.findById(anyLong())).willReturn(Optional.of(mockProduct));
+		given(productRepository.existsByProductIdAndSellerId(anyLong(), anyLong())).willReturn(true);
+
+	    // when
+		ProductRes actualRes = productService.updateProduct(mockProduct.getId(), mockSeller.getId(), updateReq);
+
+	    // then
+		assertEquals(expectedRes, actualRes);
+	}
 
 	@Test
 	@DisplayName("상품삭제성공")
@@ -85,6 +109,17 @@ class ProductServiceTest {
 	private ProductSaveReq createProductSaveReq() {
 		return new ProductSaveReq(
 			1L,
+			"후드티A",
+			100000,
+			"짱구 후드티",
+			"image",
+			(short) 99,
+			"TOP"
+		);
+	}
+
+	private ProductUpdateReq createProductUpdateReq() {
+		return new ProductUpdateReq(
 			"후드티A",
 			100000,
 			"짱구 후드티",
