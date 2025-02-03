@@ -3,7 +3,7 @@ package com.example.jjangushrine.domain.product.dto.response;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.enums.Category;
 
-public record ProductSaveRes(
+public record ProductRes(
 	Long productId,
 	Long storeId,
 	String name,
@@ -14,8 +14,8 @@ public record ProductSaveRes(
 	Category category
 ) {
 
-	public static ProductSaveRes fromEntity(Product product) {
-		return new ProductSaveRes(
+	public static ProductRes fromEntity(Product product) {
+		return new ProductRes(
 			product.getId(),
 			product.getStore().getId(),
 			product.getName(),
