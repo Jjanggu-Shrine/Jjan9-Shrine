@@ -1,5 +1,6 @@
 package com.example.jjangushrine.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -40,8 +41,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("Exception", e);
         return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage()));
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
     // MethodArgumentNotValidException은 Spring Framework에서 제공하는 예외 클래스입니다.
@@ -76,5 +77,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.of(ErrorCode.INVALID_JSON_FORMAT, detail));
+    }
+
+    // 레디스 JSON 변환 실패 예외
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<String> handleJsonProcessingException(JsonProcessingException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("JSON 변환 실패: " + e.getMessage());
     }
 }
