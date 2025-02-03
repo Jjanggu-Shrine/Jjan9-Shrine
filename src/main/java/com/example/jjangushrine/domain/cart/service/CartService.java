@@ -5,7 +5,6 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.request.CartItemUpdateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
-import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.product.service.ProductService;
 import com.example.jjangushrine.exception.common.LockException;
 import com.example.jjangushrine.exception.common.Threadxception;
@@ -16,6 +15,9 @@ import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -25,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class CartService {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ProductRepository productRepository;
     private final RedissonClient redissonClient; // 분산락을 사용하기 위해 추가
     private final ProductService productService;
 
@@ -134,5 +135,37 @@ public class CartService {
                 lock.unlock(); // 락 해제
             }
         }
+    }
+
+    /**
+     * 장바구니 조회
+     * @param authUser
+     * @return
+     */
+    public List<CartItemCreateRes> getCartItems(CustomUserDetails authUser) {
+        String userId = authUser.getId().toString();
+        String cartKey = createCartKey(userId);
+
+        // Redis 에서 장바구니 아이템 전체 조회
+        Map<Object, Object> cartItems = redisTemplate.opsForHash().entries(cartKey);
+
+        List<CartItemCreateRes> resList = new ArrayList<>();
+
+        for (Map.Entry<Object, Object> entry : cartItems.entrySet()) {
+            String productKey = (String) entry.getKey();
+
+            // "init"은 장바구니가 존재하는지 않하는지의 여부 확인으로 Object 무시
+            if ("init".equals(productKey)) continue;
+
+            Long productId = Long.parseLong(productKey.replace("product:", ""));
+            Integer quantity = (Integer) entry.getValue();
+
+            Product product = productService.getProductById(productId);
+
+            int totalPrice = product.getAmount() * quantity;
+
+            resList.add(new CartItemCreateRes(cartKey, product.getId(), product.getName(), quantity, totalPrice));
+        }
+        return resList;
     }
 }

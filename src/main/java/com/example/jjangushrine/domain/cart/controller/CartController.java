@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor
@@ -55,4 +57,18 @@ public class CartController {
                         cartItemUpdateRes));
     }
 
+    /**
+     * 장바구니 조회
+     * @param authUser
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CartItemCreateRes>>> getCartItem(
+            @AuthenticationPrincipal CustomUserDetails authUser
+    ) {
+        List<CartItemCreateRes> cartItems = cartService.getCartItems(authUser);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success("장바구니를 조회합니다.",
+                        cartItems));
+    }
 }
