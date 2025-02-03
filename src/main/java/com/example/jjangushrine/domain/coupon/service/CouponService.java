@@ -42,6 +42,20 @@ public class CouponService {
 		return UpdateCouponRes.fromEntity(coupon);
 	}
 
+	@Transactional
+	public void deleteCoupon(Long couponId) {
+		Coupon coupon = couponRepository.findById(couponId)
+			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
+
+		// 이미 사용된 쿠폰이 있는지 확인
+		if (coupon.getUsedQuantity() > 0) {
+			throw new CouponException(ErrorCode.INVALID_ACCESS, "이미 사용된 쿠폰이 있어 삭제할 수 없습니다.");
+		}
+
+		couponRepository.delete(coupon);
+	}
+
+
 	private void validateCouponRequest(CreateCouponReq createCouponReq) {
 		if (createCouponReq.validFrom().isAfter(createCouponReq.validUntil())) {
 			throw new CouponException(ErrorCode.INVALID_DATE_RANGE);

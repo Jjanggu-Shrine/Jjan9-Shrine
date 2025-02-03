@@ -1,6 +1,7 @@
 package com.example.jjangushrine.domain.coupon.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,12 @@ public class CouponController {
 	) {
 		UpdateCouponRes response = couponService.updateCoupon(couponId, request);
 		return ApiResponse.success("쿠폰이 성공적으로 수정되었습니다.", response);
+	}
+
+	@DeleteMapping("/{couponId}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ApiResponse<Void> deleteCoupon(@PathVariable Long couponId) {
+		couponService.deleteCoupon(couponId);
+		return ApiResponse.success("쿠폰이 성공적으로 삭제되었습니다.");
 	}
 }
