@@ -2,6 +2,7 @@ package com.example.jjangushrine.domain.cart.service;
 
 import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
+import com.example.jjangushrine.domain.cart.dto.request.CartItemUpdateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
@@ -29,12 +30,13 @@ public class CartService {
 
     /**
      * 장바구니 아이템 추가
+     *
      * @param reqDto cartId, productId, Quantity
      * @return cartId, productId, ProductName, Quantity, totalPrice
      */
     public CartItemCreateRes addCartItem(CustomUserDetails authUser, CartItemCreateReq reqDto) {
         String userId = authUser.getId().toString();
-        String cartKey = CreateCartKey(userId); // redis 장바구나 키
+        String cartKey = createCartKey(userId); // redis 장바구나 키
         String lockKey = "lock:cart:" + userId;
 
         RLock lock = redissonClient.getLock(lockKey); // 락 가져오기
@@ -55,7 +57,6 @@ public class CartService {
             String productKey = "product:" + product.getId();
             Integer productQuantity = (Integer) redisTemplate.opsForHash().get(cartKey, productKey);
 
-
             // 수량 더하기
             int allQuantity = (productQuantity == null ? 0 : productQuantity) + reqDto.quantity();
             redisTemplate.opsForHash().put(cartKey, productKey, allQuantity);
@@ -74,7 +75,8 @@ public class CartService {
         }
     }
 
-    private String CreateCartKey(String userId) {
+    // 장바구니가 없으면 자동으로 생성
+    private String createCartKey(String userId) {
 
         String cartKey = "cart:" + userId;
         if (!Boolean.TRUE.equals(redisTemplate.hasKey(cartKey))) {
@@ -84,4 +86,53 @@ public class CartService {
         return cartKey;
     }
 
+    /**
+     * 아이템 수량 변경
+     * @param authUser
+     * @param reqDto
+     * @return
+     */
+    public CartItemCreateRes updateCartItemQuantity(CustomUserDetails authUser, CartItemUpdateReq reqDto) {
+        String userId = authUser.getId().toString();
+        String cartKey = createCartKey(userId); // redis 장바구나 키
+        String lockKey = "lock:cart:" + userId;
+
+        RLock lock = redissonClient.getLock(lockKey); // 락 가져오기
+
+        boolean isLocked = false;
+
+        try {
+            isLocked = lock.tryLock(5, 10, TimeUnit.SECONDS);
+            if (!isLocked) {
+                throw new LockException();
+            }
+
+            Product product = productRepository.findById(reqDto.productId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다"));
+
+            // Redis 장바구니에서 아이템 수량 조회
+            String productKey = "product:" + product.getId();
+            Integer productQuantity = (Integer) redisTemplate.opsForHash().get(cartKey, productKey);
+
+            // 수량이 0으로 수정되면 아이템 삭제
+            if (reqDto.quantity() <= 0) {
+                redisTemplate.opsForHash().delete(cartKey, productKey);
+                return new CartItemCreateRes(cartKey, product.getId(), product.getName(), 0, 0);
+            }
+
+            // 수량 변경
+            redisTemplate.opsForHash().put(cartKey, productKey, reqDto.quantity());
+
+            int totalPrice = reqDto.quantity() * product.getAmount();
+
+            return new CartItemCreateRes(cartKey, product.getId(), product.getName(), reqDto.quantity(), totalPrice);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new Threadxception("상품 추가 중 인터럽트 발생");
+        } finally {
+            if (isLocked) {
+                lock.unlock(); // 락 해제
+            }
+        }
+    }
 }
