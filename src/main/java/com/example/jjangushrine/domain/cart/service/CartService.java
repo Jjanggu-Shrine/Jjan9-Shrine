@@ -1,5 +1,6 @@
 package com.example.jjangushrine.domain.cart.service;
 
+import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
@@ -31,8 +32,8 @@ public class CartService {
      * @param reqDto cartId, productId, Quantity
      * @return cartId, productId, ProductName, Quantity, totalPrice
      */
-    public CartItemCreateRes addCartItem(CartItemCreateReq reqDto) {
-        String userId = reqDto.cartId().toString();
+    public CartItemCreateRes addCartItem(CustomUserDetails authUser, CartItemCreateReq reqDto) {
+        String userId = authUser.getId().toString();
         String cartKey = CreateCartKey(userId); // redis 장바구나 키
         String lockKey = "lock:cart:" + userId;
 
