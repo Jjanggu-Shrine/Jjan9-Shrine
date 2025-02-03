@@ -1,5 +1,6 @@
 package com.example.jjangushrine.domain.auth.controller;
 
+import com.example.jjangushrine.common.ApiResMessage;
 import com.example.jjangushrine.config.TestSecurityConfig;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
 import com.example.jjangushrine.domain.auth.dto.request.UserSignUpReq;
@@ -79,7 +80,9 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bearerToken").value("Bearer token"))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value(ApiResMessage.LOGIN_SUCCESS))
+                .andExpect(jsonPath("$.data.accessToken").exists())
                 .andDo(print());
     }
 }

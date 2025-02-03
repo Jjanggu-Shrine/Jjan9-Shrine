@@ -23,6 +23,7 @@ public enum ErrorCode {
     INVALID_PRINCIPAL_TYPE(HttpStatus.BAD_REQUEST, "ERR016", "지원하지 않는 사용자 타입입니다."),
     UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"ERR017", "지원되지 않는 JWT 토큰입니다."),
     TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "ERR018", "JWT 토큰이 없습니다."),
+    INVALID_JSON_PROCESSING(HttpStatus.BAD_REQUEST, "ERR019", "JSON 직렬화 역직렬화 중 오류가 발생했습니다"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
@@ -47,6 +48,7 @@ public enum ErrorCode {
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "ERR402", "이미 사용 중인 사용자명입니다."),
+    DUPLICATE_LOCK(HttpStatus.CONFLICT, "ERR403", "다른 요청이 처리중입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");
