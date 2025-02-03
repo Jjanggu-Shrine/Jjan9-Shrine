@@ -6,6 +6,7 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemUpdateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
+import com.example.jjangushrine.domain.product.service.ProductService;
 import com.example.jjangushrine.exception.common.LockException;
 import com.example.jjangushrine.exception.common.Threadxception;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class CartService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ProductRepository productRepository;
     private final RedissonClient redissonClient; // 분산락을 사용하기 위해 추가
+    private final ProductService productService;
 
 
     /**
@@ -50,8 +52,7 @@ public class CartService {
             }
 
             // 상품 정보 조회
-            Product product = productRepository.findById(reqDto.productId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+            Product product = productService.getProductById(reqDto.productId());
 
             // 상품 갯수 redis 캐시
             String productKey = "product:" + product.getId();
@@ -107,8 +108,7 @@ public class CartService {
                 throw new LockException();
             }
 
-            Product product = productRepository.findById(reqDto.productId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다"));
+            Product product = productService.getProductById(reqDto.productId());
 
             // Redis 장바구니에서 아이템 수량 조회
             String productKey = "product:" + product.getId();
