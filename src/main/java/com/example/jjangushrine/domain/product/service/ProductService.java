@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
-import com.example.jjangushrine.domain.product.exception.StoreAccessDeniedException;
+import com.example.jjangushrine.exception.common.StoreAccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.repository.SellerRepository;
