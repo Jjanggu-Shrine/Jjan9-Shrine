@@ -81,9 +81,9 @@ public class GlobalExceptionHandler {
 
     // 레디스 JSON 변환 실패 예외
     @ExceptionHandler(JsonProcessingException.class)
-    public ResponseEntity<String> handleJsonProcessingException(JsonProcessingException e) {
+    public ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body("JSON 변환 실패: " + e.getMessage());
+                .body(ErrorResponse.of(ErrorCode.INVALID_JSON_PROCESSING, e.getMessage()));
     }
 }

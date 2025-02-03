@@ -4,6 +4,7 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
+import com.example.jjangushrine.exception.common.Threadxception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -24,6 +25,11 @@ public class CartService {
     private final RedissonClient redissonClient; // 분산락을 사용하기 위해 추가
 
 
+    /**
+     * 장바구니 아이템 추가
+     * @param reqDto cartId, productId, Quantity
+     * @return cartId, productId, ProductName, Quantity, totalPrice
+     */
     public CartItemCreateRes addCartItem(CartItemCreateReq reqDto) {
         String userId = reqDto.cartId().toString();
         String cartKey = CreateCartKey(userId); // redis 장바구나 키
@@ -58,7 +64,7 @@ public class CartService {
             return new CartItemCreateRes(cartKey, product.getId(), product.getName(), allQuantity, totalPrice);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("상품 추가 중 인터럽트 발생", e);
+            throw new Threadxception("상품 추가 중 인터럽트 발생");
         } finally {
             if (isLocked) {
                 lock.unlock(); // 락 해제

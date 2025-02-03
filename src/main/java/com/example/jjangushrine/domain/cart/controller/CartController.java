@@ -17,6 +17,11 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 장바구니 아이템 추가
+     * @param reqDto reqDto cartId, productId, Quantity
+     * @return cartId, productId, ProductName, Quantity, totalPrice
+     */
     @PostMapping("/items")
     public ResponseEntity<CartItemCreateRes> addCartItem(@RequestBody CartItemCreateReq reqDto) {
         CartItemCreateRes cartItemCreateRes = cartService.addCartItem(reqDto);

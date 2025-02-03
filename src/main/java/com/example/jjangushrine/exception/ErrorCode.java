@@ -22,6 +22,7 @@ public enum ErrorCode {
     INVALID_ORDER_TIME(HttpStatus.BAD_REQUEST, "ERR013", "지금은 가게 운영 시간이 아닙니다."),
     ORDER_NOT_DELIVERED(HttpStatus.BAD_REQUEST,"ERR014","완료되지 않은 주문입니다."),
     INVALID_USER_ROLE(HttpStatus.BAD_REQUEST,"ERR015","유효하지 않은 UerRole 입니다."),
+    INVALID_JSON_PROCESSING(HttpStatus.BAD_REQUEST, "ERR016", "JSON 직렬화 역직렬화 중 오류가 발생했습니다"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
