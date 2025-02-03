@@ -64,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String jwt = extractToken(bearerJwt);
             Claims claims = jwtUtil.extractClaims(jwt);
 
-            Long userId = Long.parseLong(claims.getId());
+            Long userId = claims.get("id", Long.class);
             String email = claims.get("email", String.class);
             UserRole role = UserRole.of(claims.get("role", String.class));
 
