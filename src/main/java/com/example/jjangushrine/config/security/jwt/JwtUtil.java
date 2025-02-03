@@ -31,7 +31,7 @@
             Date now = new Date();
 
             return SecurityConst.BEARER_PREFIX + Jwts.builder()
-                    .claim("id", principal.getId())
+                    .subject(principal.getId().toString())
                     .claim("email", principal.getUsername())
                     .claim("role", principal.getRole().name())
                     .issuedAt(now)
