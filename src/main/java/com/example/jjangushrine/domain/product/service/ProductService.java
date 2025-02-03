@@ -1,5 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,10 @@ public class ProductService {
 
 		Product saveProduct = productRepository.save(product);
 		return ProductRes.fromEntity(saveProduct);
+	}
+
+	public Page<ProductRes> getProductsByCategory(String category, Pageable pageable) {
+
 	}
 
 	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
