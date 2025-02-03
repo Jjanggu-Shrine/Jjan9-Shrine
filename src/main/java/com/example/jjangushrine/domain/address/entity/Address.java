@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "addresses")
@@ -72,21 +73,11 @@ public class Address extends BaseEntity {
     }
 
     public void update(AddressUpdateReq updateReq) {
-        if (updateReq.getRecipientName() != null) {
-            this.recipientName = updateReq.getRecipientName();
-        }
-        if (updateReq.getAddressName() != null) {
-            this.addressName = updateReq.getAddressName();
-        }
-        if (updateReq.getAddress() != null) {
-            this.address = updateReq.getAddress();
-        }
-        if (updateReq.getAddressDetail() != null) {
-            this.addressDetail = updateReq.getAddressDetail();
-        }
-        if (updateReq.getZipCode() != null) {
-            this.zipCode = updateReq.getZipCode();
-        }
+        Optional.ofNullable(updateReq.recipientName()).ifPresent(value -> this.recipientName = value);
+        Optional.ofNullable(updateReq.addressName()).ifPresent(value -> this.addressName = value);
+        Optional.ofNullable(updateReq.address()).ifPresent(value -> this.address = value);
+        Optional.ofNullable(updateReq.addressDetail()).ifPresent(value -> this.addressDetail = value);
+        Optional.ofNullable(updateReq.zipCode()).ifPresent(value -> this.zipCode = value);
     }
 
     public void setDefault() {

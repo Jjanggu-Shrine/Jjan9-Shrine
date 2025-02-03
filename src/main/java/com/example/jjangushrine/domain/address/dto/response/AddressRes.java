@@ -2,24 +2,18 @@ package com.example.jjangushrine.domain.address.dto.response;
 
 import com.example.jjangushrine.domain.address.entity.Address;
 import com.example.jjangushrine.domain.user.enums.UserRole;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class AddressRes {
-    private Long addressId;
-    private UserRole userRole;
-    private Long ownerId;
-    private String recipientName;
-    private String addressName;
-    private String address;
-    private String addressDetail;
-    private String zipCode;
-    private Boolean isDefault;
+public record AddressRes(
+        Long addressId,
+        UserRole userRole,
+        Long ownerId,
+        String recipientName,
+        String addressName,
+        String address,
+        String addressDetail,
+        String zipCode,
+        Boolean isDefault
+) {
 
     public static AddressRes from(Address address) {
         return new AddressRes(

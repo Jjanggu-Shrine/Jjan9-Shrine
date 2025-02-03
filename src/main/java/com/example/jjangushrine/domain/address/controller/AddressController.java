@@ -45,18 +45,18 @@ public class AddressController {
                         )));
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<AddressListRes>> getAddressList(
-            @ModelAttribute AddressPageRequest pageRequest,
-            @AuthenticationPrincipal CustomUserDetails userDetails
-    ) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(
-                        ApiResMessage.GET_ADDRESS_SUCCESS,
-                        addressService.getAddressList(pageRequest.toPageRequest(),
-                                userDetails.getEmail()
-                        )));
-    }
+        @GetMapping
+        public ResponseEntity<ApiResponse<AddressListRes>> getAddressList(
+                @ModelAttribute AddressPageRequest pageRequest,
+                @AuthenticationPrincipal CustomUserDetails userDetails
+        ) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ApiResponse.success(
+                            ApiResMessage.GET_ADDRESS_SUCCESS,
+                            addressService.getAddressList(pageRequest.toPageRequest(),
+                                    userDetails.getEmail()
+                            )));
+        }
 
     @PatchMapping("/{addressId}")
     public ResponseEntity<ApiResponse<AddressRes>> updateAddress(
