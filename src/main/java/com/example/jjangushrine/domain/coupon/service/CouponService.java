@@ -2,8 +2,6 @@ package com.example.jjangushrine.domain.coupon.service;
 
 import java.time.LocalDateTime;
 
-import com.example.jjangushrine.common.ApiResMessage;
-import com.example.jjangushrine.domain.coupon.dto.ValidatableCouponDate;
 import com.example.jjangushrine.domain.coupon.dto.request.CreateCouponReq;
 import com.example.jjangushrine.domain.coupon.dto.request.UpdateCouponReq;
 import com.example.jjangushrine.domain.coupon.dto.response.CreateCouponRes;
@@ -25,7 +23,7 @@ public class CouponService {
 
 	@Transactional
 	public CreateCouponRes createCoupon(CreateCouponReq createCouponReq) {
-		validateCouponDate(createCouponReq);
+		validateCouponRequest(createCouponReq);
 
 		Coupon coupon = createCouponReq.toEntity();
 		Coupon savedCoupon = couponRepository.save(coupon);
@@ -34,24 +32,44 @@ public class CouponService {
 	}
 
 	@Transactional
-	public UpdateCouponRes updateCoupon(Long couponId, UpdateCouponReq updateCouponReq) {
+	public UpdateCouponRes updateCoupon(Long couponId, UpdateCouponReq request) {
 		Coupon coupon = couponRepository.findById(couponId)
-				.orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
+			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
 
-		validateCouponDate(updateCouponReq);
-
-		updateCouponReq.updateEntity(coupon);
+		validateUpdateRequest(request);
+		request.updateEntity(coupon);
 
 		return UpdateCouponRes.fromEntity(coupon);
 	}
 
-	private void validateCouponDate(ValidatableCouponDate validatableCouponDate) {
-			if (validatableCouponDate.validFrom().isAfter(validatableCouponDate.validUntil())) {
-				throw new CouponException(ErrorCode.INVALID_DATE_RANGE);
+	private void validateCouponRequest(CreateCouponReq createCouponReq) {
+		if (createCouponReq.validFrom().isAfter(createCouponReq.validUntil())) {
+			throw new CouponException(ErrorCode.INVALID_DATE_RANGE);
+		}
+
+		if (createCouponReq.validFrom().isBefore(LocalDateTime.now())) {
+			throw new CouponException(ErrorCode.INVALID_START_DATE);
+		}
+	}
+
+	public static class UpdateCouponValidator {
+		public static void validateUpdateRequest(UpdateCouponReq request) {
+			// validFrom과 validUntil이 모두 존재할 때만 검증
+			if (request.validFrom() != null && request.validUntil() != null) {
+				if (request.validFrom().isAfter(request.validUntil())) {
+					throw new CouponException(ErrorCode.INVALID_DATE_RANGE);
+				}
 			}
 
-			if (validatableCouponDate.validFrom().isBefore(LocalDateTime.now())) {
+			// validFrom이 존재할 때만 현재 시간과 비교
+			if (request.validFrom() != null && request.validFrom().isBefore(LocalDateTime.now())) {
 				throw new CouponException(ErrorCode.INVALID_START_DATE);
 			}
 		}
 	}
+
+	private void validateUpdateRequest(UpdateCouponReq request) {
+		UpdateCouponValidator.validateUpdateRequest(request);
+	}
+}
+

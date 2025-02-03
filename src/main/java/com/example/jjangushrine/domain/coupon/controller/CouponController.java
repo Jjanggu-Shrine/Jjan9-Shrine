@@ -40,6 +40,6 @@ public class CouponController {
 		@Valid @RequestBody UpdateCouponReq request
 	) {
 		UpdateCouponRes response = couponService.updateCoupon(couponId, request);
-		return ApiResponse.success(ApiResMessage.COUPON_UPDATE_SUCCESS, response);
+		return ApiResponse.success("쿠폰이 성공적으로 수정되었습니다.", response);
 	}
 }

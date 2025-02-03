@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import com.example.jjangushrine.domain.coupon.dto.CouponValidationMessage;
-import com.example.jjangushrine.domain.coupon.dto.ValidatableCouponDate;
 import com.example.jjangushrine.domain.coupon.entity.Coupon;
 
 public record CreateCouponReq(
@@ -39,7 +38,7 @@ public record CreateCouponReq(
 	@Min(value = CouponValidationMessage.TOTAL_QUANTITY_MIN,
 		message = CouponValidationMessage.TOTAL_QUANTITY_MIN_MESSAGE)
 		Integer totalQuantity
-) implements ValidatableCouponDate {
+) {
 	public Coupon toEntity() {
 		return Coupon.builder()
 			.name(name)
