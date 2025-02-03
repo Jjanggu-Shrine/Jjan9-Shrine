@@ -1,6 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 import static org.mockito.BDDMockito.*;
 
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
+import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -22,7 +24,7 @@ import com.example.jjangushrine.domain.store.entity.Store;
 import com.example.jjangushrine.domain.store.repository.StoreRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceTest {
+public class ProductServiceTest {
 
 	@Mock
 	ProductRepository productRepository;
@@ -35,6 +37,28 @@ class ProductServiceTest {
 
 	@InjectMocks
 	ProductService productService;
+
+	@Test
+	@DisplayName("상품 등록 성공")
+	void  saveProductSuccess() {
+	    // given
+		ProductSaveReq saveReq = createProductSaveReq();
+		Seller mockSeller = createMockSeller();
+		Store mockStore = createMockStore(mockSeller);
+		Product mockProduct = createMockProduct(saveReq, mockStore);
+		ProductRes expectedRes = ProductRes.fromEntity(mockProduct);
+
+		given(storeRepository.findById(anyLong())).willReturn(Optional.of(mockStore));
+		given(sellerRepository.findById(anyLong())).willReturn(Optional.of(mockSeller));
+		given(productRepository.save(any(Product.class))).willReturn(mockProduct);
+
+		// when
+		ProductRes actualRes = productService.saveProduct(saveReq, mockSeller.getId());
+
+	    // then
+		assertEquals(expectedRes, actualRes);
+		verify(productRepository).save(any(Product.class));
+	}
 
 	@Test
 	@DisplayName("상품삭제성공")

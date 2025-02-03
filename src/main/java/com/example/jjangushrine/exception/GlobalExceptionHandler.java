@@ -1,9 +1,10 @@
 package com.example.jjangushrine.exception;
 
+import java.nio.file.AccessDeniedException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-//import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,21 +12,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.jjangushrine.common.ErrorResponse;
 import com.example.jjangushrine.exception.common.BusinessException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
-//    // AccessDeniedException 처리 추가
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-//        log.error("AccessDeniedException", e);
-//        return ResponseEntity
-//            .status(HttpStatus.FORBIDDEN)
-//            .body(ErrorResponse.of(ErrorCode.FORBIDDEN_ACCESS, "접근 권한이 없습니다."));
-//    }
+    private final HttpServletRequest request;
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
@@ -76,5 +73,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.of(ErrorCode.INVALID_JSON_FORMAT, detail));
+    }
+
+    // 레디스 JSON 변환 실패 예외
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.of(ErrorCode.INVALID_JSON_PROCESSING, e.getMessage()));
     }
 }

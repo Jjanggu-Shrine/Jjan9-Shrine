@@ -24,6 +24,11 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"ERR017", "지원되지 않는 JWT 토큰입니다."),
     TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "ERR018", "JWT 토큰이 없습니다."),
 
+	//Coupon
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "ERR019", "유효기간의 시작일이 종료일보다 늦을 수 없습니다."),
+    INVALID_START_DATE(HttpStatus.BAD_REQUEST, "ERR020", "쿠폰 시작일은 현재 시점 이후여야 합니다."),
+    INVALID_JSON_PROCESSING(HttpStatus.BAD_REQUEST, "ERR019", "JSON 직렬화 역직렬화 중 오류가 발생했습니다"),
+
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "ERR102", "잘못된 아이디 또는 비밀번호입니다."),
@@ -33,7 +38,10 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR201", "접근 권한이 없습니다."),
-    PRODUCT_FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR203", "해당 상품에 접근할 수 없습니다."),
+    //Coupon
+    ADMIN_ACCESS_DENIED(HttpStatus.FORBIDDEN, "ERR202", "관리자 권한이 필요한 작업입니다."),
+	STORE_FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR203", "해당 상점에 접근할 권한이 없습니다."),
+    PRODUCT_FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ERR204", "해당 상품에 접근할 수 없습니다."),
 
     // 404 NOT_FOUND
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR301", "사용자를 찾을 수 없습니다."),
@@ -48,6 +56,7 @@ public enum ErrorCode {
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "ERR402", "이미 사용 중인 사용자명입니다."),
+    DUPLICATE_LOCK(HttpStatus.CONFLICT, "ERR403", "다른 요청이 처리중입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");

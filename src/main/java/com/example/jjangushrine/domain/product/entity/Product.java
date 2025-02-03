@@ -77,6 +77,10 @@ public class Product extends BaseEntity {
 		this.isDeleted = false;
 	}
 
+	public void registerStore(Store store) {
+		this.store = store;
+	}
+
 	public void validateIsDeleted() {
 		if(isDeleted) {
 			throw new ProductNotFoundException();
