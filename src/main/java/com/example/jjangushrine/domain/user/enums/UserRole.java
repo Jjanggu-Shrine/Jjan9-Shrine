@@ -6,7 +6,7 @@ import com.example.jjangushrine.exception.ErrorCode;
 import com.example.jjangushrine.exception.common.InvalidException;
 
 public enum UserRole {
-	SELLER, USER;
+	SELLER, USER, ADMIN;
 
 	public static UserRole of(String role) {
 		return Arrays.stream(UserRole.values())
