@@ -1,6 +1,7 @@
 package com.example.jjangushrine.domain.coupon.entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.example.jjangushrine.common.BaseEntity;
 
@@ -16,6 +17,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.example.jjangushrine.domain.coupon.dto.request.UpdateCouponReq;
 import com.example.jjangushrine.domain.coupon.enums.CouponStatus;
 
 @Entity
@@ -63,5 +66,14 @@ public class Coupon extends BaseEntity {
 		this.status = CouponStatus.AVAILABLE;
 		this.totalQuantity = totalQuantity;
 		this.usedQuantity = 0;
+	}
+
+	public void update(UpdateCouponReq req) {
+		Optional.ofNullable(req.name()).ifPresent(value -> this.name = value);
+		Optional.ofNullable(req.discountPercent()).ifPresent(value -> this.discountPercent = value);
+		Optional.ofNullable(req.minOrderAmount()).ifPresent(value -> this.minOrderAmount = value);
+		Optional.ofNullable(req.validFrom()).ifPresent(value -> this.validFrom = value);
+		Optional.ofNullable(req.validUntil()).ifPresent(value -> this.validUntil = value);
+		Optional.ofNullable(req.totalQuantity()).ifPresent(value -> this.totalQuantity = value);
 	}
 }
