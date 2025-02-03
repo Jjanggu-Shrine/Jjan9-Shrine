@@ -41,13 +41,13 @@ public class CouponController {
 		@Valid @RequestBody UpdateCouponReq request
 	) {
 		UpdateCouponRes response = couponService.updateCoupon(couponId, request);
-		return ApiResponse.success("쿠폰이 성공적으로 수정되었습니다.", response);
+		return ApiResponse.success(ApiResMessage.COUPON_UPDATE_SUCCESS, response);
 	}
 
 	@DeleteMapping("/{couponId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ApiResponse<Void> deleteCoupon(@PathVariable Long couponId) {
 		couponService.deleteCoupon(couponId);
-		return ApiResponse.success("쿠폰이 성공적으로 삭제되었습니다.");
+		return ApiResponse.success(ApiResMessage.COUPON_DELETE_SUCCESS);
 	}
 }

@@ -34,7 +34,7 @@ public class CouponService {
 	@Transactional
 	public UpdateCouponRes updateCoupon(Long couponId, UpdateCouponReq request) {
 		Coupon coupon = couponRepository.findById(couponId)
-			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
+			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND));
 
 		validateUpdateRequest(request);
 		request.updateEntity(coupon);
@@ -45,11 +45,11 @@ public class CouponService {
 	@Transactional
 	public void deleteCoupon(Long couponId) {
 		Coupon coupon = couponRepository.findById(couponId)
-			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
+			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND));
 
 		// 이미 사용된 쿠폰이 있는지 확인
 		if (coupon.getUsedQuantity() > 0) {
-			throw new CouponException(ErrorCode.INVALID_ACCESS, "이미 사용된 쿠폰이 있어 삭제할 수 없습니다.");
+			throw new CouponException(ErrorCode.INVALID_ACCESS);
 		}
 
 		couponRepository.delete(coupon);
@@ -66,24 +66,21 @@ public class CouponService {
 		}
 	}
 
-	public static class UpdateCouponValidator {
-		public static void validateUpdateRequest(UpdateCouponReq request) {
-			// validFrom과 validUntil이 모두 존재할 때만 검증
-			if (request.validFrom() != null && request.validUntil() != null) {
-				if (request.validFrom().isAfter(request.validUntil())) {
-					throw new CouponException(ErrorCode.INVALID_DATE_RANGE);
-				}
-			}
 
-			// validFrom이 존재할 때만 현재 시간과 비교
-			if (request.validFrom() != null && request.validFrom().isBefore(LocalDateTime.now())) {
-				throw new CouponException(ErrorCode.INVALID_START_DATE);
+	public static void validateUpdateRequest(UpdateCouponReq request) {
+		// validFrom과 validUntil이 모두 존재할 때만 검증
+		if (request.validFrom() != null && request.validUntil() != null) {
+			if (request.validFrom().isAfter(request.validUntil())) {
+				throw new CouponException(ErrorCode.INVALID_DATE_RANGE);
 			}
+		}
+
+		// validFrom이 존재할 때만 현재 시간과 비교
+		if (request.validFrom() != null && request.validFrom().isBefore(LocalDateTime.now())) {
+			throw new CouponException(ErrorCode.INVALID_START_DATE);
 		}
 	}
 
-	private void validateUpdateRequest(UpdateCouponReq request) {
-		UpdateCouponValidator.validateUpdateRequest(request);
-	}
+
 }
 
