@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
+import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
+import com.example.jjangushrine.domain.product.exception.ProductAccessDeniedException;
+import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.exception.common.StoreAccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -46,6 +49,26 @@ public class ProductService {
 		return ProductRes.fromEntity(saveProduct);
 	}
 
+	@Transactional
+	public ProductRes updateProduct(Long productId, Long sellerId, ProductUpdateReq updateReq) {
+
+		Product findProduct = getProductById(productId);
+		validateProductOwnedBySeller(productId, sellerId);
+
+		findProduct.update(updateReq);
+
+		return ProductRes.fromEntity(findProduct);
+	}
+
+	@Transactional
+	public void deleteProduct(Long sellerId, Long productId) {
+
+		Product findProduct = getProductById(productId);
+		validateProductOwnedBySeller(productId, sellerId);
+
+		findProduct.delete();
+	}
+
 	public Page<ProductRes> getProductsByCategory(String category, Pageable pageable) {
 
 	}
@@ -61,5 +84,19 @@ public class ProductService {
 		}
 
 		return true;
+	}
+
+	public Product getProductById(Long productId) {
+		Product findProduct = productRepository.findById(productId)
+			.orElseThrow(ProductNotFoundException::new);
+
+		findProduct.validateIsDeleted();
+		return findProduct;
+	}
+
+	protected void validateProductOwnedBySeller(Long productId, Long sellerId) {
+		if(!productRepository.existsByProductIdAndSellerId(productId, sellerId)) {
+			throw new ProductAccessDeniedException();
+		}
 	}
 }
