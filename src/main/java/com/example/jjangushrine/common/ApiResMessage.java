@@ -22,6 +22,6 @@ public class ApiResMessage {
     public static final String UPDATE_USER_SUCCESS = "사용자 수정을 성공적으로 완료되었습니다.";
     public static final String DELETE_USER_SUCCESS = "사용자 수정을 성공적으로 완료되었습니다.";
     public static final String GET_SELLER_SUCCESS = "판매자 조회를 성공적으로 완료되었습니다.";
-    public static final String UPDATE_SELLER_SUCCESS = "판매자 삭제를 성공적으로 완료되었습니다.";
+    public static final String UPDATE_SELLER_SUCCESS = "판매자 수정을 성공적으로 완료되었습니다.";
     public static final String DELETE_SELLER_SUCCESS = "판매자 삭제를 성공적으로 완료되었습니다.";
 }

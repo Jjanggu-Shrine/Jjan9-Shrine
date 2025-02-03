@@ -1,6 +1,9 @@
 package com.example.jjangushrine.domain.seller.entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import com.example.jjangushrine.domain.seller.dto.request.SellerUpdateReq;
 import org.hibernate.annotations.ColumnDefault;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.persistence.Column;
@@ -63,6 +66,15 @@ public class Seller {
         this.password = password;
         this.representativeName = representativeName;
         this.phoneNumber = phoneNumber;
+    }
+
+    public void update(SellerUpdateReq updateReq) {
+        Optional.ofNullable(updateReq.password()).ifPresent(
+                value -> this.password = value);
+        Optional.ofNullable(updateReq.representativeName()).ifPresent(
+                value -> this.representativeName = value);
+        Optional.ofNullable(updateReq.phoneNumber()).ifPresent(
+                value -> this.phoneNumber = value);
     }
 
     public void softDelete() {
