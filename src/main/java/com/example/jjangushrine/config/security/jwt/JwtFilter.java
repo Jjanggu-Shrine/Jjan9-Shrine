@@ -64,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String jwt = extractToken(bearerJwt);
             Claims claims = jwtUtil.extractClaims(jwt);
 
-            Long userId = claims.get("id", Long.class);
+            Long id = Long.parseLong(claims.getSubject());
             String email = claims.get("email", String.class);
             UserRole role = UserRole.of(claims.get("role", String.class));
 
@@ -74,13 +74,13 @@ public class JwtFilter extends OncePerRequestFilter {
             CustomUserDetails userDetails;
             if (role == UserRole.USER) {
                 User user = User.builder()
-                        .id(userId)
+                        .id(id)
                         .email(email)
                         .build();
                 userDetails = new CustomUserDetails(user);
             } else {
                 Seller seller = Seller.builder()
-                        .id(userId)
+                        .id(id)
                         .email(email)
                         .build();
                 userDetails = new CustomUserDetails(seller);
