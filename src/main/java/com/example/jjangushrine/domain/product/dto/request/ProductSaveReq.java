@@ -1,5 +1,4 @@
 package com.example.jjangushrine.domain.product.dto.request;
-
 import com.example.jjangushrine.domain.product.entity.Product;
 
 import jakarta.validation.constraints.NotBlank;

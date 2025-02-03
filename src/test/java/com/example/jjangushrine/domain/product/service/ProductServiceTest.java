@@ -1,5 +1,6 @@
 package com.example.jjangushrine.domain.product.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 import static org.mockito.BDDMockito.*;
@@ -59,6 +60,25 @@ public class ProductServiceTest {
 		verify(productRepository).save(any(Product.class));
 	}
 
+	@Test
+	@DisplayName("상품삭제성공")
+	void deleteProductSuccess () {
+		// given
+		ProductSaveReq saveReq = createProductSaveReq();
+		Seller mockSeller = createMockSeller();
+		Store mockStore = createMockStore(mockSeller);
+		Product mockProduct = createMockProduct(saveReq, mockStore);
+
+		given(productRepository.findById(anyLong())).willReturn(Optional.of(mockProduct));
+		given(productRepository.existsByProductIdAndSellerId(anyLong(), anyLong())).willReturn(true);
+
+		// when
+		productService.deleteProduct(mockSeller.getId(), mockProduct.getId());
+
+		// then
+		assertThat(mockProduct.getIsDeleted()).isTrue();
+	}
+
 	private Seller createMockSeller() {
 		Seller mockSeller = Seller.builder().build();
 		setField(mockSeller, "id", 1L);
@@ -97,5 +117,4 @@ public class ProductServiceTest {
 			"TOP"
 		);
 	}
-
 }

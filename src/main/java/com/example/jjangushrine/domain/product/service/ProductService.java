@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
+import com.example.jjangushrine.domain.product.exception.ProductAccessDeniedException;
+import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.exception.common.StoreAccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -44,6 +46,15 @@ public class ProductService {
 		return ProductRes.fromEntity(saveProduct);
 	}
 
+	@Transactional
+	public void deleteProduct(Long sellerId, Long productId) {
+
+		Product findProduct = getProductById(productId);
+		validateProductOwnedBySeller(productId, sellerId);
+
+		findProduct.delete();
+	}
+
 	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
 
 		// sellerService에 해당 로직 메서드 생기면 변경 예정 + Execption 종류도
@@ -55,5 +66,19 @@ public class ProductService {
 		}
 
 		return true;
+	}
+
+	public Product getProductById(Long productId) {
+		Product findProduct = productRepository.findById(productId)
+			.orElseThrow(ProductNotFoundException::new);
+
+		findProduct.validateIsDeleted();
+		return findProduct;
+	}
+
+	protected void validateProductOwnedBySeller(Long productId, Long sellerId) {
+		if(!productRepository.existsByProductIdAndSellerId(productId, sellerId)) {
+			throw new ProductAccessDeniedException();
+		}
 	}
 }
