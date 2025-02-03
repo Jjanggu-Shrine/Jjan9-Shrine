@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.jjangushrine.common.ApiResponse;
 import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
-import com.example.jjangushrine.domain.product.dto.response.ProductSaveRes;
+import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class ProductController {
 	private final ProductService productService;
 
 	@PostMapping("/sellers/products")
-	public ResponseEntity<ApiResponse<ProductSaveRes>> saveProduct(
+	public ResponseEntity<ApiResponse<ProductRes>> saveProduct(
 		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@Valid @RequestBody ProductSaveReq productSaveReq) {
 		return ResponseEntity.status(HttpStatus.CREATED)
