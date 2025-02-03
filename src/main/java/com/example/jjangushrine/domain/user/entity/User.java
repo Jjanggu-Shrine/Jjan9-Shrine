@@ -1,7 +1,9 @@
 package com.example.jjangushrine.domain.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import com.example.jjangushrine.domain.user.dto.request.UserUpdateReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,6 +68,12 @@ public class User extends BaseEntity {
 		this.password = password;
 		this.nickName = nickName;
 		this.phoneNumber = phoneNumber;
+	}
+
+	public void update(UserUpdateReq updateReq) {
+		Optional.ofNullable(updateReq.password()).ifPresent(value -> this.password = value);
+		Optional.ofNullable(updateReq.nickName()).ifPresent(value -> this.nickName = value);
+		Optional.ofNullable(updateReq.phoneNumber()).ifPresent(value -> this.phoneNumber = value);
 	}
 
 	public void softDelete() {
