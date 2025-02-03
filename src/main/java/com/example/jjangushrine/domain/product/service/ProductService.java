@@ -40,9 +40,8 @@ public class ProductService {
 		Product product = productSaveReq.toEntity();
 		product.registerStore(store);
 
-		productRepository.save(product);
-
-		return ProductRes.fromEntity(product);
+		Product saveProduct = productRepository.save(product);
+		return ProductRes.fromEntity(saveProduct);
 	}
 
 	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
