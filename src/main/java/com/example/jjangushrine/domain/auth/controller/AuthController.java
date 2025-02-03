@@ -1,5 +1,7 @@
 package com.example.jjangushrine.domain.auth.controller;
 
+import com.example.jjangushrine.common.ApiResponse;
+import com.example.jjangushrine.common.ApiResMessage;
 import com.example.jjangushrine.domain.auth.dto.request.SellerSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
 import com.example.jjangushrine.domain.auth.dto.request.UserSignUpReq;
@@ -23,36 +25,44 @@ public class AuthController {
     private final UserAuthService userAuthService;
     private final SellerAuthService sellerAuthService;
 
-    @PostMapping("user/signup")
-    public ResponseEntity<Void> userSignUp(
+    @PostMapping("/user/signup")
+    public ResponseEntity<ApiResponse<Void>> userSignUp(
             @RequestBody @Valid UserSignUpReq userSignUpReq
     ) {
         userAuthService.userSignUp(userSignUpReq);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(ApiResMessage.SIGNUP_SUCCESS));
     }
 
-    @PostMapping("seller/signup")
-    public ResponseEntity<Void> sellerSignUp(
+    @PostMapping("/seller/signup")
+    public ResponseEntity<ApiResponse<Void>> sellerSignUp(
             @RequestBody @Valid SellerSignUpReq sellerSignUpReq
     ) {
         sellerAuthService.sellerSignUp(sellerSignUpReq);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(ApiResMessage.SIGNUP_SUCCESS));
     }
 
-    @PostMapping("user/signin")
-    public ResponseEntity<SignInRes> userSignIn(
+    @PostMapping("/user/signin")
+    public ResponseEntity<ApiResponse<SignInRes>> userSignIn(
             @RequestBody @Valid SignInReq signInReq
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userAuthService.userSignIn(signInReq));
+                .body(ApiResponse.success(
+                        ApiResMessage.LOGIN_SUCCESS,
+                        userAuthService.userSignIn(signInReq)
+                        ));
     }
 
-    @PostMapping("seller/signin")
-    public ResponseEntity<SignInRes> sellerSignIn(
+    @PostMapping("/seller/signin")
+    public ResponseEntity<ApiResponse<SignInRes>> sellerSignIn(
             @RequestBody @Valid SignInReq signInReq
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(sellerAuthService.sellerSignIn(signInReq));
+                .body(ApiResponse.success(
+                        ApiResMessage.LOGIN_SUCCESS,
+                        sellerAuthService.sellerSignIn(signInReq)
+                ));
     }
 }
 
