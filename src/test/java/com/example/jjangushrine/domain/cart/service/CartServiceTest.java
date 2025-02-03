@@ -1,9 +1,11 @@
 package com.example.jjangushrine.domain.cart.service;
 
+import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
+import com.example.jjangushrine.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,8 +46,17 @@ class CartServiceTest {
     @InjectMocks
     private CartService cartService;
 
+    private CustomUserDetails authUser;
+
     @BeforeEach
     void setup() {
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.com")
+                .password("password")
+                .build();
+        authUser = new CustomUserDetails(user);
+
         when(redisTemplate.opsForHash()).thenReturn(hashOperations);
         when(redissonClient.getLock(anyString())).thenReturn(rLock);
     }
@@ -54,7 +65,6 @@ class CartServiceTest {
     void addCartItem_정상추가() throws InterruptedException {
         // Given
         Long productId = 1L;
-        Long cartId = 2L;
         int quantity = 2;
         int productPrice = 30000;
 
@@ -64,9 +74,9 @@ class CartServiceTest {
                 .build();
         ReflectionTestUtils.setField(product, "id", productId);
 
-        CartItemCreateReq req = new CartItemCreateReq(cartId, productId, quantity);
+        CartItemCreateReq req = new CartItemCreateReq(productId, quantity);
 
-        String cartKey = "cart:" + cartId;
+        String cartKey = "cart:" + authUser.getId();
         String productKey = "product:" + productId;
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
@@ -74,7 +84,7 @@ class CartServiceTest {
         when(rLock.tryLock(5, 10, TimeUnit.SECONDS)).thenReturn(true);
 
         // when
-        CartItemCreateRes res = cartService.addCartItem(req);
+        CartItemCreateRes res = cartService.addCartItem(authUser, req);
 
         // Then
         assertThat(res.cartId()).isEqualTo(cartKey);
@@ -91,15 +101,14 @@ class CartServiceTest {
     @Test
     void addCartItem_상품이_없으면_예외발생() throws InterruptedException {
         // Given
-        Long cartId = 1L;
         Long productId = 2L;
-        CartItemCreateReq req = new CartItemCreateReq(cartId, productId, 2);
+        CartItemCreateReq req = new CartItemCreateReq(productId, 2);
 
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
         when(rLock.tryLock(5, 10, TimeUnit.SECONDS)).thenReturn(true);
 
         // Then
-        assertThatThrownBy(() -> cartService.addCartItem(req))
+        assertThatThrownBy(() -> cartService.addCartItem(authUser, req))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("존재하지 않는 상품");
 
@@ -109,14 +118,13 @@ class CartServiceTest {
     @Test
     void addCartItem_락을_얻지못하면_예외발생() throws InterruptedException {
         // Given
-        Long cartId = 1L;
         Long productId = 2L;
-        CartItemCreateReq req = new CartItemCreateReq(cartId, productId, 2);
+        CartItemCreateReq req = new CartItemCreateReq(productId, 2);
 
         when(rLock.tryLock(5, 10, TimeUnit.SECONDS)).thenReturn(false);
 
         // Then
-        assertThatThrownBy(() -> cartService.addCartItem(req))
+        assertThatThrownBy(() -> cartService.addCartItem(authUser, req))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("다른 요청이 처리중입니다");
 

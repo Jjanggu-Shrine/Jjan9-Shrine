@@ -75,7 +75,7 @@ class SellerAuthServiceTest {
         SignInRes res = authService.sellerSignIn(signInReq);
 
         // then
-        assertThat(res.bearerToken()).startsWith("Bearer ");
+        assertThat(res.accessToken()).startsWith("Bearer ");
     }
 
     @Test
