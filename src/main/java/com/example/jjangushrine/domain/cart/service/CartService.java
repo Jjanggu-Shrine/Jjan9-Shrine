@@ -4,6 +4,7 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
+import com.example.jjangushrine.exception.common.LockException;
 import com.example.jjangushrine.exception.common.Threadxception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class CartService {
             // 5초 동안 락을 시도하고, 10초 동안 유지(자동 해제)
             isLocked = lock.tryLock(5, 10, TimeUnit.SECONDS);
             if (!isLocked) {
-                throw new IllegalStateException("다른 요청이 처리중입니다.");
+                throw new LockException();
             }
 
             // 상품 정보 조회

@@ -47,6 +47,7 @@ public enum ErrorCode {
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "ERR402", "이미 사용 중인 사용자명입니다."),
+    DUPLICATE_LOCK(HttpStatus.CONFLICT, "ERR403", "다른 요청이 처리중입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");
