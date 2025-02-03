@@ -109,7 +109,7 @@ class UserAuthServiceTest {
         SignInRes res = authService.userSignIn(signInReq);
 
         // then
-        assertThat(res.bearerToken()).startsWith("Bearer ");
+        assertThat(res.accessToken()).startsWith("Bearer ");
     }
 
     @Test
