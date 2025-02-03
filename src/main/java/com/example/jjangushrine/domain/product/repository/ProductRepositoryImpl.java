@@ -1,7 +1,7 @@
 package com.example.jjangushrine.domain.product.repository;
 
-import static com.example.jjangushrine.domain.product.entity.QProduct.*;
-import static com.example.jjangushrine.domain.seller.entity.QSeller.*;
+import static com.example.jjangushrine.domain.product.entity.QProduct.product;
+import static com.example.jjangushrine.domain.seller.entity.QSeller.seller;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
