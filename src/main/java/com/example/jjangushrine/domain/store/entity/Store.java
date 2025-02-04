@@ -1,6 +1,9 @@
 package com.example.jjangushrine.domain.store.entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import com.example.jjangushrine.domain.store.dto.request.StoreUpdateReq;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import com.example.jjangushrine.common.BaseEntity;
@@ -64,6 +67,19 @@ public class Store extends BaseEntity {
 		this.storeName = storeName;
 		this.description = description;
 		this.baseDeliveryFee = baseDeliveryFee;
+	}
+
+	public void update(StoreUpdateReq updateReq) {
+		Optional.ofNullable(updateReq.businessNumber()).ifPresent(
+				value -> this.businessNumber = value);
+		Optional.ofNullable(updateReq.businessName()).ifPresent(
+				value -> this.businessName = value);
+		Optional.ofNullable(updateReq.storeName()).ifPresent(
+				value -> this.storeName = value);
+		Optional.ofNullable(updateReq.description()).ifPresent(
+				value -> this.description = value);
+		Optional.ofNullable(updateReq.baseDeliveryFee()).ifPresent(
+				value -> this.baseDeliveryFee = value);
 	}
 
 	public void softDelete() {
