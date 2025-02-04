@@ -17,6 +17,7 @@ import java.util.Optional;
 public class Address extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
