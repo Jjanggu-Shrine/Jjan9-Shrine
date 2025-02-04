@@ -24,4 +24,10 @@ public class ApiResMessage {
     public static final String GET_SELLER_SUCCESS = "판매자 조회를 성공적으로 완료되었습니다.";
     public static final String UPDATE_SELLER_SUCCESS = "판매자 수정을 성공적으로 완료되었습니다.";
     public static final String DELETE_SELLER_SUCCESS = "판매자 삭제를 성공적으로 완료되었습니다.";
+
+    // 쇼핑몰 관련 메시지
+    public static final String CREATE_STORE_SUCCESS = "쇼핑몰 등록을 성공적으로 완료되었습니다.";;
+    public static final String GET_STORE_SUCCESS = "쇼핑몰 조회를 성공적으로 완료되었습니다.";;
+    public static final String UPDATE_STORE_SUCCESS = "쇼핑몰 수정을 성공적으로 완료되었습니다.";;
+    public static final String DELETE_STORE_SUCCESS = "쇼핑몰 삭제를 성공적으로 완료되었습니다.";;
 }
