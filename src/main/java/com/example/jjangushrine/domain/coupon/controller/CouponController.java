@@ -29,14 +29,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/admin/coupons")
 @RequiredArgsConstructor
 public class CouponController {
 
 	private final CouponService couponService;
-	private final CouponIssueService couponIssueService;
+
 
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")  // 어드민 권한 체크
@@ -60,34 +59,6 @@ public class CouponController {
 	public ApiResponse<Void> deleteCoupon(@PathVariable Long couponId) {
 		couponService.deleteCoupon(couponId);
 		return ApiResponse.success(ApiResMessage.COUPON_DELETE_SUCCESS);
-	}
-
-	@PostMapping("/{couponId}/issue")
-	public ResponseEntity<?> issueCoupon(
-		@AuthenticationPrincipal User user,
-		@PathVariable Long couponId
-	) {
-		log.info("Coupon issue request - userId: {}, couponId: {}", user.getId(), couponId);
-
-		try {
-			CouponIssueReq request = CouponIssueReq.of(user.getId(), couponId);
-			UserCouponRes response = couponIssueService.issueCoupon(request);
-
-			log.info("Coupon issued successfully - userCouponId: {}", response.userCouponId());
-			return ResponseEntity.ok(ApiResponse.success("쿠폰이 성공적으로 발급되었습니다.", response));
-
-		} catch (IllegalStateException e) {
-			log.warn("Coupon issue failed - userId: {}, couponId: {}, reason: {}",
-				user.getId(), couponId, e.getMessage());
-			return ResponseEntity.badRequest()
-				.body(ErrorResponse.of(ErrorCode.INVALID_COUPON_REQUEST, e.getMessage()));
-
-		} catch (Exception e) {
-			log.error("Unexpected error during coupon issue - userId: {}, couponId: {}",
-				user.getId(), couponId, e);
-			return ResponseEntity.internalServerError()
-				.body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
-		}
 	}
 
 }
