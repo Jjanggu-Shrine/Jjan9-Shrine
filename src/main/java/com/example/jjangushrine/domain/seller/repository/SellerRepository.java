@@ -11,5 +11,7 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     Optional<Seller> findByEmail(String email);
 
-    Optional<Seller> findByEmailAndIsDeletedFalse(String email);
+    Optional<Seller> findByEmailAndIsDeletedIsFalse(String email);
+
+    Optional<Seller> findSellerByIdAndIsDeletedIsFalse(Long id);
 }
