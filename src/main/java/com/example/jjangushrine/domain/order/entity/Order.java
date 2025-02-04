@@ -44,12 +44,4 @@ public class Order extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "order_id")
-
-	private List<OrderItem> orderItems = new ArrayList<>();
-
-
-
 }
