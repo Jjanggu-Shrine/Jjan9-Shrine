@@ -3,6 +3,7 @@ package com.example.jjangushrine.domain.store.service;
 import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.store.dto.request.StoreCreateReq;
+import com.example.jjangushrine.domain.store.dto.request.StoreUpdateReq;
 import com.example.jjangushrine.domain.store.dto.response.StoreRes;
 import com.example.jjangushrine.domain.store.entity.Store;
 import com.example.jjangushrine.domain.store.repository.StoreRepository;
@@ -32,6 +33,16 @@ public class StoreService {
         Store store = storeRepository.findBySellerIdAndIsDeletedFalse(seller)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
 
+        return StoreRes.from(store);
+    }
+
+    @Transactional
+    public StoreRes updateStore(StoreUpdateReq updateReq, String email) {
+        Seller seller = sellerService.findSellerByEmail(email);
+        Store store = storeRepository.findBySellerIdAndIsDeletedFalse(seller)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
+
+        store.update(updateReq);
         return StoreRes.from(store);
     }
 }

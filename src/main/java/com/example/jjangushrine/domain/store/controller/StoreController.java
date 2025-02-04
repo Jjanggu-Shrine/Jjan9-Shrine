@@ -4,6 +4,8 @@ import com.example.jjangushrine.common.ApiResMessage;
 import com.example.jjangushrine.common.ApiResponse;
 import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.domain.store.dto.request.StoreCreateReq;
+import com.example.jjangushrine.domain.store.dto.request.StoreUpdateReq;
+import com.example.jjangushrine.domain.store.dto.response.StoreRes;
 import com.example.jjangushrine.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +41,14 @@ public class StoreController {
                         storeService.getStore(userDetails.getEmail())));
     }
 
+    @PatchMapping
+    public ResponseEntity<ApiResponse<StoreRes>> updateStore(
+            @RequestBody StoreUpdateReq storeUpdateReq,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        ApiResMessage.UPDATE_STORE_SUCCESS,
+                        storeService.updateStore(storeUpdateReq, userDetails.getEmail())));
+    }
 }
