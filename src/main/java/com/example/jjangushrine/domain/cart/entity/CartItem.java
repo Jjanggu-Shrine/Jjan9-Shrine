@@ -24,10 +24,10 @@ public class CartItem {
     private Product product;
 
     @Column(nullable = false)
-    private int quantity;
+    private Short quantity;
 
     @Builder
-    public CartItem(Long cartKey, Product product, int quantity) {
+    public CartItem(Long cartKey, Product product, Short quantity) {
         this.cartKey = cartKey;
         this.product = product;
         this.quantity = quantity;

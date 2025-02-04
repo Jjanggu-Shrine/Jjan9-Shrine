@@ -11,12 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "order_items")
 public class OrderItem extends BaseEntity {
 
@@ -32,7 +33,7 @@ public class OrderItem extends BaseEntity {
 	private String productName;
 
 	@Column(nullable = false, name = "quantity")
-	private int quantity;
+	private Short quantity;
 
 	@Column(nullable = false, name = "product_price")
 	private int productPrice;

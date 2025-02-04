@@ -93,4 +93,11 @@ public class ProductService {
 			throw new ProductAccessDeniedException();
 		}
 	}
+
+	@Transactional
+	public void decreaseStock(Long productId, Short quantity) {
+		Product product = getProductById(productId);
+		product.decreaseStock(quantity);
+		productRepository.save(product);
+	}
 }
