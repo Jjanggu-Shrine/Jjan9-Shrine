@@ -3,12 +3,13 @@ package com.example.jjangushrine.domain.cart.entity;
 
 import com.example.jjangushrine.domain.product.entity.Product;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cart_items")
 public class CartItem {

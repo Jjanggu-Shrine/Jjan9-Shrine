@@ -2,7 +2,7 @@ package com.example.jjangushrine.domain.product.entity;
 
 import java.time.LocalDateTime;
 
-import com.example.jjangushrine.domain.product.exception.ProductOutOfStock;
+import com.example.jjangushrine.exception.common.ProductOutOfStock;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
