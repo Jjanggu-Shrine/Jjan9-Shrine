@@ -14,5 +14,5 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 	@Query("SELECT CASE WHEN COUNT(uc) > 0 THEN true ELSE false END FROM UserCoupon uc WHERE uc.user.id = :userId AND uc.coupon.couponId = :couponId")
 	boolean existsByUserIdAndCouponId(Long userId, Long couponId);
 
-	Optional<UserCoupon> findByUserIdAndCouponIdAndUsedAtIsNull(Long userId, Long couponId);
+	Optional<UserCoupon> findByUser_IdAndCoupon_CouponIdAndUsedAtIsNull(Long userId, Long couponId);
 }

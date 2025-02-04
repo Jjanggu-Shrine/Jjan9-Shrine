@@ -33,7 +33,7 @@ public class OrderItem extends BaseEntity {
 	private String productName;
 
 	@Column(nullable = false, name = "quantity")
-	private Short quantity;
+	private int quantity;
 
 	@Column(nullable = false, name = "product_price")
 	private int productPrice;

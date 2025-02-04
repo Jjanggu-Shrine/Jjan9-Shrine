@@ -114,7 +114,7 @@ public class Product extends BaseEntity {
 		}
 	}
 
-	public void decreaseStock(Short quantity) {
+	public void decreaseStock(int quantity) {
 		if (this.stock < quantity) {
 			throw new ProductOutOfStock();
 		}

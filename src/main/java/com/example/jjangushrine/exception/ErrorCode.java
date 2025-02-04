@@ -59,6 +59,7 @@ public enum ErrorCode {
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
     USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR310", "발급된 쿠폰을 찾을 수 없습니다."),
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR309", "해당 장바구니를 찾을 수 없습니다."),
 
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
@@ -83,6 +84,7 @@ public enum ErrorCode {
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");
+
 
     private final HttpStatus status;
     private final String code;

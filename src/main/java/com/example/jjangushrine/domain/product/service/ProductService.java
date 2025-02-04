@@ -95,7 +95,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void decreaseStock(Long productId, Short quantity) {
+	public void decreaseStock(Long productId, int quantity) {
 		Product product = getProductById(productId);
 		product.decreaseStock(quantity);
 		productRepository.save(product);

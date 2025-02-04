@@ -16,7 +16,7 @@ import com.example.jjangushrine.domain.product.service.ProductService;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.ErrorCode;
-import com.example.jjangushrine.exception.common.OrderNotFoundException;
+import com.example.jjangushrine.exception.common.NotFoundException;
 import com.example.jjangushrine.exception.coupon.CouponException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,11 +48,11 @@ public class OrderService {
         Map<Object, Object> cartItems = redisTemplate.opsForHash().entries(cartKey);
 
         if (cartItems.isEmpty() || (cartItems.size() == 1 && cartItems.containsKey("init"))) {
-            throw new OrderNotFoundException();
+            throw new NotFoundException(ErrorCode.CART_NOT_FOUND);
         }
 
         User user = userService.findUserByEmail(authUser.getEmail());
-        Address address = addressService.findByUserId(user.getId(), user.getUserRole());
+        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole());
         Order order = Order.builder()
                 .user(user)
                 .build();
@@ -68,7 +68,7 @@ public class OrderService {
             if ("init".equals(productKey)) continue;      // init 무시
 
             Long productId = Long.parseLong(productKey.replace("product:", ""));
-            Short quantity = (Short) entry.getValue();
+            Integer quantity = (Integer) entry.getValue();
 
             Product product = productService.getProductById(productId);
 
@@ -100,7 +100,7 @@ public class OrderService {
 
         // 쿠폰 적용
         if (couponId != null) {
-            UserCoupon userCoupon = userCouponRepository.findByUserIdAndCouponIdAndUsedAtIsNull(authUser.getId(), couponId)
+            UserCoupon userCoupon = userCouponRepository.findByUser_IdAndCoupon_CouponIdAndUsedAtIsNull(authUser.getId(), couponId)
                     .orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
 
             int couponDiscountPercentage = userCoupon.getCoupon().getDiscountPercent();
