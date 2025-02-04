@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.example.jjangushrine.domain.store.dto.request.StoreUpdateReq;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ConflictException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import com.example.jjangushrine.common.BaseEntity;
@@ -24,7 +26,7 @@ public class Store extends BaseEntity {
 	@Column(name = "store_id")
 	private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "seller_id")
 	private Seller seller;
 
@@ -83,7 +85,11 @@ public class Store extends BaseEntity {
 	}
 
 	public void softDelete() {
-		this.isDeleted = true;
-		this.deletedAt = LocalDateTime.now();
+		if (!this.isDeleted) {
+			this.isDeleted = true;
+			this.deletedAt = LocalDateTime.now();
+		}else {
+			throw new ConflictException(ErrorCode.DUPLICATE_STORE_DELETE);
+		}
 	}
 }

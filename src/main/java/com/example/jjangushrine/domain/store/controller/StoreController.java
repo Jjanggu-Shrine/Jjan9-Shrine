@@ -43,12 +43,21 @@ public class StoreController {
 
     @PatchMapping
     public ResponseEntity<ApiResponse<StoreRes>> updateStore(
-            @RequestBody StoreUpdateReq storeUpdateReq,
+            @Valid @RequestBody StoreUpdateReq storeUpdateReq,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
                         ApiResMessage.UPDATE_STORE_SUCCESS,
                         storeService.updateStore(storeUpdateReq, userDetails.getEmail())));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteStore(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        storeService.deleteStore(userDetails.getEmail());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success( ApiResMessage.DELETE_STORE_SUCCESS));
     }
 }
