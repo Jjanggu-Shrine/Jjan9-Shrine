@@ -50,7 +50,12 @@ public class SellerService {
     }
 
     public Seller findSellerByEmail(String email) {
-        return sellerRepository.findByEmailAndIsDeletedFalse(email)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        return sellerRepository.findByEmailAndIsDeletedIsFalse(email)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.SELLER_NOT_FOUND));
+    }
+
+    public Seller findSellerById(Long id) {
+        return sellerRepository.findSellerByIdAndIsDeletedIsFalse(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.SELLER_NOT_FOUND));
     }
 }
