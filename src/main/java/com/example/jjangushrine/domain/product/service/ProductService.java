@@ -9,6 +9,7 @@ import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
 import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
+import com.example.jjangushrine.domain.product.enums.Category;
 import com.example.jjangushrine.domain.product.exception.ProductAccessDeniedException;
 import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.exception.common.StoreAccessDeniedException;
@@ -70,7 +71,7 @@ public class ProductService {
 	}
 
 	public Page<ProductRes> getProductsByCategory(String category, Pageable pageable) {
-
+		return productRepository.findAllProductByCategory(Category.valueOf(category), pageable);
 	}
 
 	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
