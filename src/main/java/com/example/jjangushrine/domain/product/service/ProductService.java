@@ -73,7 +73,7 @@ public class ProductService {
 		Seller seller = sellerRepository.findById(sellerId)
 			.orElseThrow(UserNotFoundException::new);
 
-		if (seller != store.getSellerId()) {
+		if (seller != store.getSeller()) {
 			return false;
 		}
 
