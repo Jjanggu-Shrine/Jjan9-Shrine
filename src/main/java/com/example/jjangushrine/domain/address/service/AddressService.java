@@ -11,8 +11,8 @@ import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.ErrorCode;
-import com.example.jjangushrine.exception.auth.ForbiddenException;
 import com.example.jjangushrine.exception.common.ConflictException;
+import com.example.jjangushrine.exception.common.ForbiddenException;
 import com.example.jjangushrine.exception.common.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -102,7 +102,7 @@ public class AddressService {
     private void validateUser(Address address, User user) {
         if (!address.getOwnerId().equals(user.getId()) ||
                 !address.getUserRole().equals(user.getUserRole())) {
-            throw new ForbiddenException();
+            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
         }
     }
 
