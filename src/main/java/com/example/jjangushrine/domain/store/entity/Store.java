@@ -1,15 +1,11 @@
 package com.example.jjangushrine.domain.store.entity;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
-
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.seller.entity.Seller;
-
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "stores")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Store extends BaseEntity {
 
 	@Id
@@ -27,7 +21,11 @@ public class Store extends BaseEntity {
 	@Column(name = "store_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, name = "seller_id")
+	private Seller seller;
+
+	@Column(nullable = false, unique = true)
 	private String businessNumber;
 
 	@Column(nullable = false)
@@ -42,16 +40,31 @@ public class Store extends BaseEntity {
 	@Column(nullable = false)
 	private Short baseDeliveryFee;
 
-	@Column
+	@Column(nullable = false)
 	@ColumnDefault("false")
-	private Boolean isDeleted;
+	private Boolean isDeleted = false;
 
 	@Column
 	private LocalDateTime deletedAt;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false, name = "seller_id")
-	private Seller sellerId;
+	@Builder
+	public Store(
+			Long id,
+			Seller seller,
+			String businessNumber,
+			String businessName,
+			String storeName,
+			String description,
+			Short baseDeliveryFee
+	) {
+		this.id = id;
+		this.seller = seller;
+		this.businessNumber = businessNumber;
+		this.businessName = businessName;
+		this.storeName = storeName;
+		this.description = description;
+		this.baseDeliveryFee = baseDeliveryFee;
+	}
 
 	public void softDelete() {
 		this.isDeleted = true;
