@@ -60,7 +60,7 @@ public class CartService {
             Integer productQuantity = (Integer) redisTemplate.opsForHash().get(cartKey, productKey);
 
             // 수량 더하기
-            int allQuantity = (productQuantity == null ? 0 : productQuantity) + reqDto.quantity();
+            Short allQuantity = (short) ((productQuantity == null ? 0 : productQuantity) + reqDto.quantity());
             redisTemplate.opsForHash().put(cartKey, productKey, allQuantity);
 
             // 수량 * 상품단가
@@ -118,7 +118,7 @@ public class CartService {
             // 수량이 0으로 수정되면 아이템 삭제
             if (reqDto.quantity() <= 0) {
                 redisTemplate.opsForHash().delete(cartKey, productKey);
-                return new CartItemCreateRes(cartKey, product.getId(), product.getName(), 0, 0);
+                return new CartItemCreateRes(cartKey, product.getId(), product.getName(), (short) 0, 0);
             }
 
             // 수량 변경
@@ -158,7 +158,7 @@ public class CartService {
             if ("init".equals(productKey)) continue;
 
             Long productId = Long.parseLong(productKey.replace("product:", ""));
-            Integer quantity = (Integer) entry.getValue();
+            Short quantity = (Short) entry.getValue();
 
             Product product = productService.getProductById(productId);
 

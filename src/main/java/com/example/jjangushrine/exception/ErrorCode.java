@@ -31,6 +31,7 @@ public enum ErrorCode {
 
     INVALID_JSON_PROCESSING(HttpStatus.BAD_REQUEST, "ERR019", "JSON 직렬화 역직렬화 중 오류가 발생했습니다"),
 
+
     // 401 UNAUTHORIZED
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "ERR101", "로그인이 필요합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "ERR102", "잘못된 아이디 또는 비밀번호입니다."),
@@ -56,9 +57,9 @@ public enum ErrorCode {
     SELLER_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR307", "판매자를 찾을 수 없습니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "상품을 찾을 수 없습니다."),
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
-
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
     USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR310", "발급된 쿠폰을 찾을 수 없습니다."),
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR309", "해당 장바구니를 찾을 수 없습니다."),
 
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
@@ -70,7 +71,11 @@ public enum ErrorCode {
     DUPLICATE_BUSINESS_NUMBER(HttpStatus.CONFLICT, "ERR407", "이미 등록된 사업자 번호입니다."),
     DUPLICATE_ADDRESS_DELETE(HttpStatus.CONFLICT, "ERR408", "이미 삭제된 배송지입니다."),
     DUPLICATE_USER_DELETE(HttpStatus.CONFLICT, "ERR409", "이지 탈퇴한 유저입니다."),
-    DUPLICATE_SELLER_DELETE(HttpStatus.CONFLICT, "ERR410", "이지 탈퇴한 판매자입니다."),
+    DUPLICATE_SELLER_DELETE(HttpStatus.CONFLICT, "ERR410", "이미 탈퇴한 판매자입니다."),
+    DUPLICATE_USED_COUPON(HttpStatus.CONFLICT, "ERR411", "이미 사용된 쿠폰입니다."),
+    DUPLICATE_OUT_OF_STOCK(HttpStatus.CONFLICT, "ERR412", "재고가 소진되었습니다."),
+
+
 
     //coupon
     COUPON_SOLD_OUT(HttpStatus.CONFLICT, "ERR411", "쿠폰이 모두 소진되었습니다."),
@@ -79,6 +84,7 @@ public enum ErrorCode {
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");
+
 
     private final HttpStatus status;
     private final String code;
