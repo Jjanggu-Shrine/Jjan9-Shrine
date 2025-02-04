@@ -27,6 +27,8 @@ public enum ErrorCode {
 	//Coupon
     INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "ERR019", "유효기간의 시작일이 종료일보다 늦을 수 없습니다."),
     INVALID_START_DATE(HttpStatus.BAD_REQUEST, "ERR020", "쿠폰 시작일은 현재 시점 이후여야 합니다."),
+    INVALID_COUPON_REQUEST(HttpStatus.BAD_REQUEST, "ERR021", "쿠폰 발급 요청이 유효하지 않습니다."),
+
     INVALID_JSON_PROCESSING(HttpStatus.BAD_REQUEST, "ERR019", "JSON 직렬화 역직렬화 중 오류가 발생했습니다"),
 
     // 401 UNAUTHORIZED
