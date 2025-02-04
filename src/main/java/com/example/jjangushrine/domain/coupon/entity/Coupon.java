@@ -76,4 +76,12 @@ public class Coupon extends BaseEntity {
 		Optional.ofNullable(req.validUntil()).ifPresent(value -> this.validUntil = value);
 		Optional.ofNullable(req.totalQuantity()).ifPresent(value -> this.totalQuantity = value);
 	}
+
+	public void decreaseQuantity() {
+		if (this.usedQuantity >= this.totalQuantity) {
+			throw new IllegalStateException("쿠폰이 모두 소진되었습니다.");
+		}
+		this.usedQuantity++;
+	}
+
 }

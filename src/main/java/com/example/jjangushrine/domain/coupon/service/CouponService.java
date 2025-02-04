@@ -80,7 +80,5 @@ public class CouponService {
 			throw new CouponException(ErrorCode.INVALID_START_DATE);
 		}
 	}
-
-
 }
 
