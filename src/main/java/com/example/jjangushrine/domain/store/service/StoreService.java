@@ -25,6 +25,12 @@ public class StoreService {
     @Transactional
     public void createStore(StoreCreateReq createReq, String email) {
         Seller seller = sellerService.findSellerByEmail(email);
+        if (storeRepository.existsByBusinessNumberAndIsDeletedFalse(
+                createReq.businessNumber())
+        ) {
+            throw new ConflictException(ErrorCode.DUPLICATE_BUSINESS_NUMBER);
+        }
+
         if (storeRepository.countBySellerAndIsDeletedFalse(seller)>0) {
             throw new ConflictException(ErrorCode.DUPLICATE_STORE);
         }
