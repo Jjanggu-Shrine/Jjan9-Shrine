@@ -65,8 +65,11 @@ public enum ErrorCode {
     DUPLICATE_STORE(HttpStatus.CONFLICT, "ERR405", "이미 등록된 쇼핑몰이 있습니다."),
     DUPLICATE_STORE_DELETE(HttpStatus.CONFLICT, "ERR406", "이미 삭제된 쇼핑몰입니다."),
     DUPLICATE_BUSINESS_NUMBER(HttpStatus.CONFLICT, "ERR407", "이미 등록된 사업자 번호입니다."),
+    DUPLICATE_ADDRESS_DELETE(HttpStatus.CONFLICT, "ERR408", "이미 삭제된 배송지입니다."),
+    DUPLICATE_USER_DELETE(HttpStatus.CONFLICT, "ERR409", "이지 탈퇴한 유저입니다."),
+    DUPLICATE_SELLER_DELETE(HttpStatus.CONFLICT, "ERR410", "이지 탈퇴한 판매자입니다."),
 
-            // 500 INTERNAL_SERVER_ERROR
+    // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");
 
     private final HttpStatus status;

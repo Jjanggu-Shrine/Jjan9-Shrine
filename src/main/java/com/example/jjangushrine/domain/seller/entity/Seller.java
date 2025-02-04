@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.example.jjangushrine.domain.seller.dto.request.SellerUpdateReq;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ConflictException;
 import org.hibernate.annotations.ColumnDefault;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.persistence.Column;
@@ -78,7 +80,11 @@ public class Seller {
     }
 
     public void softDelete() {
-        this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
+        if (!this.isDeleted) {
+            this.isDeleted = true;
+            this.deletedAt = LocalDateTime.now();
+        } else {
+            throw new ConflictException(ErrorCode.DUPLICATE_SELLER_DELETE);
+        }
     }
 }

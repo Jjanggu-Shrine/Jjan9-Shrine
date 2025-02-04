@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.example.jjangushrine.domain.user.dto.request.UserUpdateReq;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ConflictException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -77,7 +79,11 @@ public class User extends BaseEntity {
 	}
 
 	public void softDelete() {
-		this.isDeleted = true;
-		this.deletedAt = LocalDateTime.now();
+		if (!this.isDeleted) {
+			this.isDeleted = true;
+			this.deletedAt = LocalDateTime.now();
+		} else {
+			throw new ConflictException(ErrorCode.DUPLICATE_USER_DELETE);
+		}
 	}
 }

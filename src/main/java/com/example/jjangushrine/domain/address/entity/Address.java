@@ -3,6 +3,8 @@ package com.example.jjangushrine.domain.address.entity;
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.address.dto.request.AddressUpdateReq;
 import com.example.jjangushrine.domain.user.enums.UserRole;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ConflictException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -86,7 +88,12 @@ public class Address extends BaseEntity {
     }
 
     public void softDelete() {
-        this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
+        if (!this.isDeleted) {
+            this.isDeleted = true;
+            this.isDefault = false;
+            this.deletedAt = LocalDateTime.now();
+        } else {
+            throw new ConflictException(ErrorCode.DUPLICATE_ADDRESS_DELETE);
+        }
     }
 }
