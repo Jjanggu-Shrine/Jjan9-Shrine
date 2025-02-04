@@ -8,6 +8,7 @@ import com.example.jjangushrine.domain.address.dto.response.AddressRes;
 import com.example.jjangushrine.domain.address.entity.Address;
 import com.example.jjangushrine.domain.address.repository.AddressRepository;
 import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.ErrorCode;
 import com.example.jjangushrine.exception.auth.ForbiddenException;
@@ -50,7 +51,7 @@ public class AddressService {
         User user = userService.findUserByEmail(email);
 
         List<AddressRes> addresses = addressRepository
-                .findAllByOwnerIdAndUserRole(user.getId(), user.getUserRole(), pageable)
+                .findAllByOwnerIdAndUserRoleAndIsDeletedIsFalse(user.getId(), user.getUserRole(), pageable)
                 .map(AddressRes::from)
                 .getContent();
 
@@ -112,5 +113,10 @@ public class AddressService {
         if (isFirstAddress) {
             address.setDefault();
         }
+    }
+
+    public Address findByUserId(Long ownerId, UserRole userRole) {
+        return addressRepository.findByOwnerIdAndUserRoleAndIsDefaultIsTrue(ownerId, userRole)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
     }
 }
