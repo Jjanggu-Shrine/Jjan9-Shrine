@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface AddressRepository extends JpaRepository<Address, Long> {
     int countByOwnerIdAndUserRole(Long id, UserRole userRole);
 
@@ -17,4 +19,6 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Modifying
     @Query("UPDATE Address a SET a.isDefault = false WHERE a.ownerId = :ownerId AND a.userRole = :userRole")
     void setAllAddressesToNonDefault(@Param("ownerId") Long ownerId, @Param("userRole") UserRole userRole);
+
+    Optional<Address> findByIdAndIsDeletedFalse(Long addressId);
 }

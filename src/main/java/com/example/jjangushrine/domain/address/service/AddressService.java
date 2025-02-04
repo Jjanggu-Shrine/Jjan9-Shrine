@@ -30,7 +30,7 @@ public class AddressService {
 
     @Transactional
     public void createAddress(AddressCreateReq addressCreateReq, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
         Address address = addressCreateReq.to(user.getUserRole(), user.getId());
 
         setDefaultIfFirstAddress(address, user);
@@ -39,16 +39,15 @@ public class AddressService {
     }
 
     public AddressRes getAddressInfo(Long addressId, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
         Address address = findAddressById(addressId);
-        validateNotDeleted(address);
         validateUser(address, user);
 
         return AddressRes.from(address);
     }
 
     public AddressListRes getAddressList(Pageable pageable, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
 
         List<AddressRes> addresses = addressRepository
                 .findAllByOwnerIdAndUserRole(user.getId(), user.getUserRole(), pageable)
@@ -62,9 +61,8 @@ public class AddressService {
 
     @Transactional
     public AddressRes updateAddress(AddressUpdateReq updateReq, Long addressId, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
         Address address = findAddressById(addressId);
-        validateNotDeleted(address);
         validateUser(address, user);
 
         address.update(updateReq);
@@ -74,9 +72,8 @@ public class AddressService {
 
     @Transactional
     public void setDefaultAddress(Long addressId, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
         Address address = findAddressById(addressId);
-        validateNotDeleted(address);
         validateUser(address, user);
 
         if (address.getIsDefault()) {
@@ -89,21 +86,15 @@ public class AddressService {
 
     @Transactional
     public void deleteAddress(Long addressId, String email) {
-        User user = findUserByEmail(email);
+        User user = userService.findUserByEmail(email);
         Address address = findAddressById(addressId);
-        validateNotDeleted(address);
         validateUser(address, user);
 
         address.softDelete();
     }
 
-    private User findUserByEmail(String email) {
-        return userService.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-    }
-
     private Address findAddressById(Long addressId) {
-        return addressRepository.findById(addressId)
+        return addressRepository.findByIdAndIsDeletedFalse(addressId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
     }
 
@@ -111,12 +102,6 @@ public class AddressService {
         if (!address.getOwnerId().equals(user.getId()) ||
                 !address.getUserRole().equals(user.getUserRole())) {
             throw new ForbiddenException();
-        }
-    }
-
-    private void validateNotDeleted(Address address) {
-        if (address.getIsDeleted()) {
-            throw new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND);
         }
     }
 
