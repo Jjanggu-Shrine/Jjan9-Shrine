@@ -58,6 +58,7 @@ public enum ErrorCode {
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "해당 배송지를 찾을 수 없습니다."),
 
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR308", "존재하지 않는 쿠폰입니다."),
+    USER_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "ERR310", "발급된 쿠폰을 찾을 수 없습니다."),
 
     // 409 CONFLICT
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "ERR401", "이미 사용 중인 이메일입니다."),
@@ -70,6 +71,11 @@ public enum ErrorCode {
     DUPLICATE_ADDRESS_DELETE(HttpStatus.CONFLICT, "ERR408", "이미 삭제된 배송지입니다."),
     DUPLICATE_USER_DELETE(HttpStatus.CONFLICT, "ERR409", "이지 탈퇴한 유저입니다."),
     DUPLICATE_SELLER_DELETE(HttpStatus.CONFLICT, "ERR410", "이지 탈퇴한 판매자입니다."),
+
+    //coupon
+    COUPON_SOLD_OUT(HttpStatus.CONFLICT, "ERR411", "쿠폰이 모두 소진되었습니다."),
+    COUPON_ALREADY_USED(HttpStatus.CONFLICT, "ERR412", "이미 사용된 쿠폰입니다."),
+    DUPLICATE_COUPON_ISSUE(HttpStatus.CONFLICT, "ERR413", "이미 발급받은 쿠폰입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");

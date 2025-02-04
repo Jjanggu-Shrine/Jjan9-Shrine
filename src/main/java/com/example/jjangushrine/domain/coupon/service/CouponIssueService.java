@@ -11,8 +11,9 @@ import com.example.jjangushrine.domain.coupon.repository.CouponRepository;
 import com.example.jjangushrine.domain.coupon.repository.UserCouponRepository;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.repository.UserRepository;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.coupon.CouponException;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,14 +58,14 @@ public class CouponIssueService {
 		return couponRepository.findById(couponId)
 			.orElseThrow(() -> {
 				log.error("Coupon not found - couponId: {}", couponId);
-				return new EntityNotFoundException("존재하지 않는 쿠폰입니다.");
+				return new CouponException(ErrorCode.COUPON_NOT_FOUND);
 			});
 	}
 
 	private void validateCouponQuantity(Coupon coupon) {
 		if (coupon.getUsedQuantity() >= coupon.getTotalQuantity()) {
 			log.warn("Coupon sold out - couponId: {}", coupon.getCouponId());
-			throw new IllegalStateException("쿠폰이 모두 소진되었습니다.");
+			throw new CouponException(ErrorCode.COUPON_SOLD_OUT);
 		}
 	}
 
@@ -72,7 +73,7 @@ public class CouponIssueService {
 		if (userCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
 			log.warn("Duplicate coupon issue attempt - userId: {}, couponId: {}",
 				userId, couponId);
-			throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
+			throw new CouponException(ErrorCode.DUPLICATE_COUPON_ISSUE);
 		}
 	}
 
@@ -80,7 +81,7 @@ public class CouponIssueService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> {
 				log.error("User not found - userId: {}", userId);
-				return new EntityNotFoundException("사용자를 찾을 수 없습니다.");
+				return new CouponException(ErrorCode.USER_NOT_FOUND);
 			});
 
 		return userCouponRepository.save(
