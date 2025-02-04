@@ -2,10 +2,10 @@ package com.example.jjangushrine.domain.order.dto.response;
 
 import java.util.List;
 
-public record OrderResDto(
+public record OrderRes(
         int originalTotalAmount,
         int discountedTotalAmount,
-        List<OrderItemResDto> orderItems,
+        List<OrderItemRes> orderItems,
         String shippingAddress
         ) {
 }

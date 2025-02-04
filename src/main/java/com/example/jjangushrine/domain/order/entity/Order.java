@@ -20,10 +20,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
@@ -31,12 +37,11 @@ public class Order extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "staus", length = 15, nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	@Column(name = "original_total_amount")
+	private int originalTotalAmount;
 
-	@Column(name = "total_amount")
-	private int totalAmount;
+	@Column(name = "discounted_total_amount")
+	private int discountedTotalAmount;
 
 	@Column(name = "coupon_used")
 	private boolean couponUsed;
