@@ -14,11 +14,13 @@ import java.util.Optional;
 public interface AddressRepository extends JpaRepository<Address, Long> {
     int countByOwnerIdAndUserRole(Long id, UserRole userRole);
 
-    Page<Address> findAllByOwnerIdAndUserRole(Long id, UserRole userRole, Pageable pageable);
+    Page<Address> findAllByOwnerIdAndUserRoleAndIsDeletedIsFalse(Long id, UserRole userRole, Pageable pageable);
 
     @Modifying
     @Query("UPDATE Address a SET a.isDefault = false WHERE a.ownerId = :ownerId AND a.userRole = :userRole")
     void setAllAddressesToNonDefault(@Param("ownerId") Long ownerId, @Param("userRole") UserRole userRole);
 
     Optional<Address> findByIdAndIsDeletedFalse(Long addressId);
+
+    Optional<Address> findByOwnerIdAndUserRoleAndIsDefaultIsTrue(Long ownerId, UserRole userRole);
 }
