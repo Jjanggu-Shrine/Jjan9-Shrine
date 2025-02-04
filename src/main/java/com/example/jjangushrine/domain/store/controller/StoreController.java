@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/store")
@@ -31,4 +28,15 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(ApiResMessage.CREATE_STORE_SUCCESS));
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<StoreRes>> getStore(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        ApiResMessage.GET_STORE_SUCCESS,
+                        storeService.getStore(userDetails.getEmail())));
+    }
+
 }

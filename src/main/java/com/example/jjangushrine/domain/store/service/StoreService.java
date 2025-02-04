@@ -3,8 +3,11 @@ package com.example.jjangushrine.domain.store.service;
 import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.store.dto.request.StoreCreateReq;
+import com.example.jjangushrine.domain.store.dto.response.StoreRes;
 import com.example.jjangushrine.domain.store.entity.Store;
 import com.example.jjangushrine.domain.store.repository.StoreRepository;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,5 +25,13 @@ public class StoreService {
         Seller seller = sellerService.findSellerByEmail(email);
         Store store = createReq.to(seller);
         storeRepository.save(store);
+    }
+
+    public StoreRes getStore(String email) {
+        Seller seller = sellerService.findSellerByEmail(email);
+        Store store = storeRepository.findBySellerIdAndIsDeletedFalse(seller)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
+
+        return StoreRes.from(store);
     }
 }
