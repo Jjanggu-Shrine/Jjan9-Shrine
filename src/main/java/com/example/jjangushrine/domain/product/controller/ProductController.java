@@ -86,4 +86,10 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ApiResponse.success("상품 조회에 성공했습니다.", productResPage));
 	}
+
+	@GetMapping("/products/{productId}")
+	public ResponseEntity<ApiResponse<ProductRes>> getProduct(@PathVariable Long productId) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(ApiResponse.success("상품 조회에 성공했습니다.", productService.getProduct(productId)));
+	}
 }

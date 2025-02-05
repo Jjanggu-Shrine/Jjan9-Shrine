@@ -74,6 +74,11 @@ public class ProductService {
 		return productRepository.findAllProductByStoreAndCategory(storeId, Category.valueOf(category), pageable);
 	}
 
+	public ProductRes getProduct(Long productId) {
+		Product findProduct = getProductById(productId);
+		return ProductRes.fromEntity(findProduct);
+	}
+
 	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
 
 		Seller seller = sellerService.findSellerById(sellerId);
