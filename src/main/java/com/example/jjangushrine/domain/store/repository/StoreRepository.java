@@ -12,4 +12,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     int countBySellerAndIsDeletedFalse(Seller seller);
 
     boolean existsByBusinessNumberAndIsDeletedFalse(String BusinessNumber);
+
+    Optional<Store> findByIdAndIsDeletedFalse(long id);
 }

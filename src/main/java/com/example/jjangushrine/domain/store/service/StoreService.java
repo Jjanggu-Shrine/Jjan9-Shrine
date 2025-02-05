@@ -65,4 +65,9 @@ public class StoreService {
 
         store.softDelete();
     }
+
+    public Store findStoreById(long id) {
+        return storeRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
+    }
 }
