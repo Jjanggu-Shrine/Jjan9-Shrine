@@ -155,11 +155,7 @@ public class OrderService {
     @Transactional
     public void cancelOrder(CustomUserDetails authUser, Long orderId) {
         // 주문 조회
-        Order order = getOrderById(orderId);
-
-        if (!order.getUser().getId().equals(authUser.getId())) {
-            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
-        }
+        Order order = getOrder(authUser, orderId);
 
         // 취소가 되어있는지 확인
         if (order.isCanceled()) {
@@ -195,11 +191,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderRes getOrderById(CustomUserDetails authUser, Long orderId) {
         // 주문 조회
-        Order order = getOrderById(orderId);
-
-        if (!order.getUser().getId().equals(authUser.getId())) {
-            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
-        }
+        Order order = getOrder(authUser, orderId);
 
         Address address = addressService.findByUserId(authUser.getId(), authUser.getRole());
 
@@ -223,8 +215,13 @@ public class OrderService {
         );
     }
 
-    public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId)
+    public Order getOrder(CustomUserDetails authUser, Long orderId) {
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+
+        if (!order.getUser().getId().equals(authUser.getId())) {
+            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+        return order;
     }
 }
