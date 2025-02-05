@@ -10,6 +10,7 @@ public class ApiResMessage {
     public static final String COUPON_UPDATE_SUCCESS = "쿠폰이 성공적으로 업데이트 되었습니다.";
     public static final String COUPON_DELETE_SUCCESS = "쿠폰이 성공적으로 삭제 되었습니다.";
     public static final String COUPON_USER_SUCCESS = "쿠폰이 성공적으로 발급 되었습니다.";
+    public static final String COUPON_LIST_SUCCESS = "쿠폰 조회를 성공적으로 완료되었습니다.";
 
     // 주소 관련 성공 메시지
     public static final String CREATE_ADDRESS_SUCCESS = "주소 등록이 성공적으로 완료되었습니다.";
