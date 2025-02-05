@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -156,8 +155,7 @@ public class OrderService {
     @Transactional
     public void cancelOrder(CustomUserDetails authUser, Long orderId) {
         // 주문 조회
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+        Order order = getOrderById(orderId);
 
         if (!order.getUser().getId().equals(authUser.getId())) {
             throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
@@ -197,8 +195,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderRes getOrderById(CustomUserDetails authUser, Long orderId) {
         // 주문 조회
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+        Order order = getOrderById(orderId);
 
         if (!order.getUser().getId().equals(authUser.getId())) {
             throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
@@ -224,5 +221,10 @@ public class OrderService {
                 order.isCouponUsed(),
                 order.getCreatedAt()
         );
+    }
+
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
     }
 }
