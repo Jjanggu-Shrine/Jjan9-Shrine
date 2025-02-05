@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class OrderService {
         }
 
         User user = userService.findUserByEmail(authUser.getEmail());
-        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole());
+        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole()); // 주소 조회
         Order order = Order.builder()
                 .user(user)
                 .build();
@@ -85,8 +86,8 @@ public class OrderService {
 
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
+                    .product(product)
                     .productName(product.getName())
-                    .productPrice(product.getAmount())
                     .quantity(quantity)
                     .build();
 
@@ -148,6 +149,7 @@ public class OrderService {
 
     /**
      * 주문 취소 (재고 복구, 쿠폰 복구)
+     *
      * @param authUser
      * @param orderId
      */
@@ -166,10 +168,13 @@ public class OrderService {
             throw new OrderException(ErrorCode.DUPLICATE_CANCELED_ORDER);
         }
 
+        // 주문 취소 완료
+        order.setCanceled(true);
+
         // 주문 취소 시 재고 복구
         List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
         for (OrderItem item : orderItems) {
-            productService.increaseStock(item.getId(), item.getQuantity());
+            productService.increaseStock(item.getProduct().getId(), item.getQuantity());
         }
 
         // 주문 취소 시 쿠폰 사용 취소
@@ -180,8 +185,44 @@ public class OrderService {
             userCoupon.unmarkAsUsed();
             userCouponRepository.save(userCoupon);
         }
-        // 주문 취소 완료
-        order.setCanceled(true);
-        orderRepository.save(order);
+
+    }
+
+    /**
+     * 주문조회
+     * @param authUser
+     * @param orderId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public OrderRes getOrderById(CustomUserDetails authUser, Long orderId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+
+        if (!order.getUser().getId().equals(authUser.getId())) {
+            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole());
+
+        List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+        List<OrderItemRes> orderItemResList = orderItems.stream()
+                .map(item -> new OrderItemRes(
+                        item.getProductName(),
+                        item.getQuantity(),
+                        item.getProductPrice()
+                ))
+                .toList();
+        return new OrderRes(
+                order.getId(),
+                authUser.getUsername(),
+                address.getAddressName(),
+                orderItemResList,
+                order.getOriginalTotalAmount(),
+                order.getDiscountedTotalAmount(),
+                order.isCouponUsed(),
+                order.getCreatedAt()
+        );
     }
 }

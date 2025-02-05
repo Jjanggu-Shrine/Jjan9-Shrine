@@ -19,6 +19,7 @@ public class OrderController {
 
     /**
      * 주문 생성
+     *
      * @param authUser
      * @param couponId
      * @return
@@ -38,6 +39,7 @@ public class OrderController {
 
     /**
      * 주문취소
+     *
      * @param authUser
      * @param orderId
      * @return
@@ -51,6 +53,19 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
                         "주문이 취소되었습니다."
+                ));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<OrderRes>> getOrderById(
+            @AuthenticationPrincipal CustomUserDetails authUser,
+            @RequestParam Long orderId
+    ) {
+        OrderRes orderById = orderService.getOrderById(authUser, orderId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        "주문 조회",
+                        orderById
                 ));
     }
 }
