@@ -1,5 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
+import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.example.jjangushrine.exception.ErrorCode;
@@ -12,18 +14,12 @@ import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.enums.Category;
-import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.store.service.StoreService;
-import com.example.jjangushrine.exception.ErrorCode;
-import com.example.jjangushrine.exception.common.NotFoundException;
 import com.example.jjangushrine.exception.common.AccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.store.entity.Store;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +28,7 @@ public class ProductService {
 
 	private final ProductRepository productRepository;
 	private final StoreService storeService;
-	private final SellerService sellerService;
+	private final UserService userService;
 
 	@Transactional
 	public ProductRes saveProduct(ProductSaveReq productSaveReq, Long sellerId) {
@@ -78,11 +74,11 @@ public class ProductService {
 		return productRepository.findAllProductByStoreAndCategory(storeId, Category.valueOf(category), pageable);
 	}
 
-	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
+	public boolean validateStoreAccessForSeller(Store store, Long userId) {
 
-		Seller seller = sellerService.findSellerById(sellerId);
+		User user = userService.findUserById(userId);
 
-		if (seller != store.getSeller()) {
+		if (user != store.getUser()) {
 			return false;
 		}
 

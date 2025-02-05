@@ -1,8 +1,8 @@
 package com.example.jjangushrine.domain.product.repository;
 
 import static com.example.jjangushrine.domain.product.entity.QProduct.product;
-import static com.example.jjangushrine.domain.seller.entity.QSeller.seller;
 import static com.example.jjangushrine.domain.store.entity.QStore.*;
+import static com.example.jjangushrine.domain.user.entity.QUser.user;
 
 import java.util.List;
 
@@ -31,10 +31,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 		return queryFactory
 			.selectOne()
 			.from(product)
-			.join(product.store.seller, seller)
+			.join(product.store.user, user)
 			.where(
 				product.id.eq(productId),
-				seller.id.eq(sellerId)
+				user.id.eq(sellerId)
 			)
 			.fetchOne() != null;
 	}

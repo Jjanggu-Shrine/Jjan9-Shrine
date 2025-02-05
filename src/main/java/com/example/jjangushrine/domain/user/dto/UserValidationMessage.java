@@ -20,10 +20,6 @@ public class UserValidationMessage {
     public static final String PHONE_NUMBER_REG = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$";
     public static final String INVALID_PHONE_NUMBER_MESSAGE = "올바른 전화번호 형식으로 입력해 주세요.";
 
-    public static final String REPR_NAME_BLANK_MESSAGE = "대표자명을 입력해 주세요.";
-    public static final String REPR_NAME_REG = "^[가-힣a-zA-Z\\s]+$";  // 길이 제한 제거
-    public static final String INVALID_REPR_NAME_MESSAGE = "대표자명은 한글 또는 영문만 입력 가능합니다.";
-    public static final String REPR_NAME_SIZE_MESSAGE = "대표자명은 2~20자 이내로 입력해 주세요.";
-    public static final int REPR_NAME_MIN = 2;
-    public static final int REPR_NAME_MAX = 20;
+    public static final String USER_ROLE_BLANK_MESSAGE = "유저권한을 입력해 주세요.";
+    public static final String INVALID_USER_ROLE = "유효하지 않은 유저권한입니다.";
 }

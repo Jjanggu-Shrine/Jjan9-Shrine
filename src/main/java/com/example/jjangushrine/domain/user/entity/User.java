@@ -48,7 +48,7 @@ public class User extends BaseEntity {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private final UserRole userRole = UserRole.USER;
+	private UserRole userRole;
 
 	@Column(nullable = false)
 	@ColumnDefault("false")
@@ -63,13 +63,15 @@ public class User extends BaseEntity {
 			String email,
 			String password,
 			String nickName,
-			String phoneNumber
+			String phoneNumber,
+			UserRole userRole
 	) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.nickName = nickName;
 		this.phoneNumber = phoneNumber;
+		this.userRole = userRole;
 	}
 
 	public void update(UserUpdateReq updateReq) {
