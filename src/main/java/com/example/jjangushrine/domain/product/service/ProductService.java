@@ -1,5 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,8 @@ import com.example.jjangushrine.exception.common.StoreNotFoundException;
 import com.example.jjangushrine.exception.common.UserNotFoundException;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -94,17 +98,22 @@ public class ProductService {
 		}
 	}
 
-	@Transactional
+	@Transactional(timeout = 5, rollbackFor = Exception.class)
 	public void decreaseStock(Long productId, int quantity) {
-		Product product = getProductById(productId);
+		Product product = getFindByIdWithLock(productId);
 		product.decreaseStock(quantity);
 		productRepository.save(product);
 	}
 
-	@Transactional
+	@Transactional(timeout = 5, rollbackFor = Exception.class)
 	public void increaseStock(Long productId, int quantity) {
-		Product product = getProductById(productId);
+		Product product = getFindByIdWithLock(productId);
 		product.increaseStock(quantity);
 		productRepository.save(product);
+	}
+
+	public Product getFindByIdWithLock(Long productId) {
+		return productRepository.findByIdWithLock(productId)
+				.orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 	}
 }
