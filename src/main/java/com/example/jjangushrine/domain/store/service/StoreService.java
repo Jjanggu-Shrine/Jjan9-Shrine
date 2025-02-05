@@ -25,13 +25,13 @@ public class StoreService {
     @Transactional
     public void createStore(StoreCreateReq createReq, String email) {
         Seller seller = sellerService.findSellerByEmail(email);
-        if (storeRepository.existsByBusinessNumberAndIsDeletedFalse(
+        if (storeRepository.existsByBusinessNumberAndIsDeletedIsFalse(
                 createReq.businessNumber())
         ) {
             throw new ConflictException(ErrorCode.DUPLICATE_BUSINESS_NUMBER);
         }
 
-        if (storeRepository.countBySellerAndIsDeletedFalse(seller)>0) {
+        if (storeRepository.countBySellerAndIsDeletedIsFalse(seller)>0) {
             throw new ConflictException(ErrorCode.DUPLICATE_STORE);
         }
         Store store = createReq.to(seller);
@@ -41,7 +41,7 @@ public class StoreService {
 
     public StoreRes getStore(String email) {
         Seller seller = sellerService.findSellerByEmail(email);
-        Store store = storeRepository.findBySellerAndIsDeletedFalse(seller)
+        Store store = storeRepository.findBySellerAndIsDeletedIsFalse(seller)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
 
         return StoreRes.from(store);
@@ -50,7 +50,7 @@ public class StoreService {
     @Transactional
     public StoreRes updateStore(StoreUpdateReq updateReq, String email) {
         Seller seller = sellerService.findSellerByEmail(email);
-        Store store = storeRepository.findBySellerAndIsDeletedFalse(seller)
+        Store store = storeRepository.findBySellerAndIsDeletedIsFalse(seller)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
 
         store.update(updateReq);
@@ -60,14 +60,14 @@ public class StoreService {
     @Transactional
     public void deleteStore(String email) {
         Seller seller = sellerService.findSellerByEmail(email);
-        Store store = storeRepository.findBySellerAndIsDeletedFalse(seller)
+        Store store = storeRepository.findBySellerAndIsDeletedIsFalse(seller)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
 
         store.softDelete();
     }
 
     public Store findStoreById(long id) {
-        return storeRepository.findByIdAndIsDeletedFalse(id)
+        return storeRepository.findByIdAndIsDeletedIsFalse(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
     }
 }

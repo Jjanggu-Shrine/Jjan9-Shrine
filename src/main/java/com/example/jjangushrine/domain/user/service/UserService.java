@@ -50,7 +50,7 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        return userRepository.findByEmailAndIsDeletedFalse(email)
+        return userRepository.findByEmailAndIsDeletedIsFalse(email)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 }

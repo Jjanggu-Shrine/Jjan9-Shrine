@@ -20,7 +20,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("UPDATE Address a SET a.isDefault = false WHERE a.ownerId = :ownerId AND a.userRole = :userRole")
     void setAllAddressesToNonDefault(@Param("ownerId") Long ownerId, @Param("userRole") UserRole userRole);
 
-    Optional<Address> findByIdAndIsDeletedFalse(Long addressId);
+    Optional<Address> findByIdAndIsDeletedIsFalse(Long addressId);
 
     Optional<Address> findByOwnerIdAndUserRoleAndIsDefaultIsTrue(Long ownerId, UserRole userRole);
 }
