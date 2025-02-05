@@ -10,4 +10,5 @@ public interface ProductRepositoryCustom {
 
 	boolean existsByProductIdAndSellerId(Long productId, Long sellerId);
 	Page<ProductRes> findAllProductByCategory(Category category, Pageable pageable);
+	Page<ProductRes> findAllProductByStoreAndCategory(Long stroeId, Category category, Pageable pageable);
 }

@@ -73,4 +73,17 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(ApiResponse.success("상품 조회에 성공했습니다.", productResPage));
 	}
+
+	@GetMapping("/products/store")
+	public ResponseEntity<ApiResponse<Page<ProductRes>>> getProductsByStoreWithCategoryFilter(
+		@RequestParam Long storeId,
+		@RequestParam String category,
+		@RequestParam(defaultValue = "1") int page) {
+
+		Pageable pageable = PageRequest.of(page-1, 10);
+		Page<ProductRes> productResPage = productService.getProductsByStoreWithCategoryFilter(storeId, category, pageable);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(ApiResponse.success("상품 조회에 성공했습니다.", productResPage));
+	}
 }

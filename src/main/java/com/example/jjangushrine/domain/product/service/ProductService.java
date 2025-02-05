@@ -74,6 +74,10 @@ public class ProductService {
 		return productRepository.findAllProductByCategory(Category.valueOf(category), pageable);
 	}
 
+	public Page<ProductRes> getProductsByStoreWithCategoryFilter(Long storeId, String category, Pageable pageable) {
+		return productRepository.findAllProductByStoreAndCategory(storeId, Category.valueOf(category), pageable);
+	}
+
 	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
 
 		// sellerService에 해당 로직 메서드 생기면 변경 예정 + Execption 종류도
