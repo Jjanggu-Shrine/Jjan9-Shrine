@@ -17,7 +17,6 @@ public class UserCouponService {
 
 	private final UserCouponRepository userCouponRepository;
 
-	@Transactional(readOnly = true)
 	public List<UserCouponListRes> listUserCoupons(Long userId) {
 		return userCouponRepository.findAllByUserIdWithCoupon(userId)
 			.stream()

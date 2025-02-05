@@ -67,16 +67,7 @@ public class UserCouponController {
 	public ApiResponse<List<UserCouponListRes>> listUserCoupons(
 		@AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		log.info("User coupon list request - userId: {}", userDetails.getId());
-
-		try {
-			List<UserCouponListRes> coupons = userCouponService.listUserCoupons(userDetails.getId());
-			return ApiResponse.success(ApiResMessage.COUPON_LIST_SUCCESS, coupons);
-
-		} catch (Exception e) {
-			log.error("Failed to fetch user coupons - userId: {}", userDetails.getId(), e);
-			throw e;
-		}
+		List<UserCouponListRes> coupons = userCouponService.listUserCoupons(userDetails.getId());
+		return ApiResponse.success(ApiResMessage.COUPON_LIST_SUCCESS, coupons);
 	}
-
 }
