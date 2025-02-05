@@ -55,7 +55,7 @@ public class CouponIssueService {
 	}
 
 	private Coupon findCouponById(Long couponId) {
-		return couponRepository.findById(couponId)
+		return couponRepository.findByIdWithLock(couponId)
 			.orElseThrow(() -> {
 				log.error("Coupon not found - couponId: {}", couponId);
 				return new CouponException(ErrorCode.COUPON_NOT_FOUND);

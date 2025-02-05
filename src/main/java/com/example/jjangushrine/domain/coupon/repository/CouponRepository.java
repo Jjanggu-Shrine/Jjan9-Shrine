@@ -15,5 +15,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
 	@Query("SELECT c FROM Coupon c WHERE c.couponId = :id")
-	Optional<Coupon> findById(Long id);
+	Optional<Coupon> findByIdWithLock(Long id);
 }

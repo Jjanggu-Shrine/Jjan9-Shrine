@@ -1,5 +1,7 @@
 package com.example.jjangushrine.domain.product.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.jjangushrine.exception.ErrorCode;
 import com.example.jjangushrine.exception.common.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -9,16 +11,15 @@ import com.example.jjangushrine.domain.product.dto.request.ProductSaveReq;
 import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
-import com.example.jjangushrine.domain.product.exception.ProductAccessDeniedException;
-import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
-import com.example.jjangushrine.exception.common.StoreAccessDeniedException;
+import com.example.jjangushrine.domain.product.enums.Category;
+import com.example.jjangushrine.domain.seller.service.SellerService;
+import com.example.jjangushrine.domain.store.service.StoreService;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.NotFoundException;
+import com.example.jjangushrine.exception.common.AccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
 import com.example.jjangushrine.domain.seller.entity.Seller;
-import com.example.jjangushrine.domain.seller.repository.SellerRepository;
 import com.example.jjangushrine.domain.store.entity.Store;
-import com.example.jjangushrine.domain.store.repository.StoreRepository;
-import com.example.jjangushrine.exception.common.StoreNotFoundException;
-import com.example.jjangushrine.exception.common.UserNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,18 +31,16 @@ import java.util.Optional;
 public class ProductService {
 
 	private final ProductRepository productRepository;
-	private final StoreRepository storeRepository; // 추후 Service를 참조하도록 변경하기
-	private final SellerRepository sellerRepository; // 마찬가지
+	private final StoreService storeService;
+	private final SellerService sellerService;
 
 	@Transactional
 	public ProductRes saveProduct(ProductSaveReq productSaveReq, Long sellerId) {
 
-		// storeService에 해당 로직 메서드 생기면 변경 예정
-		Store store = storeRepository.findById(productSaveReq.storeId())
-			.orElseThrow(StoreNotFoundException::new);
+		Store store = storeService.findStoreById(productSaveReq.storeId());
 
 		if(!validateStoreAccessForSeller(store, sellerId)) {
-			throw new StoreAccessDeniedException(); // Store에서 관련된 예외처리 생성 시 그걸로 변경하기
+			throw new AccessDeniedException(ErrorCode.STORE_FORBIDDEN_ACCESS);
 		}
 
 		Product product = productSaveReq.toEntity();
@@ -71,11 +70,17 @@ public class ProductService {
 		findProduct.delete();
 	}
 
-	protected boolean validateStoreAccessForSeller(Store store, Long sellerId) {
+	public Page<ProductRes> getProductsByCategory(String category, Pageable pageable) {
+		return productRepository.findAllProductByCategory(Category.valueOf(category), pageable);
+	}
 
-		// sellerService에 해당 로직 메서드 생기면 변경 예정 + Execption 종류도
-		Seller seller = sellerRepository.findById(sellerId)
-			.orElseThrow(UserNotFoundException::new);
+	public Page<ProductRes> getProductsByStoreWithCategoryFilter(Long storeId, String category, Pageable pageable) {
+		return productRepository.findAllProductByStoreAndCategory(storeId, Category.valueOf(category), pageable);
+	}
+
+	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
+
+		Seller seller = sellerService.findSellerById(sellerId);
 
 		if (seller != store.getSeller()) {
 			return false;
@@ -86,15 +91,15 @@ public class ProductService {
 
 	public Product getProductById(Long productId) {
 		Product findProduct = productRepository.findById(productId)
-			.orElseThrow(ProductNotFoundException::new);
+			.orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
 		findProduct.validateIsDeleted();
 		return findProduct;
 	}
 
-	protected void validateProductOwnedBySeller(Long productId, Long sellerId) {
+	public void validateProductOwnedBySeller(Long productId, Long sellerId) {
 		if(!productRepository.existsByProductIdAndSellerId(productId, sellerId)) {
-			throw new ProductAccessDeniedException();
+			throw new AccessDeniedException(ErrorCode.PRODUCT_FORBIDDEN_ACCESS);
 		}
 	}
 

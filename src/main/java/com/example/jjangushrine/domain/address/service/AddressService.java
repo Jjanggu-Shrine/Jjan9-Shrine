@@ -95,7 +95,7 @@ public class AddressService {
     }
 
     private Address findAddressById(Long addressId) {
-        return addressRepository.findByIdAndIsDeletedFalse(addressId)
+        return addressRepository.findByIdAndIsDeletedIsFalse(addressId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
     }
 

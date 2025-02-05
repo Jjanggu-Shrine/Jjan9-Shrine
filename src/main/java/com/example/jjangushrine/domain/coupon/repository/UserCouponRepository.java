@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.jjangushrine.domain.coupon.entity.UserCoupon;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,4 +23,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 	Optional<UserCoupon> findByUserAndCouponWithLock(@Param("userId") Long userId,@Param("couponId") Long couponId);
 
 	Optional<UserCoupon> findByUser_IdAndCoupon_CouponId(Long id, Long couponId);
+
+	@Query("SELECT uc FROM UserCoupon uc JOIN FETCH uc.coupon WHERE uc.user.id = :userId ORDER BY uc.createdAt DESC")
+	List<UserCoupon> findAllByUserIdWithCoupon(Long userId);
 }

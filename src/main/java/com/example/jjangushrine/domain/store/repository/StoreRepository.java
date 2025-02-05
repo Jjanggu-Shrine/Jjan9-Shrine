@@ -7,9 +7,11 @@ import com.example.jjangushrine.domain.store.entity.Store;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    Optional<Store> findBySellerAndIsDeletedFalse(Seller seller);
+    Optional<Store> findBySellerAndIsDeletedIsFalse(Seller seller);
 
-    int countBySellerAndIsDeletedFalse(Seller seller);
+    int countBySellerAndIsDeletedIsFalse(Seller seller);
 
-    boolean existsByBusinessNumberAndIsDeletedFalse(String BusinessNumber);
+    boolean existsByBusinessNumberAndIsDeletedIsFalse(String BusinessNumber);
+
+    Optional<Store> findByIdAndIsDeletedIsFalse(long id);
 }
