@@ -2,13 +2,14 @@ package com.example.jjangushrine.domain.product.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.NotFoundException;
 import com.example.jjangushrine.exception.common.ProductOutOfStock;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.enums.Category;
-import com.example.jjangushrine.domain.product.exception.ProductNotFoundException;
 import com.example.jjangushrine.domain.store.entity.Store;
 
 import jakarta.persistence.Column;
@@ -20,6 +21,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -30,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = @Index(name = "idx_group", columnList = "category, store_id, is_deleted"))
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends BaseEntity {
 	@Id
@@ -85,7 +87,7 @@ public class Product extends BaseEntity {
 
 	public void validateIsDeleted() {
 		if(isDeleted) {
-			throw new ProductNotFoundException();
+			throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
 		}
 	}
 
