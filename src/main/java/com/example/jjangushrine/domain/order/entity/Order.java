@@ -41,4 +41,11 @@ public class Order extends BaseEntity {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@Setter
+	@Column(name = "is_canceled")
+	private boolean isCanceled = false;
+
+	@Setter
+	private Long couponId;
+
 }

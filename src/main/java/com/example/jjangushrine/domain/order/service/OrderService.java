@@ -16,7 +16,9 @@ import com.example.jjangushrine.domain.product.service.ProductService;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.service.UserService;
 import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ForbiddenException;
 import com.example.jjangushrine.exception.common.NotFoundException;
+import com.example.jjangushrine.exception.common.OrderException;
 import com.example.jjangushrine.exception.coupon.CouponException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,7 +41,13 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final AddressService addressService;
 
-
+    /**
+     * 주문 생성
+     *
+     * @param authUser
+     * @param couponId
+     * @return
+     */
     @Transactional
     public OrderRes createOrder(CustomUserDetails authUser, Long couponId) {
         String userId = authUser.getId().toString();
@@ -93,8 +101,6 @@ public class OrderService {
             orderItemList.add(orderItemRes);
         }
 
-
-
         order.setOriginalTotalAmount(originalTotalAmount); // 쿠폰 적용이 되지 않은 오리지널 총 가격
         int discountTotalAmount = (originalTotalAmount); // 쿠폰 적용이 된 가격 초기화
 
@@ -107,6 +113,7 @@ public class OrderService {
 
             discountTotalAmount -= originalTotalAmount * couponDiscountPercentage / 100;
             order.setCouponUsed(true);
+            order.setCouponId(couponId);
 
             // 쿠폰 사용 처리
             userCoupon.markAsUsed();
@@ -137,5 +144,44 @@ public class OrderService {
                 discountTotalAmount,
                 saveOrder.isCouponUsed(),
                 saveOrder.getCreatedAt());
+    }
+
+    /**
+     * 주문 취소 (재고 복구, 쿠폰 복구)
+     * @param authUser
+     * @param orderId
+     */
+    @Transactional
+    public void cancelOrder(CustomUserDetails authUser, Long orderId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+
+        if (!order.getUser().getId().equals(authUser.getId())) {
+            throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+
+        // 취소가 되어있는지 확인
+        if (order.isCanceled()) {
+            throw new OrderException(ErrorCode.DUPLICATE_CANCELED_ORDER);
+        }
+
+        // 주문 취소 시 재고 복구
+        List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+        for (OrderItem item : orderItems) {
+            productService.increaseStock(item.getId(), item.getQuantity());
+        }
+
+        // 주문 취소 시 쿠폰 사용 취소
+        if (order.isCouponUsed()) {
+            UserCoupon userCoupon = userCouponRepository.findByUser_IdAndCoupon_CouponId(authUser.getId(), order.getCouponId())
+                    .orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
+
+            userCoupon.unmarkAsUsed();
+            userCouponRepository.save(userCoupon);
+        }
+        // 주문 취소 완료
+        order.setCanceled(true);
+        orderRepository.save(order);
     }
 }

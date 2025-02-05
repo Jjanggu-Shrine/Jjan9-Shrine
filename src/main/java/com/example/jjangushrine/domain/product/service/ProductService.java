@@ -100,4 +100,11 @@ public class ProductService {
 		product.decreaseStock(quantity);
 		productRepository.save(product);
 	}
+
+	@Transactional
+	public void increaseStock(Long productId, int quantity) {
+		Product product = getProductById(productId);
+		product.increaseStock(quantity);
+		productRepository.save(product);
+	}
 }

@@ -158,7 +158,7 @@ public class CartService {
             if ("init".equals(productKey)) continue;
 
             Long productId = Long.parseLong(productKey.replace("product:", ""));
-            Short quantity = (Short) entry.getValue();
+            int quantity = (int) entry.getValue();
 
             Product product = productService.getProductById(productId);
 
