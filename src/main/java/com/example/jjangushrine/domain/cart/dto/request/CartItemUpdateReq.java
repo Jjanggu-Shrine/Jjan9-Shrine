@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record CartItemUpdateReq(
         @JsonProperty("productId") Long productId,
-        @JsonProperty("quantity") int quantity
+        @JsonProperty("quantity") Short quantity
 ) {
 }

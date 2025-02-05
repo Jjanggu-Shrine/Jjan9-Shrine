@@ -52,10 +52,7 @@ class AuthControllerTest {
         UserSignUpReq req = new UserSignUpReq(
                 "usermail@mail.com",
                 "1234", "userNick",
-                "000-111-2222",
-                "address",
-                "addressDetail",
-                "1234567");
+                "000-111-2222");
 
         // when & then
         mockMvc.perform(post("/api/v1/auth/user/signup")

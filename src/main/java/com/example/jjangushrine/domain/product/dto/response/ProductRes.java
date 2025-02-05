@@ -10,7 +10,7 @@ public record ProductRes(
 	Integer amount,
 	String description,
 	String image,
-	Short stock,
+	int stock,
 	Category category
 ) {
 

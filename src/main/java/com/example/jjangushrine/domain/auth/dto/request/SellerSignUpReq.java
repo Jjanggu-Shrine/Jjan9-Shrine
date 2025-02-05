@@ -38,22 +38,7 @@ public record SellerSignUpReq(
         @NotBlank(message = UserValidationMessage.PHONE_NUMBER_BLANK_MESSAGE)
         @Pattern(regexp = UserValidationMessage.PHONE_NUMBER_REG,
                 message = UserValidationMessage.INVALID_PHONE_NUMBER_MESSAGE)
-        String phoneNumber,
-
-        @NotBlank(message = UserValidationMessage.ADDRESS_BLANK_MESSAGE)
-        @Size(max = UserValidationMessage.ADDRESS_MAX,
-                message = UserValidationMessage.ADDRESS_LENGTH_MESSAGE)
-        String address,
-
-        @NotBlank(message = UserValidationMessage.ADDRESS_DETAIL_BLANK_MESSAGE)
-        @Size(max = UserValidationMessage.ADDRESS_DETAIL_MAX,
-                message = UserValidationMessage.ADDRESS_DETAIL_LENGTH_MESSAGE)
-        String addressDetail,
-
-        @NotBlank(message = UserValidationMessage.ZIP_CODE_BLANK_MESSAGE)
-        @Pattern(regexp = UserValidationMessage.ZIP_CODE_REG,
-                message = UserValidationMessage.INVALID_ZIP_CODE_MESSAGE)
-        String zipCode
+        String phoneNumber
 ) {
 
         public Seller to(String encodedPassword) {
@@ -62,9 +47,6 @@ public record SellerSignUpReq(
                         .password(encodedPassword)
                         .representativeName(this.representativeName())
                         .phoneNumber(this.phoneNumber())
-                        .address(this.address())
-                        .addressDetail(this.addressDetail())
-                        .zipCode(this.zipCode())
                         .build();
         }
 }

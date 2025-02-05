@@ -84,7 +84,7 @@ public class ProductService {
 		Seller seller = sellerRepository.findById(sellerId)
 			.orElseThrow(UserNotFoundException::new);
 
-		if (seller != store.getSellerId()) {
+		if (seller != store.getSeller()) {
 			return false;
 		}
 
@@ -103,5 +103,19 @@ public class ProductService {
 		if(!productRepository.existsByProductIdAndSellerId(productId, sellerId)) {
 			throw new ProductAccessDeniedException();
 		}
+	}
+
+	@Transactional
+	public void decreaseStock(Long productId, int quantity) {
+		Product product = getProductById(productId);
+		product.decreaseStock(quantity);
+		productRepository.save(product);
+	}
+
+	@Transactional
+	public void increaseStock(Long productId, int quantity) {
+		Product product = getProductById(productId);
+		product.increaseStock(quantity);
+		productRepository.save(product);
 	}
 }

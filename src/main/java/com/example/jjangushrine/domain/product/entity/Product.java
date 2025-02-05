@@ -2,6 +2,7 @@ package com.example.jjangushrine.domain.product.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.jjangushrine.exception.common.ProductOutOfStock;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.jjangushrine.common.BaseEntity;
@@ -55,7 +56,7 @@ public class Product extends BaseEntity {
 	private String image;
 
 	@Column(name = "stock", nullable = false)
-	private Short stock;
+	private int stock;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category", nullable = false)
@@ -112,5 +113,16 @@ public class Product extends BaseEntity {
 		if (updateReq.category() != null) {
 			this.category = Category.valueOf(updateReq.category());
 		}
+	}
+
+	public void decreaseStock(int quantity) {
+		if (this.stock < quantity) {
+			throw new ProductOutOfStock();
+		}
+		this.stock = this.stock - quantity;
+	}
+
+	public void increaseStock(int quantity) {
+		this.stock = this.stock + quantity;
 	}
 }

@@ -31,7 +31,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 		return queryFactory
 			.selectOne()
 			.from(product)
-			.join(product.store.sellerId, seller)
+			.join(product.store.seller, seller)
 			.where(
 				product.id.eq(productId),
 				seller.id.eq(sellerId)
