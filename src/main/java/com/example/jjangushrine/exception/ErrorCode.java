@@ -74,6 +74,7 @@ public enum ErrorCode {
     DUPLICATE_SELLER_DELETE(HttpStatus.CONFLICT, "ERR410", "이미 탈퇴한 판매자입니다."),
     DUPLICATE_USED_COUPON(HttpStatus.CONFLICT, "ERR411", "이미 사용된 쿠폰입니다."),
     DUPLICATE_OUT_OF_STOCK(HttpStatus.CONFLICT, "ERR412", "재고가 소진되었습니다."),
+    DUPLICATE_CANCELED_ORDER(HttpStatus.CONFLICT, "ERR413", "이미 주문취소가 되었습니다."),
 
 
 

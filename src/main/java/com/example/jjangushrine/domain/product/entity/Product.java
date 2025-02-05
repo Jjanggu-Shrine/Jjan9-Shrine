@@ -55,7 +55,7 @@ public class Product extends BaseEntity {
 	private String image;
 
 	@Column(name = "stock", nullable = false)
-	private Short stock;
+	private int stock;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category", nullable = false)
@@ -118,6 +118,10 @@ public class Product extends BaseEntity {
 		if (this.stock < quantity) {
 			throw new ProductOutOfStock();
 		}
-		this.stock = (short) (this.stock - quantity);
+		this.stock = this.stock - quantity;
+	}
+
+	public void increaseStock(int quantity) {
+		this.stock = this.stock + quantity;
 	}
 }
