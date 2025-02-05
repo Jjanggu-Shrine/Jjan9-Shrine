@@ -106,7 +106,7 @@ public class OrderService {
 
         // 쿠폰 적용
         if (couponId != null) {
-            UserCoupon userCoupon = userCouponRepository.findByUser_IdAndCoupon_CouponIdAndUsedAtIsNull(authUser.getId(), couponId)
+            UserCoupon userCoupon = userCouponRepository.findByUserAndCouponWithLock(authUser.getId(), couponId)
                     .orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
 
             int couponDiscountPercentage = userCoupon.getCoupon().getDiscountPercent();

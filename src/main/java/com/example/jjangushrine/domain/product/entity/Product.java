@@ -70,7 +70,7 @@ public class Product extends BaseEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Product(Store store,  String name, Integer amount, String description, String image, Short stock, String category) {
+	public Product(Store store,  String name, Integer amount, String description, String image, int stock, String category) {
 		this.store  = store;
 		this.name = name;
 		this.amount = amount;

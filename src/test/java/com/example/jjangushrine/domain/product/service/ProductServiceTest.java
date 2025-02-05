@@ -5,8 +5,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.ReflectionTestUtils.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +31,7 @@ import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.seller.repository.SellerRepository;
 import com.example.jjangushrine.domain.store.entity.Store;
 import com.example.jjangushrine.domain.store.repository.StoreRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -38,6 +47,9 @@ class ProductServiceTest {
 
 	@InjectMocks
 	ProductService productService;
+
+	private ExecutorService executorService;
+	private static final int THREAD_COUNT = 10;
 
 	@Test
 	@DisplayName("상품 등록 성공")
