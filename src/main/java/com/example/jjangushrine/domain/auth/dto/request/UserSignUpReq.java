@@ -4,6 +4,7 @@ import com.example.jjangushrine.domain.user.dto.UserValidationMessage;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -36,8 +37,7 @@ public record UserSignUpReq(
                 message = UserValidationMessage.INVALID_PHONE_NUMBER_MESSAGE)
         String phoneNumber,
 
-        @NotBlank(message = UserValidationMessage.USER_ROLE_BLANK_MESSAGE)
-        @Pattern(regexp =  "SELLER|USER", message = UserValidationMessage.INVALID_USER_ROLE)
+        @NotNull(message = UserValidationMessage.USER_ROLE_BLANK_MESSAGE)
         UserRole userRole
 ) {
 

@@ -7,6 +7,7 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemCreateReq;
 import com.example.jjangushrine.domain.cart.dto.request.CartItemUpdateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.cart.service.CartService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class CartController {
     @PostMapping("/items")
     public ResponseEntity<ApiResponse<CartItemCreateRes>> addCartItem(
             @AuthenticationPrincipal CustomUserDetails authUser,
-            @RequestBody CartItemCreateReq reqDto
+            @Valid @RequestBody CartItemCreateReq reqDto
     ) {
         CartItemCreateRes cartItemCreateRes = cartService.addCartItem(authUser, reqDto);
         return ResponseEntity.status(HttpStatus.OK)
@@ -49,7 +50,7 @@ public class CartController {
     @PatchMapping("/items")
     public ResponseEntity<ApiResponse<CartItemCreateRes>> updateCartItem(
             @AuthenticationPrincipal CustomUserDetails authUser,
-            @RequestBody CartItemUpdateReq reqDto
+            @Valid @RequestBody CartItemUpdateReq reqDto
     ) {
         CartItemCreateRes cartItemUpdateRes = cartService.updateCartItemQuantity(authUser, reqDto);
         return ResponseEntity.status(HttpStatus.OK)
