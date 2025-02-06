@@ -14,7 +14,7 @@ public record ProductSaveReq(
 	@Size(max = 20, message = ProductValidationMessage.PRODUCT_NAME_MAX_MESSAGE)
 	String name,
 
-	@NotBlank(message = ProductValidationMessage.AMOUNT_BLANK_MESSAGE)
+	@NotNull(message = ProductValidationMessage.AMOUNT_BLANK_MESSAGE)
 	Integer amount,
 
 	@NotBlank(message = ProductValidationMessage.DESCRIPTION_BLANK_MESSAGE)
