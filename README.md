@@ -140,7 +140,7 @@ redis_client = Redis(**redis_config)
 <summary>해결 과정</summary>
 
 1. Bitnami Redis 이미지 기본 설정 확인
-   - `ALLOW_EMPTY_PASSWORD=no`: 비밀번호 필수
+   -  비밀번호 삭제 처리
    - `REDIS_USERNAME=default`: 기본 사용자명
 
 2. Docker 설정 변경으로 해결
