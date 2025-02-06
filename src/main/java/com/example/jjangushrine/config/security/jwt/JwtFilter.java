@@ -3,7 +3,6 @@ package com.example.jjangushrine.config.security.jwt;
 import com.example.jjangushrine.common.ErrorResponse;
 import com.example.jjangushrine.config.security.SecurityConst;
 import com.example.jjangushrine.config.security.entity.CustomUserDetails;
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.example.jjangushrine.exception.ErrorCode;
@@ -72,19 +71,11 @@ public class JwtFilter extends OncePerRequestFilter {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
 
             CustomUserDetails userDetails;
-            if (role == UserRole.USER) {
-                User user = User.builder()
+            User user = User.builder()
                         .id(id)
                         .email(email)
                         .build();
                 userDetails = new CustomUserDetails(user);
-            } else {
-                Seller seller = Seller.builder()
-                        .id(id)
-                        .email(email)
-                        .build();
-                userDetails = new CustomUserDetails(seller);
-            }
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(

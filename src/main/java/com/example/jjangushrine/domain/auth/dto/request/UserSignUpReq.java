@@ -2,6 +2,7 @@ package com.example.jjangushrine.domain.auth.dto.request;
 
 import com.example.jjangushrine.domain.user.dto.UserValidationMessage;
 import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -33,7 +34,11 @@ public record UserSignUpReq(
         @NotBlank(message = UserValidationMessage.PHONE_NUMBER_BLANK_MESSAGE)
         @Pattern(regexp = UserValidationMessage.PHONE_NUMBER_REG,
                 message = UserValidationMessage.INVALID_PHONE_NUMBER_MESSAGE)
-        String phoneNumber
+        String phoneNumber,
+
+        @NotBlank(message = UserValidationMessage.USER_ROLE_BLANK_MESSAGE)
+        @Pattern(regexp =  "SELLER|USER", message = UserValidationMessage.INVALID_USER_ROLE)
+        UserRole userRole
 ) {
 
         public User to(String encodedPassword) {
@@ -42,6 +47,7 @@ public record UserSignUpReq(
                         .password(encodedPassword)
                         .nickName(this.nickName())
                         .phoneNumber(this.phoneNumber())
+                        .userRole(this.userRole)
                         .build();
         }
 }

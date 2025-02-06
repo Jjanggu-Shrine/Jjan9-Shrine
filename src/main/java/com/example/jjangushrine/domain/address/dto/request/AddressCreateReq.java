@@ -2,6 +2,7 @@ package com.example.jjangushrine.domain.address.dto.request;
 
 import com.example.jjangushrine.domain.address.dto.AddressValidationMessage;
 import com.example.jjangushrine.domain.address.entity.Address;
+import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -45,10 +46,9 @@ public record AddressCreateReq(
         String zipCode
 ) {
 
-    public Address to(UserRole userRole, Long id) {
+    public Address to(User user) {
         return Address.builder()
-                .ownerId(id)
-                .userRole(userRole)
+                .user(user)
                 .recipientName(this.recipientName)
                 .addressName(this.addressName)
                 .address(this.address)

@@ -32,7 +32,7 @@ public class AddressService {
     @Transactional
     public void createAddress(AddressCreateReq addressCreateReq, String email) {
         User user = userService.findUserByEmail(email);
-        Address address = addressCreateReq.to(user.getUserRole(), user.getId());
+        Address address = addressCreateReq.to(user);
 
         setDefaultIfFirstAddress(address, user);
 
@@ -51,7 +51,7 @@ public class AddressService {
         User user = userService.findUserByEmail(email);
 
         List<AddressRes> addresses = addressRepository
-                .findAllByOwnerIdAndUserRoleAndIsDeletedIsFalse(user.getId(), user.getUserRole(), pageable)
+                .findAllByUserIdAndIsDeletedIsFalse(user.getId(), pageable)
                 .map(AddressRes::from)
                 .getContent();
 
@@ -81,7 +81,7 @@ public class AddressService {
             throw new ConflictException(ErrorCode.DUPLICATE_DEFAULT);
         }
 
-        addressRepository.setAllAddressesToNonDefault(user.getId(), user.getUserRole());
+        addressRepository.setAllAddressesToNonDefault(user.getId());
         address.setDefault();
     }
 
@@ -100,15 +100,14 @@ public class AddressService {
     }
 
     private void validateUser(Address address, User user) {
-        if (!address.getOwnerId().equals(user.getId()) ||
-                !address.getUserRole().equals(user.getUserRole())) {
+        if (!address.getId().equals(user.getId())) {
             throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
         }
     }
 
     private void setDefaultIfFirstAddress(Address address, User user) {
         boolean isFirstAddress = addressRepository
-                .countByOwnerIdAndUserRole(user.getId(), user.getUserRole()) == 0;
+                .countByIdAndIsDeletedIsFalse(user.getId()) == 0;
 
         if (isFirstAddress) {
             address.setDefault();
@@ -116,7 +115,7 @@ public class AddressService {
     }
 
     public Address findByUserId(Long ownerId, UserRole userRole) {
-        return addressRepository.findByOwnerIdAndUserRoleAndIsDefaultIsTrue(ownerId, userRole)
+        return addressRepository.findByIdAndIsDefaultIsTrue(ownerId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
     }
 }

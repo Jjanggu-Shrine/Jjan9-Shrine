@@ -5,8 +5,7 @@ import com.example.jjangushrine.domain.user.enums.UserRole;
 
 public record AddressRes(
         Long addressId,
-        UserRole userRole,
-        Long ownerId,
+        Long userId,
         String recipientName,
         String addressName,
         String address,
@@ -18,8 +17,7 @@ public record AddressRes(
     public static AddressRes from(Address address) {
         return new AddressRes(
                 address.getId(),
-                address.getUserRole(),
-                address.getOwnerId(),
+                address.getUser().getId(),
                 address.getRecipientName(),
                 address.getAddressName(),
                 address.getAddress(),

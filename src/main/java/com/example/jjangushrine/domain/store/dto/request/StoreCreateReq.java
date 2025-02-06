@@ -1,8 +1,8 @@
 package com.example.jjangushrine.domain.store.dto.request;
 
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.store.dto.StoreValidationMessage;
 import com.example.jjangushrine.domain.store.entity.Store;
+import com.example.jjangushrine.domain.user.entity.User;
 import jakarta.validation.constraints.*;
 
 public record StoreCreateReq(
@@ -45,9 +45,9 @@ public record StoreCreateReq(
         Short baseDeliveryFee
 ) {
 
-    public Store to(Seller seller) {
+    public Store to(User user) {
         return Store.builder()
-                .seller(seller)
+                .user(user)
                 .businessNumber(this.businessNumber)
                 .businessName(this.businessNumber)
                 .storeName(this.storeName)
