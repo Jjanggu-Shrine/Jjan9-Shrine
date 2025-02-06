@@ -41,12 +41,12 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailAndIsDeletedIsFalse(email);
     }
 
     public User findUserByEmail(String email) {
