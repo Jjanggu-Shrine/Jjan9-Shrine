@@ -101,7 +101,49 @@ graph TD
 
 @donggeon -
 
-@jeongwoo -
+@jeongwoo 
+
+# Redis 인증 트러블슈팅 사례
+
+## 문제 상황
+- Docker Redis 컨테이너와 애플리케이션 코드의 인증 설정 불일치
+- Redis 연결 실패로 서비스 장애 발생
+
+## 환경 설정
+
+### Docker Redis 설정
+```bash
+docker run --name jjangushrine-redis \
+  -e ALLOW_EMPTY_PASSWORD=no \
+  -e REDIS_USERNAME=default \
+  -p 6379:6379 \
+  -d public.ecr.aws/bitnami/redis:latest
+```
+
+### 애플리케이션 코드
+```python
+redis_config = {
+    'host': os.getenv('REDIS_HOST', 'localhost'),
+    'port': int(os.getenv('REDIS_PORT', 6379)),
+    'username': os.getenv('REDIS_USERNAME', 'default'),
+    'db': int(os.getenv('REDIS_DB', 0))
+}
+
+redis_client = Redis(**redis_config)
+```
+
+## 해결 과정
+1. Bitnami Redis 이미지의 기본 설정 확인
+   - `ALLOW_EMPTY_PASSWORD=no`: 비밀번호 필수 설정
+   - `REDIS_USERNAME=default`: 기본 사용자명 설정
+
+2. 코드 수정 없이 Docker 설정 변경
+   - 비밀번호 인증 비활성화로 연결 성공
+   - 개발 환경에서는 보안 설정 간소화
+
+## 교훈
+- Docker 이미지의 기본 보안 설정 사전 확인 필요
+- 개발/운영 환경별 인증 정책 명확화
 
 ## 📝 API 문서
 | API           | 명세서 |
