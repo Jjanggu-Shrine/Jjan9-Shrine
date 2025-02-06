@@ -1,7 +1,7 @@
 package com.example.jjangushrine.config.security.entity;
 
-import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +16,17 @@ public class CustomUserDetails implements UserDetails {
     private final String email;
     private final UserRole role;
 
-    public CustomUserDetails(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.role = user.getUserRole();
+    @Builder
+    public CustomUserDetails(
+            Long id,
+            String email,
+            UserRole role
+    ) {
+        this.id = id;
+        this.email = email;
+        this.role = role;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

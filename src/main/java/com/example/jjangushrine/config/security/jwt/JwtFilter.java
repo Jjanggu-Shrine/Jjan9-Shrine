@@ -2,8 +2,7 @@ package com.example.jjangushrine.config.security.jwt;
 
 import com.example.jjangushrine.common.ErrorResponse;
 import com.example.jjangushrine.config.security.SecurityConst;
-import com.example.jjangushrine.config.security.entity.CustomUserDetails;
-import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.config.security.sevice.CustomUserDetailsService;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.example.jjangushrine.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,18 +17,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -42,12 +38,9 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        String path = request.getRequestURI();
+        String uri = request.getRequestURI();
 
-        if (path.startsWith("/api/v1/auth/") ||
-                path.startsWith("/swagger-ui/") ||
-                path.startsWith("/v3/api-docs") ||
-                path.startsWith("/swagger-resources")) {
+        if (isExcludedPath(uri)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -60,31 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         try {
-            String jwt = extractToken(bearerJwt);
-            Claims claims = jwtUtil.extractClaims(jwt);
-
-            Long id = Long.parseLong(claims.getSubject());
-            String email = claims.get("email", String.class);
-            UserRole role = UserRole.of(claims.get("role", String.class));
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
-
-            CustomUserDetails userDetails;
-            User user = User.builder()
-                        .id(id)
-                        .email(email)
-                        .build();
-                userDetails = new CustomUserDetails(user);
-
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            authorities
-                    );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            authenticateUser(bearerJwt);
             filterChain.doFilter(request, response);
 
         } catch (SecurityException e) {
@@ -105,14 +74,40 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
+    private boolean isExcludedPath(String uri) {
+        for (String excludePath : SecurityConst.EXCLUDE_PATHS) {
+            if (uri.startsWith(excludePath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void authenticateUser(String bearerJwt) {
+        String jwt = extractToken(bearerJwt);
+        Claims claims = jwtUtil.extractClaims(jwt);
+
+        Long id = Long.parseLong(claims.getSubject());
+        String email = claims.get("email", String.class);
+        UserRole role = UserRole.of(claims.get("role", String.class));
+
+        Authentication authentication =
+                CustomUserDetailsService.createAuthentication(id, email, role);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
     private String extractToken(String bearerToken) {
-        if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith(SecurityConst.BEARER_PREFIX)) {
+        if (!StringUtils.hasText(bearerToken) ||
+                !bearerToken.startsWith(SecurityConst.BEARER_PREFIX)) {
             throw new MalformedJwtException(SecurityConst.MALFORMED_TOKEN);
         }
         return bearerToken.substring(7);
     }
 
-    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    private void sendErrorResponse(
+            HttpServletResponse response,
+            ErrorCode errorCode) throws IOException {
         ErrorResponse errorResponse = ErrorResponse.of(errorCode);
         response.setContentType(SecurityConst.CONTENT_TYPE);
         response.setStatus(errorCode.getStatus().value());

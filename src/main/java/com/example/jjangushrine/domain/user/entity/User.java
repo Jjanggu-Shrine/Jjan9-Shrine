@@ -84,6 +84,7 @@ public class User extends BaseEntity {
 		if (!this.isDeleted) {
 			this.isDeleted = true;
 			this.deletedAt = LocalDateTime.now();
+			this.email = "(DELETED)" + this.email;
 		} else {
 			throw new ConflictException(ErrorCode.DUPLICATE_USER_DELETE);
 		}

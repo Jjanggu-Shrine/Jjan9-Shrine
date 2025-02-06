@@ -46,7 +46,9 @@ public class UserAuthService {
             throw new InvalidException(ErrorCode.LOGIN_FAILED);
         }
 
-        Authentication authentication = customUserDetailsService.createAuthentication(user);
+        Authentication authentication =
+                CustomUserDetailsService.createAuthentication(
+                        user.getId(), user.getEmail(), user.getUserRole());
         String token = jwtUtil.generateToken(authentication);
 
         return new SignInRes(token);
