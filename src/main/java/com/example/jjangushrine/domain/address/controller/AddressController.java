@@ -28,7 +28,7 @@ public class AddressController {
             @Valid @RequestBody AddressCreateReq createReq,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        addressService.createAddress(createReq,userDetails.getEmail());
+        addressService.createAddress(createReq, userDetails.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(ApiResMessage.CREATE_ADDRESS_SUCCESS));
     }
@@ -45,18 +45,18 @@ public class AddressController {
                         )));
     }
 
-        @GetMapping
-        public ResponseEntity<ApiResponse<AddressListRes>> getAddressList(
-                @ModelAttribute AddressPageRequest pageRequest,
-                @AuthenticationPrincipal CustomUserDetails userDetails
-        ) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(ApiResponse.success(
-                            ApiResMessage.GET_ADDRESS_SUCCESS,
-                            addressService.getAddressList(pageRequest.toPageRequest(),
-                                    userDetails.getEmail()
-                            )));
-        }
+    @GetMapping
+    public ResponseEntity<ApiResponse<AddressListRes>> getAddressList(
+            @ModelAttribute AddressPageRequest pageRequest,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        ApiResMessage.GET_ADDRESS_SUCCESS,
+                        addressService.getAddressList(pageRequest.toPageRequest(),
+                                userDetails.getEmail()))
+                );
+    }
 
     @PatchMapping("/{addressId}")
     public ResponseEntity<ApiResponse<AddressRes>> updateAddress(
@@ -64,11 +64,12 @@ public class AddressController {
             @PathVariable Long addressId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        return  ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
                         ApiResMessage.UPDATE_ADDRESS_SUCCESS,
-                        addressService.updateAddress(updateReq, addressId, userDetails.getEmail()
-                        )));
+                        addressService.updateAddress(
+                                updateReq, addressId, userDetails.getEmail()))
+                );
     }
 
     @PatchMapping("/{addressId}/default")
@@ -78,7 +79,8 @@ public class AddressController {
     ) {
         addressService.setDefaultAddress(addressId, userDetails.getEmail());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(ApiResMessage.SET_DEFAULT_ADDRESS_SUCCESS));
+                .body(ApiResponse.success(ApiResMessage.SET_DEFAULT_ADDRESS_SUCCESS)
+                );
     }
 
     @DeleteMapping("/{addressId}")

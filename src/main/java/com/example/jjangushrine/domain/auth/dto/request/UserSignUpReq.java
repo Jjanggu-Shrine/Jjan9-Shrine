@@ -41,13 +41,13 @@ public record UserSignUpReq(
         UserRole userRole
 ) {
 
-        public User to(String encodedPassword) {
-                return User.builder()
-                        .email(this.email())
-                        .password(encodedPassword)
-                        .nickName(this.nickName())
-                        .phoneNumber(this.phoneNumber())
-                        .userRole(this.userRole)
-                        .build();
-        }
+    public User to(String encodedPassword) {
+        return User.builder()
+                .email(this.email())
+                .password(encodedPassword)
+                .nickName(this.nickName())
+                .phoneNumber(this.phoneNumber())
+                .userRole(this.userRole)
+                .build();
+    }
 }
