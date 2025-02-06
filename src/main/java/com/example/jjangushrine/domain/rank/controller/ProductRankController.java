@@ -24,6 +24,6 @@ public class ProductRankController {
 	@GetMapping("/products/ranking")
 	public ResponseEntity<ApiResponse<List<ProductRankRes>>> getProductRankList() {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(ApiResponse.success("인기 상품 랭킹 조회애 성공했습니다.", productRankService.getProductRankList()));
+			.body(ApiResponse.success("인기 상품 랭킹 조회에 성공했습니다.", productRankService.getProductRankList()));
 	}
 }
