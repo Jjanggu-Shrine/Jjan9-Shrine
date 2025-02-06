@@ -1,37 +1,39 @@
 package com.example.jjangushrine.domain.product.dto.request;
+import com.example.jjangushrine.domain.product.dto.ProductValidationMessage;
 import com.example.jjangushrine.domain.product.entity.Product;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ProductSaveReq(
-	@NotBlank
+	@NotNull(message = ProductValidationMessage.STOREID_BLANK_MESSAGE)
 	Long storeId,
 
-	@NotBlank
-	@Size(max = 20)
+	@NotBlank(message = ProductValidationMessage.NAME_BLANK_MESSAGE)
+	@Size(max = 20, message = ProductValidationMessage.PRODUCT_NAME_MAX_MESSAGE)
 	String name,
 
-	@NotBlank
+	@NotNull(message = ProductValidationMessage.AMOUNT_BLANK_MESSAGE)
 	Integer amount,
 
-	@NotBlank
+	@NotBlank(message = ProductValidationMessage.DESCRIPTION_BLANK_MESSAGE)
 	String description,
 
-	@NotBlank
-	String image,
+	@NotBlank(message = ProductValidationMessage.IMAGE_BLANK_MESSAGE)
+	String imageUrl,
 
-	@NotBlank
+	@NotNull(message = ProductValidationMessage.STOCK_BLANK_MESSAGE)
 	Short stock,
 
-	@NotBlank
+	@NotBlank(message = ProductValidationMessage.CATEGORY_BLANK_MESSAGE)
 	String category
 ) {
 	public Product toEntity() {
 		return Product.builder()
 			.name(name())
 			.stock(stock())
-			.image(image())
+			.image(imageUrl())
 			.amount(amount())
 			.description(description())
 			.category(category())

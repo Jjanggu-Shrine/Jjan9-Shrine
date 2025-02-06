@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -60,7 +61,6 @@ dependencies {
 
     // Redis
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    implementation 'org.redisson:redisson-spring-boot-starter:3.23.4' // Redisson 추가 (분산락)
 
     // Oauth2.0
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

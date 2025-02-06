@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class LockService {
+	//분산락 구현
 	private final RedisTemplate<String, String> redisTemplate;
 	private static final String LOCK_PREFIX = "LOCK:";
 

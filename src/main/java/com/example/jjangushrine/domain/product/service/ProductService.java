@@ -1,5 +1,6 @@
 package com.example.jjangushrine.domain.product.service;
 
+import com.example.jjangushrine.domain.rank.service.ProductRankService;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.service.UserService;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final StoreService storeService;
 	private final UserService userService;
+	private final ProductRankService productRankService;
 
 	@Transactional
 	public ProductRes saveProduct(ProductSaveReq productSaveReq, Long sellerId) {
@@ -74,15 +76,10 @@ public class ProductService {
 		return productRepository.findAllProductByStoreAndCategory(storeId, Category.valueOf(category), pageable);
 	}
 
-	public boolean validateStoreAccessForSeller(Store store, Long userId) {
-
-		User user = userService.findUserById(userId);
-
-		if (user != store.getUser()) {
-			return false;
-		}
-
-		return true;
+	public ProductRes getProduct(Long productId) {
+		Product findProduct = getProductById(productId);
+		productRankService.increaseSearchCount(productId);
+		return ProductRes.fromEntity(findProduct);
 	}
 
 	public Product getProductById(Long productId) {
@@ -91,6 +88,17 @@ public class ProductService {
 
 		findProduct.validateIsDeleted();
 		return findProduct;
+	}
+
+	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
+
+		User user = userService.findUserById(sellerId);
+
+		if (user != store.getUser()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public void validateProductOwnedBySeller(Long productId, Long sellerId) {

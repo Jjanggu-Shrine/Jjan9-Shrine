@@ -8,7 +8,6 @@ import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,6 @@ public class CartService {
     public CartItemCreateRes addCartItem(CustomUserDetails authUser, CartItemCreateReq reqDto) {
         String userId = authUser.getId().toString();
         String cartKey = createCartKey(userId); // redis 장바구나 키
-        String lockKey = "lock:cart:" + userId;
 
 
             // 상품 정보 조회
@@ -76,7 +74,6 @@ public class CartService {
     public CartItemCreateRes updateCartItemQuantity(CustomUserDetails authUser, CartItemUpdateReq reqDto) {
         String userId = authUser.getId().toString();
         String cartKey = createCartKey(userId); // redis 장바구나 키
-        String lockKey = "lock:cart:" + userId;
 
             Product product = productService.getProductById(reqDto.productId());
 
