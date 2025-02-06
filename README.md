@@ -45,6 +45,9 @@
 ### Backend
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/-naver-%23Clojure?style=for-the-badge&logo=naver&logoColor=white">
+<img src="https://img.shields.io/badge/-Sping Security-%23Clojure?style=for-the-badge&logo=SpringSecurity&logoColor=white">
+<img src="https://img.shields.io/badge/-JWT-100000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
 
 ### Database
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
@@ -53,6 +56,13 @@
 ### Infrastructure
 <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
 <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+<img src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white">
+
+
+### Group
+<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+<img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white">
 
 ## 📊 시스템 아키텍처
 
@@ -76,6 +86,7 @@ graph TD
 ## 📋 ERD
 [ERD.md](doc%2FERD.md)
 
+
 ## 🚀 성능 개선
 
 ### 1. 캐싱 전략
@@ -98,12 +109,14 @@ graph TD
   - 상품 검색 속도 향상
 
 ## 🔍 트러블슈팅
-@yeana - 
+@yeana - https://github.com/Jjanggu-Shrine/Jjan9-Shrine/wiki/%5BTrouble-Shooting%5D-%ED%94%[…]A%B5%AC%EC%A1%B0%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B3%A0%EC%B0%B0
+
+https://github.com/Jjanggu-Shrine/Jjan9-Shrine/wiki/%5BTrouble-Shooting%5D-OAuth2.[…]C%B0%A8%EC%9D%B4%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EB%AC%B8%EC%A0%9C
 
 @hayoung -
 🐞 [상품 조회 속도 저하로 인한 개선](https://github.com/Jjanggu-Shrine/Jjan9-Shrine/issues/69#issue-2832016451)
 
-@donggeon -
+@donggeon - https://github.com/Jjanggu-Shrine/Jjan9-Shrine/issues/89
 
 ## @jeongwoo - Redis 인증 트러블슈팅 사례
 <details>
