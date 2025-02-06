@@ -53,4 +53,9 @@ public class UserService {
         return userRepository.findByEmailAndIsDeletedIsFalse(email)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
+
+    public User findUserById(Long id) {
+        return userRepository.findByIdAndIsDeletedIsFalse(id)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
 }

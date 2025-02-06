@@ -1,6 +1,5 @@
 package com.example.jjangushrine.domain.auth.service;
 
-import com.example.jjangushrine.domain.auth.dto.request.SellerSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
 import com.example.jjangushrine.domain.auth.dto.response.SignInRes;
 import com.example.jjangushrine.domain.seller.entity.Seller;

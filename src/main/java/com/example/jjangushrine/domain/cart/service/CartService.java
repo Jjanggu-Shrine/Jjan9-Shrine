@@ -6,11 +6,8 @@ import com.example.jjangushrine.domain.cart.dto.request.CartItemUpdateReq;
 import com.example.jjangushrine.domain.cart.dto.response.CartItemCreateRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.service.ProductService;
-import com.example.jjangushrine.exception.common.LockException;
-import com.example.jjangushrine.exception.common.Threadxception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -27,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class CartService {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final RedissonClient redissonClient; // 분산락을 사용하기 위해 추가
     private final ProductService productService;
 
 
@@ -42,15 +37,6 @@ public class CartService {
         String cartKey = createCartKey(userId); // redis 장바구나 키
         String lockKey = "lock:cart:" + userId;
 
-        RLock lock = redissonClient.getLock(lockKey); // 락 가져오기
-
-        boolean isLocked = false;
-        try {
-            // 5초 동안 락을 시도하고, 10초 동안 유지(자동 해제)
-            isLocked = lock.tryLock(5, 10, TimeUnit.SECONDS);
-            if (!isLocked) {
-                throw new LockException();
-            }
 
             // 상품 정보 조회
             Product product = productService.getProductById(reqDto.productId());
@@ -67,14 +53,7 @@ public class CartService {
             int totalPrice = allQuantity * product.getAmount();
 
             return new CartItemCreateRes(cartKey, product.getId(), product.getName(), allQuantity, totalPrice);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new Threadxception("상품 추가 중 인터럽트 발생");
-        } finally {
-            if (isLocked) {
-                lock.unlock(); // 락 해제
-            }
-        }
+
     }
 
     // 장바구니가 없으면 자동으로 생성
@@ -99,16 +78,6 @@ public class CartService {
         String cartKey = createCartKey(userId); // redis 장바구나 키
         String lockKey = "lock:cart:" + userId;
 
-        RLock lock = redissonClient.getLock(lockKey); // 락 가져오기
-
-        boolean isLocked = false;
-
-        try {
-            isLocked = lock.tryLock(5, 10, TimeUnit.SECONDS);
-            if (!isLocked) {
-                throw new LockException();
-            }
-
             Product product = productService.getProductById(reqDto.productId());
 
             // Redis 장바구니에서 아이템 수량 조회
@@ -127,14 +96,6 @@ public class CartService {
             int totalPrice = reqDto.quantity() * product.getAmount();
 
             return new CartItemCreateRes(cartKey, product.getId(), product.getName(), reqDto.quantity(), totalPrice);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new Threadxception("상품 추가 중 인터럽트 발생");
-        } finally {
-            if (isLocked) {
-                lock.unlock(); // 락 해제
-            }
-        }
     }
 
     /**

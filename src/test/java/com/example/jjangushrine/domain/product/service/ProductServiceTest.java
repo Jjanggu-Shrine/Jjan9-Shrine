@@ -6,6 +6,7 @@ import static org.springframework.test.util.ReflectionTestUtils.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,10 @@ import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
-import com.example.jjangushrine.domain.seller.entity.Seller;
-import com.example.jjangushrine.domain.seller.repository.SellerRepository;
 import com.example.jjangushrine.domain.store.entity.Store;
 import com.example.jjangushrine.domain.store.repository.StoreRepository;
+import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -34,23 +35,26 @@ class ProductServiceTest {
 	StoreRepository storeRepository; // productService 수정하면 같이 수정
 
 	@Mock
-	SellerRepository sellerRepository; // productService 수정하면 같이 수정
+	UserRepository userRepository; // productService 수정하면 같이 수정
 
 	@InjectMocks
 	ProductService productService;
+
+	private ExecutorService executorService;
+	private static final int THREAD_COUNT = 10;
 
 	@Test
 	@DisplayName("상품 등록 성공")
 	void  saveProductSuccess() {
 	    // given
 		ProductSaveReq saveReq = createProductSaveReq();
-		Seller mockSeller = createMockSeller();
+		User mockSeller = createMockSeller();
 		Store mockStore = createMockStore(mockSeller);
 		Product mockProduct = createMockProduct(saveReq, mockStore);
 		ProductRes expectedRes = ProductRes.fromEntity(mockProduct);
 
 		given(storeRepository.findById(anyLong())).willReturn(Optional.of(mockStore));
-		given(sellerRepository.findById(anyLong())).willReturn(Optional.of(mockSeller));
+		given(userRepository.findById(anyLong())).willReturn(Optional.of(mockSeller));
 		given(productRepository.save(any(Product.class))).willReturn(mockProduct);
 
 		// when
@@ -67,7 +71,7 @@ class ProductServiceTest {
 	    // given
 		ProductSaveReq saveReq = createProductSaveReq();
 	    ProductUpdateReq updateReq = createProductUpdateReq();
-		Seller mockSeller = createMockSeller();
+		User mockSeller = createMockSeller();
 		Store mockStore = createMockStore(mockSeller);
 		Product mockProduct = createMockProduct(saveReq, mockStore);
 		ProductRes expectedRes = ProductRes.fromEntity(mockProduct);
@@ -87,7 +91,7 @@ class ProductServiceTest {
 	void deleteProductSuccess () {
 		// given
 		ProductSaveReq saveReq = createProductSaveReq();
-		Seller mockSeller = createMockSeller();
+		User mockSeller = createMockSeller();
 		Store mockStore = createMockStore(mockSeller);
 		Product mockProduct = createMockProduct(saveReq, mockStore);
 
@@ -101,13 +105,13 @@ class ProductServiceTest {
 		assertThat(mockProduct.getIsDeleted()).isTrue();
 	}
 
-	private Seller createMockSeller() {
-		Seller mockSeller = Seller.builder().build();
+	private User createMockSeller() {
+		User mockSeller = User.builder().build();
 		setField(mockSeller, "id", 1L);
 		return mockSeller;
 	}
 
-	private Store createMockStore(Seller mockSeller) {
+	private Store createMockStore(User mockSeller) {
 		Store mockStore = Store.builder().build();
 		setField(mockStore, "id", 1L);
 		setField(mockStore, "sellerId", mockSeller);

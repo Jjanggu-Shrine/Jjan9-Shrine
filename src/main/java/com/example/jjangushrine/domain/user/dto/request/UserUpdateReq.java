@@ -1,6 +1,7 @@
 package com.example.jjangushrine.domain.user.dto.request;
 
 import com.example.jjangushrine.domain.user.dto.UserValidationMessage;
+import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 

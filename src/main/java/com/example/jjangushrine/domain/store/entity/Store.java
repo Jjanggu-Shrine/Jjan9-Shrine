@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.example.jjangushrine.domain.store.dto.request.StoreUpdateReq;
+import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.exception.ErrorCode;
 import com.example.jjangushrine.exception.common.ConflictException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import com.example.jjangushrine.common.BaseEntity;
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,8 +27,8 @@ public class Store extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "seller_id")
-    private Seller seller;
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String businessNumber;
@@ -55,7 +55,7 @@ public class Store extends BaseEntity {
     @Builder
     public Store(
             Long id,
-            Seller seller,
+            User user,
             String businessNumber,
             String businessName,
             String storeName,
@@ -63,7 +63,7 @@ public class Store extends BaseEntity {
             Short baseDeliveryFee
     ) {
         this.id = id;
-        this.seller = seller;
+        this.user = user;
         this.businessNumber = businessNumber;
         this.businessName = businessName;
         this.storeName = storeName;

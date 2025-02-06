@@ -1,7 +1,11 @@
 package com.example.jjangushrine.domain.product.service;
 
+import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,13 +14,9 @@ import com.example.jjangushrine.domain.product.dto.request.ProductUpdateReq;
 import com.example.jjangushrine.domain.product.dto.response.ProductRes;
 import com.example.jjangushrine.domain.product.entity.Product;
 import com.example.jjangushrine.domain.product.enums.Category;
-import com.example.jjangushrine.domain.seller.service.SellerService;
 import com.example.jjangushrine.domain.store.service.StoreService;
-import com.example.jjangushrine.exception.ErrorCode;
-import com.example.jjangushrine.exception.common.NotFoundException;
 import com.example.jjangushrine.exception.common.AccessDeniedException;
 import com.example.jjangushrine.domain.product.repository.ProductRepository;
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.store.entity.Store;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ProductService {
 
 	private final ProductRepository productRepository;
 	private final StoreService storeService;
-	private final SellerService sellerService;
+	private final UserService userService;
 
 	@Transactional
 	public ProductRes saveProduct(ProductSaveReq productSaveReq, Long sellerId) {
@@ -79,17 +79,6 @@ public class ProductService {
 		return ProductRes.fromEntity(findProduct);
 	}
 
-	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
-
-		Seller seller = sellerService.findSellerById(sellerId);
-
-		if (seller != store.getSeller()) {
-			return false;
-		}
-
-		return true;
-	}
-
 	public Product getProductById(Long productId) {
 		Product findProduct = productRepository.findById(productId)
 			.orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -98,23 +87,39 @@ public class ProductService {
 		return findProduct;
 	}
 
+	public boolean validateStoreAccessForSeller(Store store, Long sellerId) {
+
+		User user = userService.findUserById(sellerId);
+
+		if (user != store.getUser()) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public void validateProductOwnedBySeller(Long productId, Long sellerId) {
 		if(!productRepository.existsByProductIdAndSellerId(productId, sellerId)) {
 			throw new AccessDeniedException(ErrorCode.PRODUCT_FORBIDDEN_ACCESS);
 		}
 	}
 
-	@Transactional
+	@Transactional(timeout = 5, rollbackFor = Exception.class)
 	public void decreaseStock(Long productId, int quantity) {
-		Product product = getProductById(productId);
+		Product product = getFindByIdWithLock(productId);
 		product.decreaseStock(quantity);
 		productRepository.save(product);
 	}
 
-	@Transactional
+	@Transactional(timeout = 5, rollbackFor = Exception.class)
 	public void increaseStock(Long productId, int quantity) {
-		Product product = getProductById(productId);
+		Product product = getFindByIdWithLock(productId);
 		product.increaseStock(quantity);
 		productRepository.save(product);
+	}
+
+	public Product getFindByIdWithLock(Long productId) {
+		return productRepository.findByIdWithLock(productId)
+				.orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 	}
 }

@@ -2,6 +2,7 @@ package com.example.jjangushrine.domain.address.entity;
 
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.address.dto.request.AddressUpdateReq;
+import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.example.jjangushrine.exception.ErrorCode;
 import com.example.jjangushrine.exception.common.ConflictException;
@@ -22,11 +23,9 @@ public class Address extends BaseEntity {
     @Column(name = "address_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
-
-    @Column(nullable = false)
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String recipientName;
@@ -57,8 +56,7 @@ public class Address extends BaseEntity {
     @Builder
     public Address(
             Long id,
-            UserRole userRole,
-            Long ownerId,
+            User user,
             String recipientName,
             String addressName,
             String address,
@@ -66,8 +64,7 @@ public class Address extends BaseEntity {
             String zipCode
     ) {
         this.id = id;
-        this.userRole = userRole;
-        this.ownerId = ownerId;
+        this.user = user;
         this.recipientName = recipientName;
         this.addressName = addressName;
         this.address = address;
