@@ -1,7 +1,11 @@
 package com.example.jjangushrine.domain.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import com.example.jjangushrine.domain.user.dto.request.UserUpdateReq;
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.common.ConflictException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,7 +34,7 @@ public class User extends BaseEntity {
 	@Column(name = "user_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)
@@ -43,21 +47,12 @@ public class User extends BaseEntity {
 	private String phoneNumber;
 
 	@Column(nullable = false)
-	private String address;
-
-	@Column(nullable = false)
-	private String addressDetail;
-
-	@Column(nullable = false)
-	private String zipCode;
-
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private final UserRole userRole = UserRole.USER;
+	private UserRole userRole;
 
-	@Column
+	@Column(nullable = false)
 	@ColumnDefault("false")
-	private Boolean isDeleted;
+	private Boolean isDeleted = false;
 
 	@Column
 	private LocalDateTime deletedAt;
@@ -69,22 +64,28 @@ public class User extends BaseEntity {
 			String password,
 			String nickName,
 			String phoneNumber,
-			String address,
-			String addressDetail,
-			String zipCode
+			UserRole userRole
 	) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.nickName = nickName;
 		this.phoneNumber = phoneNumber;
-		this.address = address;
-		this.addressDetail = addressDetail;
-		this.zipCode = zipCode;
+		this.userRole = userRole;
+	}
+
+	public void update(UserUpdateReq updateReq) {
+		Optional.ofNullable(updateReq.password()).ifPresent(value -> this.password = value);
+		Optional.ofNullable(updateReq.nickName()).ifPresent(value -> this.nickName = value);
+		Optional.ofNullable(updateReq.phoneNumber()).ifPresent(value -> this.phoneNumber = value);
 	}
 
 	public void softDelete() {
-		this.isDeleted = true;
-		this.deletedAt = LocalDateTime.now();
+		if (!this.isDeleted) {
+			this.isDeleted = true;
+			this.deletedAt = LocalDateTime.now();
+		} else {
+			throw new ConflictException(ErrorCode.DUPLICATE_USER_DELETE);
+		}
 	}
 }

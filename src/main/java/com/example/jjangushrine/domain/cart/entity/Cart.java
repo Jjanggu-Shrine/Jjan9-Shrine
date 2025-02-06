@@ -3,24 +3,28 @@ package com.example.jjangushrine.domain.cart.entity;
 import com.example.jjangushrine.domain.user.entity.User;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
-@Entity
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
-@NoArgsConstructor
-@Table(name = "carts")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RedisHash("cart") // Redis에 저장할 객체 명시
 public class Cart {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cartId;
+	private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Long userId; // Redis에서는 ID 필수
+	private List<CartItem> cartItems = new ArrayList<>();
 
-	public Cart(User user) {
-		this.user = user;
+
+	public Cart(Long userId) {
+		this.id = userId;
+		this.userId = userId;
 	}
 }

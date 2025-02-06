@@ -2,7 +2,9 @@ package com.example.jjangushrine.domain.auth.dto.request;
 
 import com.example.jjangushrine.domain.user.dto.UserValidationMessage;
 import com.example.jjangushrine.domain.user.entity.User;
+import com.example.jjangushrine.domain.user.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -35,20 +37,8 @@ public record UserSignUpReq(
                 message = UserValidationMessage.INVALID_PHONE_NUMBER_MESSAGE)
         String phoneNumber,
 
-        @NotBlank(message = UserValidationMessage.ADDRESS_BLANK_MESSAGE)
-        @Size(max = UserValidationMessage.ADDRESS_MAX,
-                message = UserValidationMessage.ADDRESS_LENGTH_MESSAGE)
-        String address,
-
-        @NotBlank(message = UserValidationMessage.ADDRESS_DETAIL_BLANK_MESSAGE)
-        @Size(max = UserValidationMessage.ADDRESS_DETAIL_MAX,
-                message = UserValidationMessage.ADDRESS_DETAIL_LENGTH_MESSAGE)
-        String addressDetail,
-
-        @NotBlank(message = UserValidationMessage.ZIP_CODE_BLANK_MESSAGE)
-        @Pattern(regexp = UserValidationMessage.ZIP_CODE_REG,
-                message = UserValidationMessage.INVALID_ZIP_CODE_MESSAGE)
-        String zipCode
+        @NotNull(message = UserValidationMessage.USER_ROLE_BLANK_MESSAGE)
+        UserRole userRole
 ) {
 
         public User to(String encodedPassword) {
@@ -57,9 +47,7 @@ public record UserSignUpReq(
                         .password(encodedPassword)
                         .nickName(this.nickName())
                         .phoneNumber(this.phoneNumber())
-                        .address(this.address())
-                        .addressDetail(this.addressDetail())
-                        .zipCode(this.zipCode())
+                        .userRole(this.userRole)
                         .build();
         }
 }

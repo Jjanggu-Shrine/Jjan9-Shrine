@@ -3,12 +3,13 @@ package com.example.jjangushrine.domain.cart.entity;
 
 import com.example.jjangushrine.domain.product.entity.Product;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cart_items")
 public class CartItem {
@@ -17,9 +18,7 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartItemId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    private Long cartKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -28,10 +27,4 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @Builder
-    public CartItem(Cart cart, Product product, int quantity) {
-        this.cart = cart;
-        this.product = product;
-        this.quantity = quantity;
-    }
 }

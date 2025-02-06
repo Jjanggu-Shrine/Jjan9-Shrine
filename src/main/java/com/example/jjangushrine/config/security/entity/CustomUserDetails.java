@@ -1,6 +1,5 @@
 package com.example.jjangushrine.config.security.entity;
 
-import com.example.jjangushrine.domain.seller.entity.Seller;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import lombok.Getter;
@@ -15,21 +14,12 @@ public class CustomUserDetails implements UserDetails {
 
     private final Long id;
     private final String email;
-    private final String password;
     private final UserRole role;
 
     public CustomUserDetails(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
-        this.password = user.getPassword();
         this.role = user.getUserRole();
-    }
-
-    public CustomUserDetails(Seller seller) {
-        this.id = seller.getId();
-        this.email = seller.getEmail();
-        this.password = seller.getPassword();
-        this.role = seller.getUserRole();
     }
 
     @Override
@@ -39,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override

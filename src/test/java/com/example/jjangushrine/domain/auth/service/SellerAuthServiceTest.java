@@ -1,6 +1,5 @@
 package com.example.jjangushrine.domain.auth.service;
 
-import com.example.jjangushrine.domain.auth.dto.request.SellerSignUpReq;
 import com.example.jjangushrine.domain.auth.dto.request.SignInReq;
 import com.example.jjangushrine.domain.auth.dto.response.SignInRes;
 import com.example.jjangushrine.domain.seller.entity.Seller;
@@ -38,10 +37,7 @@ class SellerAuthServiceTest {
                 "seller@test.com",
                 "Password123!",
                 "대표자명",
-                "010-1234-5678",
-                "서울시",
-                "강남구",
-                "12345"
+                "010-1234-5678"
         );
 
         // when
@@ -64,8 +60,7 @@ class SellerAuthServiceTest {
         String password = "Password123!";
 
         SellerSignUpReq signUpReq = new SellerSignUpReq(
-                email, password, "대표자명", "010-1234-5678",
-                "서울시", "강남구", "12345"
+                email, password, "대표자명", "010-1234-5678"
         );
         authService.sellerSignUp(signUpReq);
 
@@ -75,7 +70,7 @@ class SellerAuthServiceTest {
         SignInRes res = authService.sellerSignIn(signInReq);
 
         // then
-        assertThat(res.bearerToken()).startsWith("Bearer ");
+        assertThat(res.accessToken()).startsWith("Bearer ");
     }
 
     @Test
@@ -86,8 +81,7 @@ class SellerAuthServiceTest {
         String password = "Password123!";
 
         SellerSignUpReq signUpReq = new SellerSignUpReq(
-                email, password, "대표자명", "010-1234-5678",
-                "서울시", "강남구", "12345"
+                email, password, "대표자명", "010-1234-5678"
         );
         authService.sellerSignUp(signUpReq);
 
@@ -105,8 +99,7 @@ class SellerAuthServiceTest {
         // given
         String email = "seller@test.com";
         SellerSignUpReq req = new SellerSignUpReq(
-                email, "Password123!", "대표자명", "010-1234-5678",
-                "서울시", "강남구", "12345"
+                email, "Password123!", "대표자명", "010-1234-5678"
         );
         authService.sellerSignUp(req);
 

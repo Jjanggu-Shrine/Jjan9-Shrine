@@ -6,7 +6,7 @@ public class UserValidationMessage {
     public static final String INVALID_EMAIL_MESSAGE = "올바른 이메일 형식으로 입력해 주세요.";
 
     public static final String PASSWORD_BLANK_MESSAGE = "비밀번호를 입력해 주세요.";
-    public static final String PASSWORD_REG = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+])[a-zA-Z\\d!@#$%^&*()\\-_=+]*$";
+    public static final String PASSWORD_REG = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+])[a-zA-Z\\d!@#$%^&*()\\-_=+]{8,20}$";
     public static final String INVALID_PASSWORD_MESSAGE = "비밀번호엔 대소문자 영문, 숫자, 특수문자를 최소 1글자씩 포함해 주세요.";
     public static final String PASSWORD_MIN_MESSAGE = "비밀번호는 8자 이상 입력해 주세요.";
     public static final int PASSWORD_MIN = 8;
@@ -17,25 +17,8 @@ public class UserValidationMessage {
     public static final int NICKNAME_MIN = 2;
 
     public static final String PHONE_NUMBER_BLANK_MESSAGE = "전화번호를 입력해 주세요.";
-    public static final String PHONE_NUMBER_REG = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$";
+    public static final String PHONE_NUMBER_REG = "^(\\d{2,4}-\\d{3,4}-\\d{4}|\\d{9,16})$";
     public static final String INVALID_PHONE_NUMBER_MESSAGE = "올바른 전화번호 형식으로 입력해 주세요.";
 
-    public static final String ADDRESS_BLANK_MESSAGE = "주소를 입력해 주세요.";
-    public static final String ADDRESS_LENGTH_MESSAGE = "주소는 100자 이내로 입력해 주세요.";
-    public static final int ADDRESS_MAX = 100;
-
-    public static final String ADDRESS_DETAIL_BLANK_MESSAGE = "상세주소를 입력해 주세요.";
-    public static final String ADDRESS_DETAIL_LENGTH_MESSAGE = "상세주소는 100자 이내로 입력해 주세요.";
-    public static final int ADDRESS_DETAIL_MAX = 100;
-
-    public static final String ZIP_CODE_BLANK_MESSAGE = "우편번호를 입력해 주세요.";
-    public static final String ZIP_CODE_REG = "^\\d{5}$";
-    public static final String INVALID_ZIP_CODE_MESSAGE = "우편번호는 5자리 숫자로 입력해 주세요.";
-
-    public static final String REPR_NAME_BLANK_MESSAGE = "대표자명을 입력해 주세요.";
-    public static final String REPR_NAME_REG = "^[가-힣a-zA-Z\\s]+$";  // 길이 제한 제거
-    public static final String INVALID_REPR_NAME_MESSAGE = "대표자명은 한글 또는 영문만 입력 가능합니다.";
-    public static final String REPR_NAME_SIZE_MESSAGE = "대표자명은 2~20자 이내로 입력해 주세요.";
-    public static final int REPR_NAME_MIN = 2;
-    public static final int REPR_NAME_MAX = 20;
+    public static final String USER_ROLE_BLANK_MESSAGE = "유저권한을 입력해 주세요.";
 }

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import com.example.jjangushrine.common.BaseEntity;
 import com.example.jjangushrine.domain.user.entity.User;
 
+import com.example.jjangushrine.exception.ErrorCode;
+import com.example.jjangushrine.exception.coupon.CouponException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -46,5 +48,16 @@ public class UserCoupon extends BaseEntity {
 		this.user = user;
 		this.coupon = coupon;
 		this.isUsed = false;
+	}
+
+	public void markAsUsed() {
+		if (this.usedAt != null) {
+			throw new CouponException(ErrorCode.DUPLICATE_USED_COUPON);
+		}
+		this.usedAt = LocalDateTime.now();
+	}
+
+	public void unmarkAsUsed() {
+		this.usedAt = null;
 	}
 }
