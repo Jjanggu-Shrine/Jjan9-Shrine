@@ -3,10 +3,11 @@ import com.example.jjangushrine.domain.product.dto.ProductValidationMessage;
 import com.example.jjangushrine.domain.product.entity.Product;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ProductSaveReq(
-	@NotBlank(message = ProductValidationMessage.STOREID_BLANK_MESSAGE)
+	@NotNull(message = ProductValidationMessage.STOREID_BLANK_MESSAGE)
 	Long storeId,
 
 	@NotBlank(message = ProductValidationMessage.NAME_BLANK_MESSAGE)
@@ -22,7 +23,7 @@ public record ProductSaveReq(
 	@NotBlank(message = ProductValidationMessage.IMAGE_BLANK_MESSAGE)
 	String imageUrl,
 
-	@NotBlank(message = ProductValidationMessage.STOCK_BLANK_MESSAGE)
+	@NotNull(message = ProductValidationMessage.STOCK_BLANK_MESSAGE)
 	Short stock,
 
 	@NotBlank(message = ProductValidationMessage.CATEGORY_BLANK_MESSAGE)
