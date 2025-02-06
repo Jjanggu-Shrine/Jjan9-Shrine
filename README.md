@@ -72,8 +72,8 @@ graph TD
 ```
 
 ## 📋 ERD
+[ERD.md](doc%2FERD.md)
 
-[ERD 이미지]
 
 ## 🚀 성능 개선
 
@@ -88,16 +88,33 @@ graph TD
   - 쿠폰 수량 관리
     
 - **비관적 락 (Pessimistic Lock)**
+  - 쿠폰 수량 관리
   - 주문 생성 시 재고 차감관리
   - 주문 취소 시 재고 증가관리
+  - 주문 생성 및 취소 시 쿠폰 사용 여부 비관적 락 관리
 
 
 ## 🔍 트러블슈팅
+@yeana - 
 
+@hayoung -
 
+@donggeon -
+
+@jeongwoo -
 
 ## 📝 API 문서
-- [Swagger UI](링크)
+| API           | 명세서 |
+|---------------|-----|
+| AuthAPI       | [AUTH.md](doc%2FAUTH.md)    |
+| UserAPI       | [USER.md](doc%2FUSER.md)    |
+| StoreAPI      | [STORE.md](doc%2FSTORE.md)    |
+| ProductAPI    | [PRODUCT.md](doc%2FPRODUCT.md)   |
+| CartAPI       | [CART.md](doc%2FCART.md)    |
+| AddressAPI    | [ADDRESS.md](doc%2FADDRESS.md)   | 
+| OrderAPI      | [ORDER.md](doc%2FORDER.md)    | 
+| CouponAPI     | [COUPON.md](doc%2FCOUPON.md)    | 
+| UserCouponAPI | [USERCOUPOIN.md](doc%2FUSERCOUPOIN.md)    | 
 
 
 ## 👨‍👩‍👧‍👦 팀원 소개
