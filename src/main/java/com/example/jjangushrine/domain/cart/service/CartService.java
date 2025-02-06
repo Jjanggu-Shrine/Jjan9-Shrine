@@ -34,7 +34,6 @@ public class CartService {
     public CartItemCreateRes addCartItem(CustomUserDetails authUser, CartItemCreateReq reqDto) {
         String userId = authUser.getId().toString();
         String cartKey = createCartKey(userId); // redis 장바구나 키
-        String lockKey = "lock:cart:" + userId;
 
 
             // 상품 정보 조회
@@ -75,7 +74,6 @@ public class CartService {
     public CartItemCreateRes updateCartItemQuantity(CustomUserDetails authUser, CartItemUpdateReq reqDto) {
         String userId = authUser.getId().toString();
         String cartKey = createCartKey(userId); // redis 장바구나 키
-        String lockKey = "lock:cart:" + userId;
 
             Product product = productService.getProductById(reqDto.productId());
 
