@@ -74,8 +74,7 @@ graph TD
 ```
 
 ## 📋 ERD
-
-[ERD 이미지]
+[ERD.md](doc%2FERD.md)
 
 ## 🚀 성능 개선
 
@@ -89,19 +88,90 @@ graph TD
   - 쿠폰 수량 관리
     
 - **비관적 락 (Pessimistic Lock)**
+  - 쿠폰 수량 관리
   - 주문 생성 시 재고 차감관리
   - 주문 취소 시 재고 증가관리
+  - 주문 생성 및 취소 시 쿠폰 사용 여부 비관적 락 관리
 
 ### 3. 대용량 데이터 조회 최적화
 - **Indexing**
   - 상품 검색 속도 향상
 
 ## 🔍 트러블슈팅
+@yeana - 
 
- 🐞 [상품 조회 속도 저하로 인한 개선](https://github.com/Jjanggu-Shrine/Jjan9-Shrine/issues/69#issue-2832016451)
+@hayoung -
+🐞 [상품 조회 속도 저하로 인한 개선](https://github.com/Jjanggu-Shrine/Jjan9-Shrine/issues/69#issue-2832016451)
+
+@donggeon -
+
+## @jeongwoo - Redis 인증 트러블슈팅 사례
+<details>
+<summary>문제 상황</summary>
+
+- Docker Redis 컨테이너와 애플리케이션 코드의 인증 설정 불일치
+- Redis 연결 실패로 서비스 장애 발생
+</details>
+
+<details>
+<summary>Docker Redis 설정</summary>
+
+```bash
+docker run --name jjangushrine-redis \
+  -e ALLOW_EMPTY_PASSWORD=no \
+  -e REDIS_USERNAME=default \
+  -p 6379:6379 \
+  -d public.ecr.aws/bitnami/redis:latest
+```
+</details>
+
+<details>
+<summary>애플리케이션 코드</summary>
+
+```python
+redis_config = {
+    'host': os.getenv('REDIS_HOST', 'localhost'),
+    'port': int(os.getenv('REDIS_PORT', 6379)),
+    'username': os.getenv('REDIS_USERNAME', 'default'),
+    'db': int(os.getenv('REDIS_DB', 0))
+}
+
+redis_client = Redis(**redis_config)
+```
+</details>
+
+<details>
+<summary>해결 과정</summary>
+
+1. Bitnami Redis 이미지 기본 설정 확인
+   -  비밀번호 삭제 처리
+   - `REDIS_USERNAME=default`: 기본 사용자명
+
+2. Docker 설정 변경으로 해결
+   - 비밀번호 인증 비활성화
+   - 개발 환경 보안 설정 간소화
+</details>
+
+<details>
+<summary>교훈</summary>
+
+- Docker 이미지 기본 보안 설정 사전 확인 필요
+- 개발/운영 환경별 인증 정책 명확화
+</details>
+
 
 ## 📝 API 문서
-- [Swagger UI](링크)
+| API           | 명세서 |
+|---------------|-----|
+| AuthAPI       | [AUTH.md](doc%2FAUTH.md)    |
+| UserAPI       | [USER.md](doc%2FUSER.md)    |
+| StoreAPI      | [STORE.md](doc%2FSTORE.md)    |
+| ProductAPI    | [PRODUCT.md](doc%2FPRODUCT.md)   |
+| CartAPI       | [CART.md](doc%2FCART.md)    |
+| AddressAPI    | [ADDRESS.md](doc%2FADDRESS.md)   | 
+| OrderAPI      | [ORDER.md](doc%2FORDER.md)    | 
+| CouponAPI     | [COUPON.md](doc%2FCOUPON.md)    | 
+| UserCouponAPI | [USERCOUPOIN.md](doc%2FUSERCOUPOIN.md)    | 
 
 
 ## 👨‍👩‍👧‍👦 팀원 소개
