@@ -6,7 +6,7 @@ public class UserValidationMessage {
     public static final String INVALID_EMAIL_MESSAGE = "올바른 이메일 형식으로 입력해 주세요.";
 
     public static final String PASSWORD_BLANK_MESSAGE = "비밀번호를 입력해 주세요.";
-    public static final String PASSWORD_REG = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+])[a-zA-Z\\d!@#$%^&*()\\-_=+]*$";
+    public static final String PASSWORD_REG = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+])[a-zA-Z\\d!@#$%^&*()\\-_=+]{8,20}$";
     public static final String INVALID_PASSWORD_MESSAGE = "비밀번호엔 대소문자 영문, 숫자, 특수문자를 최소 1글자씩 포함해 주세요.";
     public static final String PASSWORD_MIN_MESSAGE = "비밀번호는 8자 이상 입력해 주세요.";
     public static final int PASSWORD_MIN = 8;
@@ -17,9 +17,8 @@ public class UserValidationMessage {
     public static final int NICKNAME_MIN = 2;
 
     public static final String PHONE_NUMBER_BLANK_MESSAGE = "전화번호를 입력해 주세요.";
-    public static final String PHONE_NUMBER_REG = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$";
+    public static final String PHONE_NUMBER_REG = "^(\\d{2,4}-\\d{3,4}-\\d{4}|\\d{9,16})$";
     public static final String INVALID_PHONE_NUMBER_MESSAGE = "올바른 전화번호 형식으로 입력해 주세요.";
 
     public static final String USER_ROLE_BLANK_MESSAGE = "유저권한을 입력해 주세요.";
-    public static final String INVALID_USER_ROLE = "유효하지 않은 유저권한입니다.";
 }
