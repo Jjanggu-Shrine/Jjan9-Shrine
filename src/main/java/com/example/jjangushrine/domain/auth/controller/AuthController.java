@@ -22,18 +22,18 @@ public class AuthController {
 
     private final UserAuthService userAuthService;
 
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> userSignUp(
-            @RequestBody @Valid UserSignUpReq userSignUpReq
+            @Valid @RequestBody UserSignUpReq userSignUpReq
     ) {
         userAuthService.userSignUp(userSignUpReq);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(ApiResMessage.SIGNUP_SUCCESS));
     }
 
-    @PostMapping("/user/signin")
+    @PostMapping("/signin")
     public ResponseEntity<ApiResponse<SignInRes>> userSignIn(
-            @RequestBody @Valid SignInReq signInReq
+            @Valid @RequestBody SignInReq signInReq
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
