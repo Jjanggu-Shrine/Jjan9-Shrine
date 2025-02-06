@@ -1,5 +1,6 @@
 package com.example.jjangushrine.domain.product.service;
 
+import com.example.jjangushrine.domain.rank.service.ProductRankService;
 import com.example.jjangushrine.domain.user.entity.User;
 import com.example.jjangushrine.domain.user.service.UserService;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final StoreService storeService;
 	private final UserService userService;
+	private final ProductRankService productRankService;
 
 	@Transactional
 	public ProductRes saveProduct(ProductSaveReq productSaveReq, Long sellerId) {
@@ -76,6 +78,7 @@ public class ProductService {
 
 	public ProductRes getProduct(Long productId) {
 		Product findProduct = getProductById(productId);
+		productRankService.increaseSearchCount(productId);
 		return ProductRes.fromEntity(findProduct);
 	}
 
