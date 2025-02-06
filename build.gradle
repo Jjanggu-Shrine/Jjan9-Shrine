@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

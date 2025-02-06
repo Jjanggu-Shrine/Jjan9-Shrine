@@ -34,7 +34,7 @@ public class CouponService {
 	@Transactional
 	public UpdateCouponRes updateCoupon(Long couponId, UpdateCouponReq request) {
 		Coupon coupon = couponRepository.findById(couponId)
-			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
 
 		validateUpdateRequest(request);
 		request.updateEntity(coupon);
@@ -45,7 +45,7 @@ public class CouponService {
 	@Transactional
 	public void deleteCoupon(Long couponId) {
 		Coupon coupon = couponRepository.findById(couponId)
-			.orElseThrow(() -> new CouponException(ErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new CouponException(ErrorCode.COUPON_NOT_FOUND));
 
 		// 이미 사용된 쿠폰이 있는지 확인
 		if (coupon.getUsedQuantity() > 0) {

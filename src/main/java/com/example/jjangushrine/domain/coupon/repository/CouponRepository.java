@@ -12,6 +12,7 @@ import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
+	//비관적 락 설정
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
 	@Query("SELECT c FROM Coupon c WHERE c.couponId = :id")
