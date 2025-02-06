@@ -101,8 +101,7 @@ graph TD
 
 @donggeon -
 
-@jeongwoo 
-## Redis 인증 트러블슈팅 사례
+## @jeongwoo - Redis 인증 트러블슈팅 사례
 <details>
 <summary>문제 상황</summary>
 
