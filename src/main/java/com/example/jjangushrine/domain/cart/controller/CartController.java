@@ -43,9 +43,9 @@ public class CartController {
 
     /**
      * 아이템 수량 변경 (갯수가 0이면 삭제)
-     * @param authUser
-     * @param reqDto
-     * @return
+     * @param authUser user
+     * @param reqDto productId, quantity
+     * @return cartId, productId, ProductName, Quantity, totalPrice
      */
     @PatchMapping("/items")
     public ResponseEntity<ApiResponse<CartItemCreateRes>> updateCartItem(
@@ -60,8 +60,8 @@ public class CartController {
 
     /**
      * 장바구니 조회
-     * @param authUser
-     * @return
+     * @param authUser user
+     * @return cartId, productId, productName, quantity, totalPrice
      */
     @GetMapping
     public ResponseEntity<ApiResponse<List<CartItemCreateRes>>> getCartItem(
