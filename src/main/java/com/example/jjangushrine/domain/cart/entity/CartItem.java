@@ -27,10 +27,4 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @Builder
-    public CartItem(Long cartKey, Product product, int quantity) {
-        this.cartKey = cartKey;
-        this.product = product;
-        this.quantity = quantity;
-    }
 }

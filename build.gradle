@@ -61,7 +61,6 @@ dependencies {
 
     // Redis
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    implementation 'org.redisson:redisson-spring-boot-starter:3.23.4' // Redisson 추가 (분산락)
 }
 
 tasks.named('test') {
