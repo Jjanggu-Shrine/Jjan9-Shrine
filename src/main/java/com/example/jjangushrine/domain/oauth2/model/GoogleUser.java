@@ -7,16 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class GoogleUser extends OAuth2ProviderUser{
+public class GoogleUser extends OAuth2ProviderUser {
 
     public GoogleUser(
             OAuth2User oAuth2User,
-            ClientRegistration clientRegistration
+            ClientRegistration clientRegistration,
+            Long id
     ) {
         super(
                 oAuth2User.getAttributes(),
                 oAuth2User,
-                clientRegistration
+                clientRegistration,
+                id
         );
     }
 
@@ -28,12 +30,5 @@ public class GoogleUser extends OAuth2ProviderUser{
     @Override
     public String getEmail() {
         return (String) getAttributes().get("email");
-    }
-
-    @Override
-    public void setId(Long id) {
-        super.setId(id);
-        Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
-        attributes.put("userId", id);
     }
 }

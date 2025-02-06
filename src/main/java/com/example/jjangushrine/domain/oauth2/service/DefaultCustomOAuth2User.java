@@ -1,4 +1,4 @@
-package com.example.jjangushrine.domain.oauth2.test;
+package com.example.jjangushrine.domain.oauth2.service;
 
 import com.example.jjangushrine.domain.oauth2.model.ProviderUser;
 import com.example.jjangushrine.domain.user.enums.UserRole;
@@ -25,7 +25,8 @@ public class DefaultCustomOAuth2User implements OAuth2User {
             ProviderUser providerUser,
             OAuth2UserRequest userRequest) {
         this.providerUser = providerUser;
-        this.authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_" + UserRole.USER.name()));
+        this.authorities = Collections.singleton(
+                new SimpleGrantedAuthority("ROLE_" + UserRole.USER.name()));
         this.userNameAttributeName = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
@@ -45,5 +46,6 @@ public class DefaultCustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        return providerUser.getName();    }
+        return providerUser.getName();
+    }
 }

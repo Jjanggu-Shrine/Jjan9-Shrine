@@ -3,20 +3,17 @@ package com.example.jjangushrine.domain.oauth2.handler;
 import com.example.jjangushrine.common.ApiResMessage;
 import com.example.jjangushrine.common.ApiResponse;
 import com.example.jjangushrine.config.security.SecurityConst;
-import com.example.jjangushrine.config.security.entity.CustomUserDetails;
 import com.example.jjangushrine.config.security.jwt.JwtUtil;
+import com.example.jjangushrine.config.security.sevice.CustomUserDetailsService;
 import com.example.jjangushrine.domain.oauth2.model.ProviderUser;
-import com.example.jjangushrine.domain.oauth2.test.DefaultCustomOAuth2User;
+import com.example.jjangushrine.domain.oauth2.service.DefaultCustomOAuth2User;
 import com.example.jjangushrine.domain.user.enums.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -36,25 +33,27 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             HttpServletResponse response,
             Authentication authentication) throws IOException {
 
-        DefaultCustomOAuth2User defaultCustomOAuth2User = (DefaultCustomOAuth2User) authentication.getPrincipal();
+        DefaultCustomOAuth2User defaultCustomOAuth2User =
+                (DefaultCustomOAuth2User) authentication.getPrincipal();
 
-        ProviderUser providerUser = defaultCustomOAuth2User.getProviderUser();
+        ProviderUser providerUser =
+                defaultCustomOAuth2User.getProviderUser();
 
-        CustomUserDetails userDetails = CustomUserDetails.builder()
-                .email(providerUser.getEmail())
-                .id(providerUser.getId())
-                .role(UserRole.USER)
-                .build();
-
-        Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities()
+        Authentication newAuth =
+                CustomUserDetailsService.createAuthentication(
+                providerUser.getId(),
+                providerUser.getEmail(),
+                UserRole.USER
         );
 
         String token = jwtUtil.generateToken(newAuth);
         sendSuccessResponse(response, token);
     }
 
-    private void sendSuccessResponse(HttpServletResponse response, String token) throws IOException {
+    private void sendSuccessResponse(
+            HttpServletResponse response,
+            String token
+    ) throws IOException {
         response.setContentType(SecurityConst.CONTENT_TYPE);
         response.setHeader(SecurityConst.AUTHORIZATION_HEADER,
                 SecurityConst.BEARER_PREFIX + token);
@@ -64,6 +63,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 token
         );
 
-        response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        response.getWriter().write(
+                objectMapper.writeValueAsString(apiResponse)
+        );
     }
 }
