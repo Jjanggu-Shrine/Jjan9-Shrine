@@ -76,12 +76,13 @@ public enum ErrorCode {
     DUPLICATE_OUT_OF_STOCK(HttpStatus.CONFLICT, "ERR412", "재고가 소진되었습니다."),
     DUPLICATE_CANCELED_ORDER(HttpStatus.CONFLICT, "ERR413", "이미 주문취소가 되었습니다."),
 
-
-
     //coupon
     COUPON_SOLD_OUT(HttpStatus.CONFLICT, "ERR411", "쿠폰이 모두 소진되었습니다."),
     COUPON_ALREADY_USED(HttpStatus.CONFLICT, "ERR412", "이미 사용된 쿠폰입니다."),
     DUPLICATE_COUPON_ISSUE(HttpStatus.CONFLICT, "ERR413", "이미 발급받은 쿠폰입니다."),
+
+    // OAuth
+    INVALID_PROVIDER(HttpStatus.UNAUTHORIZED, "ERR414","유효하지 않은 제공자입니다."),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERR999", "서버 내부 오류가 발생했습니다.");

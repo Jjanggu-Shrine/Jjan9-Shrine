@@ -25,8 +25,15 @@ public class ApiResMessage {
     public static final String DELETE_USER_SUCCESS = "사용자 삭제를 성공적으로 완료되었습니다.";
 
     // 쇼핑몰 관련 메시지
-    public static final String CREATE_STORE_SUCCESS = "쇼핑몰 등록을 성공적으로 완료되었습니다.";;
-    public static final String GET_STORE_SUCCESS = "쇼핑몰 조회를 성공적으로 완료되었습니다.";;
-    public static final String UPDATE_STORE_SUCCESS = "쇼핑몰 수정을 성공적으로 완료되었습니다.";;
-    public static final String DELETE_STORE_SUCCESS = "쇼핑몰 삭제를 성공적으로 완료되었습니다.";;
+    public static final String CREATE_STORE_SUCCESS = "쇼핑몰 등록을 성공적으로 완료되었습니다.";
+    public static final String GET_STORE_SUCCESS = "쇼핑몰 조회를 성공적으로 완료되었습니다.";
+    public static final String UPDATE_STORE_SUCCESS = "쇼핑몰 수정을 성공적으로 완료되었습니다.";
+    public static final String DELETE_STORE_SUCCESS = "쇼핑몰 삭제를 성공적으로 완료되었습니다.";
+
+    // OAuth 관련 메시지
+    public static final String NAVER_LOGIN_SUCCESS = "네이버 로그인이 성공적으로 완료되었습니다.";
+    public static final String GOOGLE_LOGIN_SUCCESS = "구글 로그인이 성공적으로 완료되었습니다.";
+    public static final String OAUTH_LOGIN_SUCCESS = "소셜 로그인이 성공적으로 완료되었습니다.";
+
+
 }
