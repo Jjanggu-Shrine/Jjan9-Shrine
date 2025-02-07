@@ -38,8 +38,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(
                         ApiResMessage.LOGIN_SUCCESS,
-                        userAuthService.userSignIn(signInReq)
-                        ));
+                        userAuthService.userSignIn(signInReq))
+                );
     }
 }
 

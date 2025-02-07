@@ -11,12 +11,14 @@ public class NaverUser extends OAuth2ProviderUser {
     @SuppressWarnings("unchecked")
     public NaverUser(
             OAuth2User oAuth2User,
-            ClientRegistration clientRegistration
+            ClientRegistration clientRegistration,
+            Long id
     ) {
         super(
                 (Map<String, Object>) oAuth2User.getAttributes().get("response"),
                 oAuth2User,
-                clientRegistration
+                clientRegistration,
+                id
         );
         this.response = (Map<String, Object>) oAuth2User.getAttributes().get("response");
     }
@@ -34,11 +36,5 @@ public class NaverUser extends OAuth2ProviderUser {
     @Override
     public Map<String, Object> getAttributes() {
         return response;
-    }
-
-    @Override
-    public void setId(Long id) {
-        super.setId(id);
-        response.put("userId", id);
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -75,12 +76,13 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isExcludedPath(String uri) {
-        for (String excludePath : SecurityConst.EXCLUDE_PATHS) {
-            if (uri.startsWith(excludePath)) {
-                return true;
-            }
-        }
-        return false;
+        return uri.startsWith("/api/v1/auth/") ||
+                uri.startsWith("/swagger-ui/") ||
+                uri.startsWith("/v3/api-docs") ||
+                uri.startsWith("/swagger-resources") ||
+                uri.startsWith("/auth") ||
+                uri.startsWith("/oauth2/") ||
+                uri.startsWith("/login/oauth2/");
     }
 
     private void authenticateUser(String bearerJwt) {

@@ -10,6 +10,7 @@ import com.example.jjangushrine.domain.user.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -64,18 +65,44 @@ public class SecurityConfig {
                                 "/oauth2/**",
                                 "/login/**",
                                 "/auth/**",
-                                // Swagger UI 허용
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**"
                         ).permitAll()
+
+                        // 누구나 조회 가능한 GET
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/stores",
+                                "/api/v1/products/**",
+                                "/api/v1/products/ranking",
+                                "/api/v1/products/store"
+                        ).permitAll()
+
+                        // ADMIN
                         .requestMatchers("/api/v1/admin/**").hasRole(UserRole.ADMIN.name())
-                        .requestMatchers("/api/v1/store/**").hasRole(UserRole.SELLER.name())
-                        .requestMatchers(
-                                "/api/v1/carts/**",
-                                "/api/v1/orders/**",
-                                "/api/v1/user/coupons/**"
-                        ).hasRole(UserRole.USER.name())
+
+                        // SELLER
+                        .requestMatchers("/api/v1/sellers/**").hasRole(UserRole.SELLER.name())
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/stores").hasRole(UserRole.SELLER.name())
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/stores").hasRole(UserRole.SELLER.name())
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/v1/stores").hasRole(UserRole.SELLER.name())
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/products/{productId}").hasRole(UserRole.SELLER.name())
+
+                        // USER
+                        .requestMatchers("/api/v1/user/**").hasRole(UserRole.USER.name())
+                        .requestMatchers("/api/v1/carts/**").hasRole(UserRole.USER.name())
+                        .requestMatchers("/api/v1/orders/**").hasRole(UserRole.USER.name())
+                        .requestMatchers("/api/v1/addresses/**").hasRole(UserRole.USER.name())
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/users").hasRole(UserRole.USER.name())
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/users").hasRole(UserRole.USER.name())
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/v1/users").hasRole(UserRole.USER.name())
                         .anyRequest().authenticated())
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -91,7 +118,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
-                "http://15.164.91.27:8080"
+                "http://15.164.91.27:8080",
+                "https://logins-git-main-wldnr1208s-projects.vercel.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));

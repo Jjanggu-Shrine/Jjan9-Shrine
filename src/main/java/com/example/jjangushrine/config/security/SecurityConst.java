@@ -1,7 +1,5 @@
 package com.example.jjangushrine.config.security;
 
-import java.util.List;
-
 public class SecurityConst {
     // JWT 관련 상수
     public static final String BEARER_PREFIX = "Bearer ";
@@ -21,13 +19,4 @@ public class SecurityConst {
     // Response Headers
     public static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
-    public static final List<String> EXCLUDE_PATHS = List.of(
-            "/api/v1/auth/",
-            "/swagger-ui/",
-            "/v3/api-docs",
-            "/swagger-resources",
-            "/auth",
-            "/oauth2/**",
-            "/login/oauth2/**"
-    );
 }

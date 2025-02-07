@@ -38,7 +38,8 @@ class UserAuthServiceTest {
                 "test@test.com",
                 "Password123!",
                 "닉네임",
-                "010-1234-5678"
+                "010-1234-5678",
+                 UserRole.USER
         );
 
         // when
@@ -61,14 +62,16 @@ class UserAuthServiceTest {
         UserSignUpReq req = new UserSignUpReq(
                 "usermail@mail.com",
                 "1234", "userNick",
-                "000-111-2222"
+                "000-111-2222",
+                UserRole.USER
         );
         authService.userSignUp(req);  // 첫 번째 가입
 
         UserSignUpReq duplicateReq = new UserSignUpReq(
                 "usermail@mail.com",
                 "1234", "userNick",
-                "000-111-2222"
+                "000-111-2222",
+                UserRole.USER
         );
 
         // when & then
@@ -88,7 +91,8 @@ class UserAuthServiceTest {
                 email,
                 password,
                 "nickname",
-                "010-1234-5678"
+                "010-1234-5678",
+                UserRole.USER
         );
         authService.userSignUp(signUpReq);
 
@@ -114,7 +118,8 @@ class UserAuthServiceTest {
                 email,
                 password,
                 "nickname",
-                "010-1234-5678"
+                "010-1234-5678",
+                UserRole.USER
         );
         authService.userSignUp(signUpReq);
 

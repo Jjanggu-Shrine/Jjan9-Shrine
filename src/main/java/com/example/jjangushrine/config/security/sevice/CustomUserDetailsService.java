@@ -13,14 +13,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String email)  {
+    public UserDetails loadUserByUsername(String email) {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
@@ -31,14 +30,18 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-    public static Authentication createAuthentication(Long id, String email, UserRole role) {
+    public static Authentication createAuthentication(
+            Long id,
+            String email,
+            UserRole role
+    ) {
         CustomUserDetails userDetails;
 
-       userDetails = CustomUserDetails.builder()
-               .id(id)
-               .email(email)
-               .role(role)
-               .build();
+        userDetails = CustomUserDetails.builder()
+                .id(id)
+                .email(email)
+                .role(role)
+                .build();
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails,
