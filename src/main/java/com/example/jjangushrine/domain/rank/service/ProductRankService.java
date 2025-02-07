@@ -33,11 +33,11 @@ public class ProductRankService {
 	public void increaseSearchCount(Long productId) {
 		LocalDate today = LocalDate.now();
 
-		for (int i=0; i < 3; i++) { // 현재부터 3일 간의 상품 조회수 저장
+		for (int i=0; i < 2; i++) { // 현재부터 2일 간의 상품 조회수 저장
 			String key = PRODUCT_RANK_KEY + today.plusDays(i).format(DateTimeFormatter.ISO_DATE); // yyyy-MM-dd 형식으로 지정
 
 			redisTemplate.opsForZSet().incrementScore(key, PRODUCT_RANK_VALUE + productId.toString(), RANKING_INCREMENT_SCORE); // key : {member : score}
-			redisTemplate.expire(key, 3, TimeUnit.DAYS); // 3일 동안만 유지
+			redisTemplate.expire(key, 2, TimeUnit.DAYS); // 2일 동안만 유지
 
 		}
 	}
