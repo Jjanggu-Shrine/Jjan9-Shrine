@@ -22,4 +22,6 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     Optional<Address> findByIdAndIsDeletedIsFalse(Long addressId);
 
     Optional<Address> findByIdAndIsDefaultIsTrue(Long id);
+
+    int countByUserIdAndIsDeletedIsFalse(Long id);
 }

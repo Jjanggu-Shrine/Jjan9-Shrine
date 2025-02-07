@@ -107,13 +107,12 @@ public class AddressService {
 
     private void setDefaultIfFirstAddress(Address address, User user) {
         boolean isFirstAddress = addressRepository
-                .countByIdAndIsDeletedIsFalse(user.getId()) == 0;
+                .countByUserIdAndIsDeletedIsFalse(user.getId()) == 0;
 
         if (isFirstAddress) {
             address.setDefault();
         }
     }
-
     public Address findByUserId(Long ownerId, UserRole userRole) {
         return addressRepository.findByIdAndIsDefaultIsTrue(ownerId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
