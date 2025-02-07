@@ -100,7 +100,7 @@ public class AddressService {
     }
 
     private void validateUser(Address address, User user) {
-        if (!address.getId().equals(user.getId())) {
+        if (!address.getUser().getId().equals(user.getId())) {
             throw new ForbiddenException(ErrorCode.FORBIDDEN_ACCESS);
         }
     }
@@ -113,8 +113,9 @@ public class AddressService {
             address.setDefault();
         }
     }
-    public Address findByUserId(Long ownerId, UserRole userRole) {
-        return addressRepository.findByIdAndIsDefaultIsTrue(ownerId)
+
+    public Address findByUserId(Long ownerId) {
+        return addressRepository.findByUserIdAndIsDefaultIsTrue(ownerId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ADDRESS_NOT_FOUND));
     }
 }
