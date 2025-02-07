@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
-    int countByIdAndIsDeletedIsFalse(Long id);
 
     Page<Address> findAllByUserIdAndIsDeletedIsFalse(Long id, Pageable pageable);
 
@@ -21,7 +20,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     Optional<Address> findByIdAndIsDeletedIsFalse(Long addressId);
 
-    Optional<Address> findByIdAndIsDefaultIsTrue(Long id);
-
     int countByUserIdAndIsDeletedIsFalse(Long id);
+
+    Optional<Address> findByUserIdAndIsDefaultIsTrue(Long ownerId);
 }

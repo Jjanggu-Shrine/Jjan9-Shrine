@@ -60,7 +60,7 @@ public class OrderService {
         }
 
         User user = userService.findUserByEmail(authUser.getEmail());
-        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole()); // 주소 조회
+        Address address = addressService.findByUserId(authUser.getId()); // 주소 조회
         Order order = Order.builder()
                 .user(user)
                 .build();
@@ -193,7 +193,7 @@ public class OrderService {
         // 주문 조회
         Order order = getOrder(authUser, orderId);
 
-        Address address = addressService.findByUserId(authUser.getId(), authUser.getRole());
+        Address address = addressService.findByUserId(authUser.getId());
 
         List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
         List<OrderItemRes> orderItemResList = orderItems.stream()
