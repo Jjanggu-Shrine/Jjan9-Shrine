@@ -75,9 +75,12 @@ public class User extends BaseEntity {
 	}
 
 	public void update(UserUpdateReq updateReq) {
-		Optional.ofNullable(updateReq.password()).ifPresent(value -> this.password = value);
-		Optional.ofNullable(updateReq.nickName()).ifPresent(value -> this.nickName = value);
-		Optional.ofNullable(updateReq.phoneNumber()).ifPresent(value -> this.phoneNumber = value);
+		Optional.ofNullable(updateReq.password())
+				.ifPresent(value -> this.password = value);
+		Optional.ofNullable(updateReq.nickName())
+				.ifPresent(value -> this.nickName = value);
+		Optional.ofNullable(updateReq.phoneNumber())
+				.ifPresent(value -> this.phoneNumber = value);
 	}
 
 	public void softDelete() {
