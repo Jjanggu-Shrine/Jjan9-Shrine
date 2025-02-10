@@ -28,7 +28,7 @@ public class JwtUtil {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Date now = new Date();
 
-        return SecurityConst.BEARER_PREFIX + Jwts.builder()
+        return Jwts.builder()
                 .subject(principal.getId().toString())
                 .claim("email", principal.getUsername())
                 .claim("role", principal.getRole().name())
