@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserUpdateReq(
-    @Size(min = UserValidationMessage.PASSWORD_MIN, message = UserValidationMessage.PASSWORD_MIN_MESSAGE)
+    @Size(min = UserValidationMessage.PASSWORD_MIN,
+            message = UserValidationMessage.PASSWORD_MIN_MESSAGE)
     @Pattern(
             regexp = UserValidationMessage.PASSWORD_REG,
             message = UserValidationMessage.INVALID_PASSWORD_MESSAGE
